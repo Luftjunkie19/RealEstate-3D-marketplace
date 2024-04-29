@@ -23,7 +23,7 @@ function FirstScene() {
   const object = useGLTF('/simple_real_estate.glb');
     
   return (
-      <Canvas camera={{ fov: 50, near: 0.1, far: 1000, position: [0, 10, 30] }}>
+      <Canvas camera={{ fov: 50, near: 0.1, far: 1000, position: [0, 10, 50] }}>
   <OrbitControls/>
       <ambientLight />
 

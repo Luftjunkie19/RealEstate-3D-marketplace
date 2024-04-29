@@ -11,7 +11,7 @@ type Props = {imageUrl: StaticImageData, name:string, description: string, barth
 
 function Offer({name, imageUrl, description, barthRooms, bedRooms, isForRent, price, squareMetrage}: Props) {
   return (
-      <div className='p-6 flex flex-col gap-2 max-w-sm w-full border-2 border-darkGray rounded-xl shadow-lg overflow-hidden'>
+      <div className='p-6 flex flex-col gap-2 lg:max-w-sm w-full border-2 border-darkGray rounded-xl shadow-lg overflow-hidden'>
        
           <Image src={imageUrl}  width={256} height={256} className='w-full object-cover p-2 h-64 rounded-lg'  alt=""/>
           

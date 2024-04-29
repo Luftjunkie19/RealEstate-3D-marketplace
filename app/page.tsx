@@ -8,7 +8,7 @@ import SwipeSlider from './components/main-page/Swiper';
 export default function Page() {
   return (
    
-    <div className="w-screen min-h-screen">
+    <div className="w-screen min-h-screen overflow-x-hidden">
       <HeroSection />
       <Outstandings/>
       <SwipeSlider />

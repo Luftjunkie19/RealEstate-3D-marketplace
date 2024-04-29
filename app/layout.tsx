@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast';
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,10 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className=' bg-bgColor'>
+      <body className=' bg-bgColor overflow-x-hidden'>
         <Navbar/>
               <Toaster/>
         {children}
+        <Footer/>
       </body>
     </html>
   );
