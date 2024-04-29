@@ -8,8 +8,8 @@ type Props = {}
 
 function HeroSection({}: Props) {
   return (
-      <div className='m-0 mx-auto flex gap-6 p-2  justify-around'>
-          <div className="flex flex-col self-center gap-6 py-8 pl-12">
+      <div className='m-0 mx-auto flex sm:flex-col-reverse xl:flex-row gap-6 p-2 justify-around'>
+          <div className="flex flex-col lg:self-center gap-6 py-8 3xl:pl-12">
           <div className="flex flex-col gap-2 max-w-xl">
                  <p className='text-white font-bold text-3xl'>Discover Your Dream </p>
             <p className="text-white">Your journey to finding the perfect property begins here. Explore our listings to find the home that matches your dreams.</p>
@@ -35,7 +35,7 @@ function HeroSection({}: Props) {
               </div>
           </div>
           
-      <div className=" w-full max-w-lg max-h-[28rem]">
+      <div className=" w-full max-w-md max-h-[28rem]">
 <FirstScene/>
       </div>
     </div>

@@ -31,10 +31,10 @@ function Offer({name, imageUrl, description, barthRooms, bedRooms, isForRent, pr
                   <p className="text-sm">{barthRooms} Bathrooms</p>
               </div>
 
-              {!isForRent ? <div className="p-2 flex gap-1 border border-darkGray items-center rounded-full">
+              {!isForRent ? <div className="py-2 px-3 flex gap-1 border border-darkGray items-center rounded-full">
                   <MdSell size={12} />
                   <p className="text-sm">Sale</p>
-              </div> : <div className="p-2 border border-darkGray flex gap-1 items-center rounded-full">
+              </div> : <div className="py-2 px-4 border border-darkGray flex gap-1 items-center rounded-full">
                   <GiHouseKeys size={12} />
                   <p className="text-sm">Rent</p>
               </div>}

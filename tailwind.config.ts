@@ -7,6 +7,14 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      sm: "0px",
+      md: "481px",
+      lg: "768px",
+      xl: "1024px",
+      "2xl": "1280px",
+      "3xl":"1560px",
+    },
     extend: {
       colors: {
         purple: "#703BF7",
