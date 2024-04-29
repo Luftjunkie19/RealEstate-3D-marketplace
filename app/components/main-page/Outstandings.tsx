@@ -7,7 +7,7 @@ type Props = {}
 
 export default function Outstandings({}: Props) {
   return (
-      <div className='flex gap-6 items-center justify-around py-6 px-2 border-t-2 border-b-2 border-darkGray'>
+      <div className='flex sm:flex-wrap xl:flex-nowrap gap-6 items-center justify-around py-6 px-2 border-t-2 border-b-2 border-darkGray'>
           <div className="bg-darkGray max-w-xs w-full p-8 rounded-lg flex flex-col gap-8 items-center justify-center">
               <BsHouseHeartFill className='text-purple text-5xl' />
               <p className='text-white  '>Find Your Dream Home</p>
