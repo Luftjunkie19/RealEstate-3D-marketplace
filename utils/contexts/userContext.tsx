@@ -2,12 +2,13 @@
 
 import React, { createContext, useEffect, useReducer } from 'react'
 
-import {User, Session} from '@supabase/supabase-js';
+import {User, Session, UserResponse} from '@supabase/supabase-js';
 import { supabase } from '../supabase/client';
 type Props = {
     user: User | null,
     session: Session | null,
     isUserReady: boolean,
+    dispatch: React.Dispatch<{ type: any; payload: any; }> | null,
 }
 
 export const authReducer=(state: any, action: { type: any; payload: any; })=>{
@@ -28,17 +29,36 @@ switch(action.type){
 }
 }
 
-export const UserContext = createContext<Props>({user: null, session:null, isUserReady:true});
+export const UserContext = createContext<Props>({user: null, session:null, isUserReady:true, dispatch:null});
 
 export default function AuthProvider({children}:{children:React.ReactNode}) {
 
     const [state, dispatch]=useReducer(authReducer, {user:null, session:null});
 
     useEffect(()=>{
-        supabase.auth.onAuthStateChange((e, session)=>{
-            dispatch({type:'IS_USER_READY', payload:{session:session, user:session?.user }});
-        })
+
+        supabase.auth.getUser().then((userData:UserResponse)=>{
+            if(userData.data.user){
+                dispatch({type:'LOGIN', payload:{user:userData.data.user, session:null}});
+                dispatch({type:'IS_USER_READY', payload:{user:userData.data.user, session:null}})
+            }
     })
+
+     const subscription = supabase.auth.onAuthStateChange(async (e, session)=>{
+           if(e === 'SIGNED_IN'){
+            dispatch({type:'LOGIN', payload:{session:session, user:session?.user }});
+           }
+           if(e === 'SIGNED_OUT'){
+            dispatch({
+                type: 'LOGOUT',
+                payload: null
+            });
+           }
+
+           dispatch({type:'IS_USER_READY', payload:{session:session, user:session?.user }});
+        });
+        subscription.data.subscription.unsubscribe();
+    }, []);
 
     return (<UserContext.Provider value={{ ...state, dispatch }}>
 {children}

@@ -4,17 +4,15 @@
 import React from 'react'
 import GoogleLogo from '@/assets/googleLogo.png';
 import { FaDiscord, FaGithub } from 'react-icons/fa'
-import { FaGoogle } from 'react-icons/fa6'
 import Image from 'next/image';
+import { useAuthContext } from '@/utils/hooks/useAuthContext';
 
 
-type Props = {}
+function Page() {
+  
+  const {dispatch}=useAuthContext();
 
-function Page({}: Props) {
-
-
-
-  const formActionHandler=async (form:FormData)=>{
+const formActionHandler=async (form:FormData)=>{
 const username = form.get('username');
 const email = form.get('email');
 const password = form.get('password');
@@ -22,9 +20,8 @@ const password = form.get('password');
 const fetchData= await fetch('/api/signIn/credentials', {
   method:'POST',
   body:JSON.stringify({
-    username,
-    email,
-    password
+    email: email as string,
+    password: password as string
   }),
   headers:{
     'Content-Type':'application/json'
@@ -32,12 +29,47 @@ const fetchData= await fetch('/api/signIn/credentials', {
 })
 
 const fetchRes= await fetchData.json();
+if(dispatch) dispatch({type:'LOGIN', payload:{user:fetchRes.data.user, session:fetchRes.data.session}});
 
 console.log(fetchRes);
 
 
 
   }
+
+  const signInWithDiscord = async()=>{
+    const fetchData= await fetch('/api/signIn/discord', {
+      method:'POST'
+    });
+
+    const data= await fetchData.json();
+
+    window.location.href = data.data.url;
+  }
+
+  const signInGoogle = async()=>{
+    const fetchData= await fetch('/api/signIn/google', {
+      method:'POST'
+    });
+
+    const data= await fetchData.json();
+
+    window.location.href = data.data.url;
+  }
+
+  
+  const signInGithub = async()=>{
+    const fetchData= await fetch('/api/signIn/github', {
+      method:'POST'
+    });
+
+    const data= await fetchData.json();
+
+    console.log(data.data);
+
+    window.location.href = data.data.url;
+  }
+
 
   return (
     <div className="min-h-screen w-screen flex flex-col justify-center items-center">
@@ -63,13 +95,13 @@ console.log(fetchRes);
 </form>
         
           <div className="flex flex-wrap gap-4 p-3">
-              <button className=' bg-gray-600 border-2 border-darkGray p-4 rounded-lg text-red-500'>
+              <button onClick={signInGoogle} className=' bg-gray-600 border-2 border-darkGray p-4 rounded-lg text-red-500'>
                   <Image src={GoogleLogo} width={48} height={48} alt='' className='w-12 h-12 object-cover' />
               </button>
-              <button className='bg-purple border-2 border-darkGray p-4 rounded-lg text-white'>
+              <button onClick={signInWithDiscord} className='bg-purple border-2 border-darkGray p-4 rounded-lg text-white'>
                   <FaDiscord size={48}/>
               </button>
-              <button className='bg-darkGray border-2 border-darkGray p-4 rounded-lg text-white'>
+              <button onClick={signInGithub} className='bg-darkGray border-2 border-darkGray p-4 rounded-lg text-white'>
                   <FaGithub size={48}/>
               </button>
 </div>
