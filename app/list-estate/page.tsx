@@ -1,4 +1,8 @@
 "use client";
+
+import { useAuthContext } from '@/utils/hooks/useAuthContext';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 import React, { ChangeEvent, useState } from 'react'
 import toast from 'react-hot-toast';
@@ -8,21 +12,66 @@ import { FaCamera } from 'react-icons/fa6'
 type Props = {}
 
 function Page({}: Props) {
-
-    
+  const {user}=useAuthContext();
+  
     const [images, setImages] = useState<string | any>([]);
 
     const formAction = async (formData:FormData) => {
-        const providedAddress= formData.get('property-address'); 
-        
-        const fetchData = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${providedAddress}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`);
-        const fetchResult = await fetchData.json();
+try {
+  const propertyName= formData.get('property-name');
+  const propertyPrice = formData.get('property-price');
+  const squareFootage= formData.get('sqr-footage');
+  const propertyDescription= formData.get('description');
+  const bathroomsQty= formData.get('bathrooms');
+  const bedroomsQty= formData.get('bedrooms');
+    const providedAddress= formData.get('property-address'); 
+    const isForRent= formData.get('isForRent');
+    const fetchData = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${providedAddress}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`);
+    const fetchResult = await fetchData.json();
 
-        console.log(fetchResult.results[0].formatted_address);
-        console.log(fetchResult.results[0].geometry.location);
-   
+    console.log(fetchResult.results[0].formatted_address);
+    console.log(fetchResult.results[0].geometry.location);
 
-        
+    let imgs: any[]= [];
+
+    const fileReader= new FileReader();
+
+    images.map((item:any)=>{
+      fileReader.onload=()=>{
+        imgs.push(item);
+      }
+    })
+
+    
+
+const item = await fetch('/api/insert', {method:"POST", body:JSON.stringify({object:{
+  listed_by: user && user.id,
+  address: fetchResult.results[0].formatted_address,
+  rent_offer:isForRent,
+  geometric_positions:fetchResult.results[0].geometry.location,
+  bathrooms: Number(bathroomsQty),
+  bedrooms: Number(bedroomsQty),
+  square_footage: Number(squareFootage),
+  description:propertyDescription,
+  price: Number(propertyPrice),
+  property_name:propertyName,
+  images:imgs,
+}, collection:'listings'}), headers:{
+  'Content-Type':'application/json'
+} });
+
+const result = await item.json();
+
+console.log(result);
+    
+    toast.success('Property Successfully added');
+  
+} catch (error) {
+  console.log(error);
+}
+
+     
+    
     }
 
 const handleImages = (e: ChangeEvent<HTMLInputElement>) => {
@@ -31,43 +80,17 @@ const handleImages = (e: ChangeEvent<HTMLInputElement>) => {
     return;
   }
 
-  if ( e.target.files.length > 6) {
+  if (e.target.files.length > 6) {
     toast.error('Too many images uploaded. Maximum 6 images.');
     return;
   }
 
-  const promises: Promise<string>[] = [];
-  for (const file of Array.from(e.target.files)) {
-    if (file.size) {
-      promises.push(readFileAsDataURL(file));
-    }
-  }
 
-  Promise.all(promises)
-    .then((dataURLs: string[]) => {
-      setImages(dataURLs);
-    })
-    .catch((error) => {
-      console.error('Error reading files:', error);
-    });
+  console.log(Array.from(e.target.files));
+
+  setImages(Array.from(e.target.files))
 };
 
-const readFileAsDataURL = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      if (fileReader.result && typeof fileReader.result === 'string') {
-        resolve(fileReader.result);
-      } else {
-        reject(new Error('Failed to read file'));
-      }
-    };
-    fileReader.onerror = (event) => {
-      reject(new Error('Error reading file'));
-    };
-    fileReader.readAsDataURL(file);
-  });
-};
 
 
 
@@ -80,7 +103,7 @@ const readFileAsDataURL = (file: File): Promise<string> => {
               <p className="text-2xl text-white font-bold">List your Real Estate</p>
 
 
-<div className="flex w-full flex-wrap gap-3"> 
+
                   <div className="grid w-full sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                       <div className="flex col-span-1 flex-col gap-2">
                         <p className="text-white font-semibold">Propety Name</p>
@@ -116,16 +139,16 @@ const readFileAsDataURL = (file: File): Promise<string> => {
 
                       
 </div>
-
-                  
+         
+<div className="flex flex-col gap-2">
+  <p className='text-white font-bold text-xl'>Is for rent?</p>
+  <input name='isForRent' type="checkbox"  className="toggle toggle-lg checked:text-purple checked:bg-purple" />
 </div>
+
 
 <div className="flex flex-col gap-4">
                   <p className='font-bold text-white text-xl flex gap-2 items-center'><FaCamera size={24} className='text-purple'/> Images</p>
                   <input onChange={handleImages} name="images" type="file" multiple  className="file-input outline-none text-white  bg-purple w-full max-w-xs" accept="image/*" />
-                  <div className="flex gap-4 flex-wrap">
-                    {images.length > 0 && images.map((item:any, i:any)=>(<Image className='w-16 h-16 rounded-lg object-cover' key={i} width={48} height={48} src={item} alt=''/>))}
-                  </div> 
 </div>
               
 
