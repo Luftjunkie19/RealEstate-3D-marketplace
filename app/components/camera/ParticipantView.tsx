@@ -1,13 +1,15 @@
 import { useParticipant } from '@videosdk.live/react-sdk';
 import React, { useEffect, useMemo, useRef } from 'react'
+import { FaCamera, FaMicrophone, FaPhone } from 'react-icons/fa6';
 import ReactPlayer from "react-player";
+import { PiCameraSlashFill } from "react-icons/pi";
 
 
 type Props = {participantId:any, key:any}
 
 function ParticipantView({participantId,key}: Props) {
   const micRef = useRef<HTMLAudioElement>(null);
-  const { webcamStream, micStream, webcamOn, micOn, isLocal, displayName } =
+  const { webcamStream, micStream, webcamOn, micOn, isLocal, displayName, participant } =
     useParticipant(participantId);
 
   const videoStream = useMemo(() => {
@@ -36,10 +38,14 @@ function ParticipantView({participantId,key}: Props) {
     }
   }, [micStream, micOn]);
 
+
+
   return (
     <div>
       <audio ref={micRef} autoPlay playsInline muted={isLocal} />
-      {webcamOn && (
+  
+        <div className=" max-w-xs h-56 w-full bg-darkGray p-2 rounded-lg flex flex-col gap-2">
+        {webcamOn ? (
         <ReactPlayer
           playsinline // very very imp prop
           pip={false}
@@ -47,14 +53,20 @@ function ParticipantView({participantId,key}: Props) {
           controls={false}
           muted={true}
           playing={true}
+          width={'100%'}
+          height={'100%'}
           url={videoStream}
-          height={"300px"}
-          width={"300px"}
           onError={(err) => {
             console.log(err, "participant video error");
           }}
         />
-      )}
+      ) : <PiCameraSlashFill className='text-5xl w-full h-full text-purple'/>}
+        <p>{displayName}</p>
+      
+        </div>
+   
+
+
     </div>
   );
 
