@@ -38,7 +38,7 @@ function Navbar({}: Props) {
                   <FaSignInAlt />
                   Sign In
               </button>
-        </Link> : <Link className='flex items-center gap-4' href={'/profile'}>
+        </Link> : <Link className='flex items-center gap-2' href={'/profile'}>
           <FaUser/>
           Profile
         </Link>
