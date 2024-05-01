@@ -1,10 +1,14 @@
 'use client';
-
 import React from 'react'
 import { MapContainer, Marker, TileLayer, Popup } from 'react-leaflet'
 
 import 'leaflet/dist/leaflet.css';
-import 'leaflet/dist/images/marker-icon.png';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
+import * as L from 'leaflet';
+import 'leaflet-defaulticon-compatibility';
+
+
 
 
 
@@ -17,7 +21,7 @@ function PointWithMap({lat, lng, address}: Props) {
     center={[lat, lng]}
     zoom={13}
     scrollWheelZoom={true}
-    className='max-w-5xl h-80 mx-auto lg:my-6'
+    className='max-w-5xl h-80 mx-auto lg:my-2 z-[20]'
   >
     <TileLayer
       url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"

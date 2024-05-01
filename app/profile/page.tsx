@@ -2,14 +2,19 @@
 
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import Image from 'next/image';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {formatDistance, formatDistanceToNow} from 'date-fns'
 import { IconType } from 'react-icons/lib';
 type Props = {}
 import { BsFillHousesFill } from "react-icons/bs";
 import { FaMessage, FaStar } from 'react-icons/fa6';
+import { supabase } from '@/utils/supabase/client';
+import Offer from '../components/main-page/items/Offer';
 
 function CurrentUserPage({}: Props) {
+  const [object, setObject]=useState<any[]>([]);
+  const [favourites, setFavourites]=useState<any[]>([]);
+
   const {user}=useAuthContext();
   interface tabObject{
     id:number,
@@ -18,6 +23,28 @@ function CurrentUserPage({}: Props) {
   }
   const [activeTab, setActiveTab]=useState<number>(0);
 const tabs:tabObject[]=[{id:1, content:'Properties', tabIcon:BsFillHousesFill}, {id:2, content:'Messages', tabIcon:FaMessage}, {id:3, content:'Favourited', tabIcon:FaStar}]
+const getDataNeeded=async ()=>{
+  if(user){
+    const {data:yourListings, error:yourListingsError} = await supabase.from('listings').select('*').eq('listed_by', user.id);
+
+    if(!yourListingsError){
+      setObject(yourListings);
+    }
+  
+
+    const {data, error}= await supabase.from('users').select('favourite_properties').eq('id', user.id);
+
+    if(data && !error){
+      setFavourites(data);
+    }
+  }
+
+
+}
+useEffect(()=>{
+  getDataNeeded();
+
+}, [])
 
     return (
     <div className='w-screen min-h-screen'>
@@ -40,7 +67,8 @@ const tabs:tabObject[]=[{id:1, content:'Properties', tabIcon:BsFillHousesFill}, 
 </div>
 
 <div className="flex flex-wrap gap-4 mx-auto m-0 p-4 max-w-screen-2xl">
-
+{activeTab === 1 && object.length > 0 && object.map((item:any)=><><Offer imageUrl={item.images[0]} name={item.property_name} description={item.description} barthRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} squareMetrage={item.square_footage} id={item.id}/></>)}
+{activeTab === 3 && favourites.length > 0 &&  <><p>{favourites.length} properties appeal to you.</p></>}
 </div>
 </>
     

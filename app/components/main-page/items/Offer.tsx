@@ -7,7 +7,6 @@ import { IoBed } from 'react-icons/io5';
 import { MdSell } from 'react-icons/md';
 import { RxRulerSquare } from 'react-icons/rx';
 import Link from 'next/link';
-import { getBase64 } from '@/app/blur/placeholder';
 
 type Props = {imageUrl: string, name:string, description: string, barthRooms:number, bedRooms:number, isForRent: boolean, price:number, squareMetrage:number, id:number}
 
