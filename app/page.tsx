@@ -12,6 +12,8 @@ import { UserResponse } from '@supabase/supabase-js';
 export default function Page() {
   const {dispatch}=useAuthContext();
 
+
+
   useEffect(()=>{
     const getUser = async ()=>{
       await supabase.auth.getUser().then(async (userData:UserResponse)=>{
