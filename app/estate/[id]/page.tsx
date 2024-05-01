@@ -24,6 +24,9 @@ async function DetailedPage({params}: Props) {
     const {data}= await supabase.from('listings').select('*').eq('id', id).limit(1);
 
 
+  
+    
+
 
   return (
     <div className='min-h-screen w-screen'>
@@ -95,10 +98,10 @@ async function DetailedPage({params}: Props) {
   {<Link href={`/profile/${data[0].listed_by}`}>
 <FaUserCircle className=' text-5xl text-white'/>
   </Link>}
-          <button className='flex gap-2 items-center w-fit bg-purple p-2 rounded-lg'>
+          <Link href={`/channel/w4pp-zx0r-fnc9`} className='flex gap-2 items-center w-fit bg-purple p-2 rounded-lg'>
             <FaMessage className='text-white'/>
             <p className='text-white font-semibold'>Contact</p>
-          </button>
+          </Link>
 </div>
         </div>
 </div>
