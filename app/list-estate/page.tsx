@@ -1,9 +1,12 @@
 "use client";
 
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
+import { supabase } from '@/utils/supabase/client';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
+
 import React, { ChangeEvent, useState } from 'react'
 import toast from 'react-hot-toast';
 
@@ -13,86 +16,90 @@ type Props = {}
 
 function Page({}: Props) {
   const {user}=useAuthContext();
+
+  const [images, setImages] = useState<File[]>([]); // Set initial state to an array of Files
+
+  const formAction = async (formData: FormData) => {
+    try {
+      // Extract form data
+      const propertyName = formData.get('property-name');
+      const propertyPrice = formData.get('property-price');
+      const squareFootage = formData.get('sqr-footage');
+      const propertyDescription = formData.get('description');
+      const bathroomsQty = formData.get('bathrooms');
+      const bedroomsQty = formData.get('bedrooms');
+      const providedAddress = formData.get('property-address');
+      const isForRent = formData.get('isForRent');
   
-    const [images, setImages] = useState<string | any>([]);
-
-    const formAction = async (formData:FormData) => {
-try {
-  const propertyName= formData.get('property-name');
-  const propertyPrice = formData.get('property-price');
-  const squareFootage= formData.get('sqr-footage');
-  const propertyDescription= formData.get('description');
-  const bathroomsQty= formData.get('bathrooms');
-  const bedroomsQty= formData.get('bedrooms');
-    const providedAddress= formData.get('property-address'); 
-    const isForRent= formData.get('isForRent');
-    const fetchData = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${providedAddress}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`);
-    const fetchResult = await fetchData.json();
-
-    console.log(fetchResult.results[0].formatted_address);
-    console.log(fetchResult.results[0].geometry.location);
-
-    let imgs: any[]= [];
-
-    const fileReader= new FileReader();
-
-    images.map((item:any)=>{
-      fileReader.onload=()=>{
-        imgs.push(item);
+      // Fetch geocode data
+      const fetchData = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${providedAddress}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`);
+      const fetchResult = await fetchData.json();
+  
+      const address = fetchResult.results[0].formatted_address;
+      const geometricPositions = fetchResult.results[0].geometry.location;
+  
+      // Upload images
+      const uploadedImageUrls: string[] = [];
+      for (const image of images) {
+        const { data:propertyImage, error } = await supabase.storage.from('property_images').upload(`${user?.id}/${propertyName}/${image.name}`, image);
+      
+        if (error) {
+          console.error('Error uploading image:', error);
+        } else {
+          const {data}= supabase.storage.from('property_images').getPublicUrl(`${user?.id}/${propertyName}/${image.name}`);
+          uploadedImageUrls.push(data.publicUrl || ''); // Assuming Key contains the URL or identifier of the uploaded image
+        }
       }
-    })
-
-    
-
-const item = await fetch('/api/insert', {method:"POST", body:JSON.stringify({object:{
-  listed_by: user && user.id,
-  address: fetchResult.results[0].formatted_address,
-  rent_offer:isForRent,
-  geometric_positions:fetchResult.results[0].geometry.location,
-  bathrooms: Number(bathroomsQty),
-  bedrooms: Number(bedroomsQty),
-  square_footage: Number(squareFootage),
-  description:propertyDescription,
-  price: Number(propertyPrice),
-  property_name:propertyName,
-  images:imgs,
-}, collection:'listings'}), headers:{
-  'Content-Type':'application/json'
-} });
-
-const result = await item.json();
-
-console.log(result);
-    
-    toast.success('Property Successfully added');
   
-} catch (error) {
-  console.log(error);
-}
 
+      toast.success('Property Successfully added');
+      // Insert property data into the database
+ await fetch('/api/insert', {
+        method: "POST",
+        body: JSON.stringify({
+          object: {
+            listed_by: user?.id,
+            address,
+            rent_offer: isForRent ? isForRent : false,
+            geometric_positions: geometricPositions,
+            bathrooms: Number(bathroomsQty),
+            bedrooms: Number(bedroomsQty),
+            square_footage: Number(squareFootage),
+            description: propertyDescription,
+            price: Number(propertyPrice),
+            property_name: propertyName,
+            images: uploadedImageUrls, // Associate uploaded image URLs with the property
+          },
+          collection: 'listings'
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      window.location.href='/';
+   
      
-    
+    } catch (error) {
+      console.error(error);
+      toast.error('An error occurred while adding the property');
     }
-
-const handleImages = (e: ChangeEvent<HTMLInputElement>) => {
-  if (!e.target.files || e.target.files.length === 0) {
-    toast.error('No image uploaded');
-    return;
-  }
-
-  if (e.target.files.length > 6) {
-    toast.error('Too many images uploaded. Maximum 6 images.');
-    return;
-  }
-
-
-  console.log(Array.from(e.target.files));
-
-  setImages(Array.from(e.target.files))
-};
-
-
-
+  };
+  
+  const handleImages = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      toast.error('No image uploaded');
+      return;
+    }
+  
+    if (e.target.files.length > 6) {
+      toast.error('Too many images uploaded. Maximum 6 images.');
+      return;
+    }
+  
+    setImages(Array.from(e.target.files));
+  };
+  
 
 
 

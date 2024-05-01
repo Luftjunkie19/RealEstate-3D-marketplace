@@ -6,11 +6,16 @@ import { GiHouseKeys } from 'react-icons/gi';
 import { IoBed } from 'react-icons/io5';
 import { MdSell } from 'react-icons/md';
 import { RxRulerSquare } from 'react-icons/rx';
+import Link from 'next/link';
+import { getBase64 } from '@/app/blur/placeholder';
 
-type Props = {imageUrl: StaticImageData, name:string, description: string, barthRooms:number, bedRooms:number, isForRent: boolean, price:number, squareMetrage:number}
+type Props = {imageUrl: string, name:string, description: string, barthRooms:number, bedRooms:number, isForRent: boolean, price:number, squareMetrage:number, id:number}
 
-function Offer({name, imageUrl, description, barthRooms, bedRooms, isForRent, price, squareMetrage}: Props) {
-  return (
+function Offer({name, imageUrl, description, barthRooms, bedRooms, isForRent, price, squareMetrage, id}: Props) {
+  
+
+
+    return (
       <div className='p-6 flex flex-col gap-2 lg:max-w-sm w-full border-2 border-darkGray rounded-xl shadow-lg overflow-hidden'>
        
           <Image src={imageUrl}  width={256} height={256} className='w-full object-cover p-2 h-64 rounded-lg'  alt=""/>
@@ -42,10 +47,10 @@ function Offer({name, imageUrl, description, barthRooms, bedRooms, isForRent, pr
           <div className="flex p-2 justify-between items-center">
               <div className="flex flex-col gap-2">
                   <p className='text-xs'>Price</p>
-                {isForRent ?   <p>{price}$ / month</p> :   <p>{price}$</p>}
+                {isForRent ?   <p>{new Intl.NumberFormat('pl', {currency:'USD'}).format(price)} $ / month</p> :   <p>{new Intl.NumberFormat('en', {currency:'USD'}).format(price)} $</p>}
               </div>
 
-              <button className="bg-purple p-2 rounded-lg text-base text-white font-semibold"> View Details</button>
+              <Link href={`/estate/${id}`} className="bg-purple p-2 rounded-lg text-base text-white font-semibold"> View Details</Link>
           </div>
     </div>
   )
