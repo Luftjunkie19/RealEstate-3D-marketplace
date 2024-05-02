@@ -6,6 +6,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AuthProvider from "@/utils/contexts/userContext";
 import VideoProvider from "@/utils/contexts/VideoProvider";
+import Drawer from "./components/Drawer";
+import { useState } from "react";
 
 export const metadata: Metadata = {
   title: "VirtuEstate",
@@ -18,13 +20,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en">
 
   <AuthProvider>
 
       <body className=' bg-bgColor overflow-x-hidden'>
-        <Navbar/>
+        <Navbar />
+      
               <Toaster/>
         {children}
         <Footer/>

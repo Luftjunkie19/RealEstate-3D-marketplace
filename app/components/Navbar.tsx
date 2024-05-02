@@ -2,14 +2,25 @@
 
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import Link from 'next/link';
-import React from 'react'
+import React, { useState } from 'react'
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { FaUser } from 'react-icons/fa6';
 import { IoMenu } from "react-icons/io5";
+import Drawer from './Drawer';
+import { User } from '@supabase/supabase-js';
 type Props = {}
 
 function Navbar({}: Props) {
 
+  const [show, setShown]=useState(false);
+
+  const openDrawer=()=>{
+    setShown(true);
+  }
+
+  const closeDrawer=()=>{
+    setShown(false);
+  }
   const {user, dispatch}=useAuthContext();
 
   const handleSignOut= async()=>{
@@ -19,10 +30,11 @@ function Navbar({}: Props) {
 
 
   return (
+    <>
       <div className=' bg-darkGray w-screen sticky top-0 left-0 z-[100] border-b border-bgColor border-2 flex justify-between items-center p-1'>
           <Link href={'/'} className='sm:text-lg lg:text-xl xl:text-2xl font-bold text-white'>Virtu<span className='text-purple'>Estate</span></Link>
 
-<button className="sm:block lg:hidden mr-4">
+<button onClick={openDrawer} className="sm:block lg:hidden mr-4">
   <IoMenu size={24} className='text-white'/>
 </button>
           <div className="gap-6 mr-8 items-center sm:hidden lg:flex">
@@ -50,6 +62,8 @@ function Navbar({}: Props) {
         </button>}
           </div>
     </div>
+    <Drawer handleSignOut={handleSignOut} user={user as User} closeDrawer={closeDrawer} isShown={show}/>
+    </>
   )
 }
 
