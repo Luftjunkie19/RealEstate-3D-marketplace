@@ -16,6 +16,7 @@ import PointWithMap from '@/app/components/PointWithMap';
 import { FaHeart, FaUserCircle } from 'react-icons/fa';
 import { format } from 'date-fns';
 import Link from 'next/link';
+import ContactBtn from '@/app/components/estate-components/ContactBtn';
 
 async function DetailedPage({params}: Props) {
 
@@ -24,8 +25,7 @@ async function DetailedPage({params}: Props) {
     const {data}= await supabase.from('listings').select('*').eq('id', id).limit(1);
 
 
-  
-    
+
 
 
   return (
@@ -98,10 +98,7 @@ async function DetailedPage({params}: Props) {
   {<Link href={`/profile/${data[0].listed_by}`}>
 <FaUserCircle className=' text-5xl text-white'/>
   </Link>}
-          <Link href={`/channel/w4pp-zx0r-fnc9`} className='flex gap-2 items-center w-fit bg-purple p-2 rounded-lg'>
-            <FaMessage className='text-white'/>
-            <p className='text-white font-semibold'>Contact</p>
-          </Link>
+         <ContactBtn data={data} id={id}/>
 </div>
         </div>
 </div>
