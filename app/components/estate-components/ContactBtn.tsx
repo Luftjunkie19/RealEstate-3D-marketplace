@@ -2,6 +2,7 @@
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import React from 'react'
 import { FaMessage } from 'react-icons/fa6';
+import { IoCall } from 'react-icons/io5';
 
 type Props = {data:any[], id:string }
 
@@ -37,7 +38,7 @@ const {user:userData}=useAuthContext();
 
   return (
     <button onClick={createTokenAndRedirect} className='flex gap-2 items-center w-fit bg-purple p-2 rounded-lg'>
-    <FaMessage className='text-white'/>
+    <IoCall className='text-white'/>
     <p className='text-white font-semibold'>Contact</p>
   </button>
   )
