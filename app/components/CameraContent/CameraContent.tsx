@@ -66,19 +66,20 @@ function CameraContent({meetingID}: Props) {
     }
 
     const sendMessage= (formData:FormData)=>{
-      const messageText= formData.get('message') as string;
+      let messageText= formData.get('message') as string;
       console.log(messageText);
       if(messageText.length > 0){
 meeting.sendChatMessage(JSON.stringify({message:messageText}));
+
       }
 
     }
 
   return (
-    <main className="w-screen h-screen">
+    <main className="w-screen h-screen ">
                 {joined === "JOINED" ? (
-                <div className="w-full grid-flow-row-dense justify-items-stretch place-items-stretch grid  grid-cols-12">
-                  <div className="p-4 flex flex-col lg:col-span-6 xl:col-span-9 gap-6 max-w-3xl">
+                <div className="w-screen lg:flex lg:justify-between  xl:grid-flow-row xl:grid  xl:grid-cols-12">
+                  <div className="p-4 w-full flex flex-col lg:col-span-6 xl:col-span-9 gap-6">
                 <div className='flex justify-around mx-auto m-0 max-w-2xl items-center gap-6 flex-wrap p-2'>
                         {participants && participants.size > 0 && [...participants.keys()].map((participantId) => (
                             <ParticipantView
@@ -107,9 +108,9 @@ meeting.sendChatMessage(JSON.stringify({message:messageText}));
     <p>{message.senderName}: {JSON.parse(message.text).message}</p>
   </div>))}
  </div>
-  <form action={sendMessage} className="flex sticky bottom-0 left-0 gap-2 w-full bg-bgColor p-2 ">
-<input name="message" className="p-1 outline-none max-w-56 rounded-lg text-white"/>
-<button className="bg-purple px-2 py-1 rounded-lg text-white">Send</button>
+  <form action={sendMessage} className="flex items-center justify-around sticky bottom-0 left-0 gap-2 w-full bg-bgColor p-2 ">
+<textarea name="message" className="p-1 outline-none h-12 border-0 resize-none max-w-56 rounded-lg text-white"/>
+<button className="bg-purple h-fit p-2 rounded-lg text-white">Send</button>
   </form>
 </div>
 
