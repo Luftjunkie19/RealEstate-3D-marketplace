@@ -1,33 +1,141 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { RiCameraOffFill } from "react-icons/ri";
 import { FaMicrophoneAltSlash } from "react-icons/fa";
 import { MdMeetingRoom } from "react-icons/md";
-import { useMeeting } from '@videosdk.live/react-sdk';
-import React, {  useState } from 'react'
+import { Constants, createCameraVideoTrack, createMicrophoneAudioTrack, MicrophoneDeviceInfo, useMediaDevice, useMeeting } from '@videosdk.live/react-sdk';
+import React, {  useEffect, useRef, useState } from 'react'
 import ParticipantView from '../camera/ParticipantView';
 import { FaCamera, FaMicrophone, FaPhone, FaRegMessage } from 'react-icons/fa6';
 import toast from "react-hot-toast";
 import { TbMessageCircleOff } from "react-icons/tb";
-
+import { MdCallEnd } from "react-icons/md";
+import cameraImg from '@/assets/camera-off.png'
 import { TbMessageCircle2 } from "react-icons/tb";
-
-
-import { IoIosChatbubbles } from "react-icons/io";
+import micImg from '@/assets/images.jpeg'
 
 type Props = {meetingID: string}
 import {FadeLoader} from 'react-spinners';
 import ChatDrawer from "../ChatDrawer";
-function CameraContent({meetingID}: Props) {
+import ReactPlayer from "react-player";
+import useMediaStream from "@/lib/getDevices";
+import Image from "next/image";
+
+export default function CameraContent({meetingID}: Props) {
     const [joined, setJoined] = useState<string | null>(null);
     const [showChat, setShowChat]=useState<boolean>(true);
-    //Get the method which will be used to join the meeting.
-    //We will also get the participants list to display all participants
-  
+    const [micMuted, setMicMuted]=useState<boolean>(true);
+    const [showCamera, setShowCamera]=useState<boolean>(true);
+    const {getVideoTrack, getAudioTrack}=useMediaStream();
+    //Devices Array
+    const [accessedMics, setAccessedMics]=useState<any[]>([]);
+    const [accessibleCams, setAccessibleCams]=useState<any[]>([]);
+    const [accessedSpeakers, setAccessedSpeakers]=useState<any[]>([]);
+    
+    
+    //Refs to camera and mic
+    const [displayCamera, setDisplayCamera]=useState<MediaStream | null>(null);
+    const micRef=useRef<HTMLAudioElement>(null);
+
+
+    const toggleTestMic=()=>{
+      if(micRef.current){
+        micRef.current.pause();
+
+      }
+    }
+    
+
+  const {checkPermissions, getCameras, getMicrophones, requestPermission, getPlaybackDevices}=useMediaDevice({onDeviceChanged(devices) {
+  const loadedDevices= devices.then((device)=>device);
+  console.log(loadedDevices);
+  },});
+
+  const requestMissingPermissions= async ()=>{
+    const permissions = await checkPermissions();
+
+
+    if(!permissions.get(Constants.permission.AUDIO)){
+      await requestPermission(Constants.permission.AUDIO);
+    }
+
+    if(!permissions.get(Constants.permission.VIDEO)){
+     await requestPermission(Constants.permission.VIDEO); 
+    }
+
+    if(!permissions.get(Constants.permission.AUDIO_AND_VIDEO)){
+       await requestPermission(Constants.permission.AUDIO_AND_VIDEO);
+    }
+
+  }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getMediaDevices = async () => {
+    try {
+      let webcams = await getCameras();
+
+     
+        setAccessibleCams(webcams);
+
+       const accessCamera = await getVideoTrack({webcamId:webcams[0].deviceId as string, encoderConfig: "h540p_w960p" });
+     if(accessCamera){
+      setDisplayCamera(accessCamera);
+     }else{
+      setDisplayCamera(null);
+      }
+     
+      
+
+      let mics = await getMicrophones();
+
+        setAccessedMics(mics);
+        
+        if(micRef.current){
+
+          const accessMic = await getAudioTrack({micId:mics[0].deviceId as string });
+          if(accessMic && joined !== 'JOINED'){
+            micRef.current.srcObject=accessMic;
+            micRef.current
+            .play()
+            .catch((error) =>
+              console.error("videoElem.current.play() failed", error)
+            );
+          }else{
+            micRef.current.srcObject=null;
+          }
+        }
+        
+      
+
+      let speakers = await getPlaybackDevices();
+
+      if(speakers.length > 0){
+setAccessedSpeakers(speakers);
+      }
+    } catch (err) {
+      console.log("Error in getting audio or video devices", err);
+    }
+  };
+
+
+ 
+  useEffect(()=>{
+    requestMissingPermissions();
+  },[requestMissingPermissions]);
+
+  useEffect(()=>{
+    getMediaDevices();
+  }, [getMediaDevices])
+
+
     const { join, participants, toggleMic, toggleWebcam, leave, localMicOn, localWebcamOn, end, meeting
      } = useMeeting({
       //callback for when meeting is joined successfully
       onMeetingJoined: () => {
         setJoined("JOINED");
+      },
+      onConnetionClose() {
+        setJoined('CLOSED');
       },
       onParticipantJoined(participant) {
         toast(`${participant.displayName} joined the Conference`, {
@@ -52,6 +160,12 @@ function CameraContent({meetingID}: Props) {
       },
      
     });
+
+    const toggleCamera= ()=>{
+      setShowCamera(!showCamera)
+    }
+  
+
     const joinMeeting = () => {
       setJoined("JOINING");
       join();
@@ -83,6 +197,9 @@ meeting.sendChatMessage(JSON.stringify({message:messageText}));
       }
 
     }
+
+
+    
 
     const toggleShowChat=()=>{
       setShowChat(!showChat);
@@ -152,12 +269,46 @@ meeting.sendChatMessage(JSON.stringify({message:messageText}));
                 ) : joined === "ERROR" ? (
                     <p>Error joining the meeting. Please try again later.</p>
                 ) : (
-                  <div className="mx-auto my-12 flex flex-col gap-8 items-center justify-center">
-                    <MdMeetingRoom className="text-6xl text-purple"/>
+                  <div className="mx-auto my-12 flex gap-8 items-center sm:flex-col lg:flex-row justify-around">
+
+<div className="max-w-xl flex flex-col gap-4">
+  
+<div className="max-w-sm relative top-0 left-0 max-h-64 w-full h-full">
+  {!micMuted && showCamera && joined !== "JOINED" && <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-darkGray/60">
+   <FaMicrophoneAltSlash className='text-purple text-5xl'/>
+    </div>}
+ {displayCamera && showCamera && joined !== "JOINED" && <ReactPlayer url={displayCamera as MediaStream} playing muted controls={false} height={'100%'} width={'100%'} playsinline onError={(err) => {
+            console.log(err, "participant video error");
+          }} />}
+  {!displayCamera || !showCamera && joined !== "JOINED" && <div className="w-full h-full rounded-lg bg-darkGray p-2">
+    <Image width={256} height={256} src={cameraImg} alt="" className="w-full h-full"/>
+    </div>}
+<audio  playsInline muted={micMuted} ref={micRef}></audio>
+</div>
+
+
+<div className='flex self-center max-w-sm w-full my-4 p-2 rounded-lg mx-auto m-0 bg-darkGray gap-6 justify-center items-center sticky top-0 left-0'>
+                  <button onClick={toggleCamera} className={`text-white ${displayCamera ? 'bg-purple' : 'bg-red-500'} p-3 rounded-full`}>
+                   {displayCamera && showCamera ? <RiCameraOffFill/> : <FaCamera/>}  
+                  </button>
+                  <button onClick={toggleTestMic} className={`text-white bg-purple p-3 rounded-full ${micMuted ? 'bg-purple' : 'bg-red-500'}`}>
+                  { !micMuted ?  <FaMicrophone/> : <FaMicrophoneAltSlash/>}
+                  </button>             
+                  </div>
+</div>
+                    
+<div className="flex gap-6 flex-col items-center">
+<MdMeetingRoom className="text-6xl text-purple"/>
                     <p className="text-white text-lg">MeetingId: <span className="text-xl font-bold">{meetingID}</span></p>
                     <button className="text-white p-2 rounded-lg bg-purple" onClick={joinMeeting}>Join the meeting</button>
+</div>   
                   </div>
                 )}
+
+                {joined === "CLOSED" && <div className="mx-auto m-0 flex flex-col items-center gap-6">
+                  <MdCallEnd className=" text-3xl"/>
+                  <p className="text-white text-lg">Meeting has ended up.</p>
+                  </div>}
 
 
 
@@ -166,4 +317,3 @@ meeting.sendChatMessage(JSON.stringify({message:messageText}));
   )
 }
 
-export default CameraContent

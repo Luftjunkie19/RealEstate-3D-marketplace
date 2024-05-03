@@ -9,6 +9,8 @@ type Props = {
   path:string, 
   userID:string,
   metaData:Object,
+  micEnabled?:boolean,
+  cameraEnabled?:boolean
 }
 
 function VideoProvider({children, username, path, userID, metaData}: Props) {
@@ -23,6 +25,7 @@ function VideoProvider({children, username, path, userID, metaData}: Props) {
       participantId: userID,
       debugMode:true,
       metaData:metaData,
+    
     }}
 
     >
