@@ -3,10 +3,10 @@
 import { RiCameraOffFill } from "react-icons/ri";
 import { FaMicrophoneAltSlash } from "react-icons/fa";
 import { MdMeetingRoom } from "react-icons/md";
-import { Constants, createCameraVideoTrack, createMicrophoneAudioTrack, MicrophoneDeviceInfo, useMediaDevice, useMeeting } from '@videosdk.live/react-sdk';
+import { CameraDeviceInfo, Constants, createCameraVideoTrack, createMicrophoneAudioTrack, MicrophoneDeviceInfo, useMediaDevice, useMeeting } from '@videosdk.live/react-sdk';
 import React, {  useEffect, useRef, useState } from 'react'
 import ParticipantView from '../camera/ParticipantView';
-import { FaCamera, FaMicrophone, FaPhone, FaRegMessage } from 'react-icons/fa6';
+import { FaCamera, FaMicrophone, FaPhone, FaRegMessage, FaSpeakerDeck } from 'react-icons/fa6';
 import toast from "react-hot-toast";
 import { TbMessageCircleOff } from "react-icons/tb";
 import { MdCallEnd } from "react-icons/md";
@@ -14,120 +14,39 @@ import cameraImg from '@/assets/camera-off.png'
 import { TbMessageCircle2 } from "react-icons/tb";
 import micImg from '@/assets/images.jpeg'
 
-type Props = {meetingID: string}
+type Props = {
+  meetingID: string, 
+  accessMics: MicrophoneDeviceInfo[],
+  accessSpeakers:PlaybackDeviceInfo[],
+  accessCams: CameraDeviceInfo[],
+  selectedCameraTrack:MediaStream | undefined,
+selectedAudioTrack:MediaStream | undefined,
+setEnabledMic: React.Dispatch<React.SetStateAction<boolean>>,
+setEnabledCamera:React.Dispatch<React.SetStateAction<boolean>>,
+enabledMic:boolean,
+enabledCam:boolean, 
+selectedMic: string | null,
+selectedCam:string | null,
+selectedSpeakers:string | null,
+selectCam:React.Dispatch<React.SetStateAction<CameraDeviceInfo | null>>,
+selectMic:React.Dispatch<React.SetStateAction<MicrophoneDeviceInfo | null>>,
+selectSpeakers: React.Dispatch<React.SetStateAction<PlaybackDeviceInfo | null>>,
+}
 import {FadeLoader} from 'react-spinners';
 import ChatDrawer from "../ChatDrawer";
 import ReactPlayer from "react-player";
-import useMediaStream from "@/lib/getDevices";
 import Image from "next/image";
+import SelectionBar from "./items/SelectionBar";
+import SelectListItem from "./items/SelectItem";
+import { PlaybackDeviceInfo } from "@videosdk.live/react-sdk/dist/types/deviceInfo";
+;
 
-export default function CameraContent({meetingID}: Props) {
+export default function CameraContent({meetingID, selectMic, selectCam, selectedSpeakers, selectSpeakers, selectedCam, selectedMic,  accessCams, accessSpeakers, accessMics, selectedAudioTrack, selectedCameraTrack, setEnabledCamera, setEnabledMic, enabledCam, enabledMic}: Props) {
+  //Manage showing screen
     const [joined, setJoined] = useState<string | null>(null);
     const [showChat, setShowChat]=useState<boolean>(true);
-    const [micMuted, setMicMuted]=useState<boolean>(true);
-    const [showCamera, setShowCamera]=useState<boolean>(true);
-    const {getVideoTrack, getAudioTrack}=useMediaStream();
-    //Devices Array
-    const [accessedMics, setAccessedMics]=useState<any[]>([]);
-    const [accessibleCams, setAccessibleCams]=useState<any[]>([]);
-    const [accessedSpeakers, setAccessedSpeakers]=useState<any[]>([]);
-    
-    
-    //Refs to camera and mic
-    const [displayCamera, setDisplayCamera]=useState<MediaStream | null>(null);
-    const micRef=useRef<HTMLAudioElement>(null);
-
-
-    const toggleTestMic=()=>{
-      if(micRef.current){
-        micRef.current.pause();
-
-      }
-    }
-    
-
-  const {checkPermissions, getCameras, getMicrophones, requestPermission, getPlaybackDevices}=useMediaDevice({onDeviceChanged(devices) {
-  const loadedDevices= devices.then((device)=>device);
-  console.log(loadedDevices);
-  },});
-
-  const requestMissingPermissions= async ()=>{
-    const permissions = await checkPermissions();
-
-
-    if(!permissions.get(Constants.permission.AUDIO)){
-      await requestPermission(Constants.permission.AUDIO);
-    }
-
-    if(!permissions.get(Constants.permission.VIDEO)){
-     await requestPermission(Constants.permission.VIDEO); 
-    }
-
-    if(!permissions.get(Constants.permission.AUDIO_AND_VIDEO)){
-       await requestPermission(Constants.permission.AUDIO_AND_VIDEO);
-    }
-
-  }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getMediaDevices = async () => {
-    try {
-      let webcams = await getCameras();
-
-     
-        setAccessibleCams(webcams);
-
-       const accessCamera = await getVideoTrack({webcamId:webcams[0].deviceId as string, encoderConfig: "h540p_w960p" });
-     if(accessCamera){
-      setDisplayCamera(accessCamera);
-     }else{
-      setDisplayCamera(null);
-      }
-     
-      
-
-      let mics = await getMicrophones();
-
-        setAccessedMics(mics);
-        
-        if(micRef.current){
-
-          const accessMic = await getAudioTrack({micId:mics[0].deviceId as string });
-          if(accessMic && joined !== 'JOINED'){
-            micRef.current.srcObject=accessMic;
-            micRef.current
-            .play()
-            .catch((error) =>
-              console.error("videoElem.current.play() failed", error)
-            );
-          }else{
-            micRef.current.srcObject=null;
-          }
-        }
-        
-      
-
-      let speakers = await getPlaybackDevices();
-
-      if(speakers.length > 0){
-setAccessedSpeakers(speakers);
-      }
-    } catch (err) {
-      console.log("Error in getting audio or video devices", err);
-    }
-  };
-
-
- 
-  useEffect(()=>{
-    requestMissingPermissions();
-  },[requestMissingPermissions]);
-
-  useEffect(()=>{
-    getMediaDevices();
-  }, [getMediaDevices])
-
-
+  
+  
     const { join, participants, toggleMic, toggleWebcam, leave, localMicOn, localWebcamOn, end, meeting
      } = useMeeting({
       //callback for when meeting is joined successfully
@@ -161,9 +80,6 @@ setAccessedSpeakers(speakers);
      
     });
 
-    const toggleCamera= ()=>{
-      setShowCamera(!showCamera)
-    }
   
 
     const joinMeeting = () => {
@@ -173,10 +89,12 @@ setAccessedSpeakers(speakers);
 
     const toggleMicHandler = () => {
       toggleMic();
+      setEnabledMic(localMicOn);
             
     }
     const toggleWebcamHandler = () => {
       toggleWebcam();
+      setEnabledCamera(localWebcamOn);
     }
 
     const leaveConference= ()=>{
@@ -198,9 +116,6 @@ meeting.sendChatMessage(JSON.stringify({message:messageText}));
 
     }
 
-
-    
-
     const toggleShowChat=()=>{
       setShowChat(!showChat);
     }
@@ -219,16 +134,16 @@ meeting.sendChatMessage(JSON.stringify({message:messageText}));
                         ))}
                     </div>
                     <div className='flex self-center max-w-sm w-full my-4 p-2 rounded-lg mx-auto m-0 bg-darkGray gap-6 justify-center items-center sticky top-0 left-0'>
-                  <button onClick={toggleWebcamHandler} className='text-white bg-purple p-3 rounded-full'>
+                  <button onClick={toggleWebcamHandler} className={`text-white bg-purple p-3 rounded-full ${!localWebcamOn ? 'bg-purple' : 'bg-red-500'}`}>
                    {localWebcamOn ? <RiCameraOffFill/> : <FaCamera/>}  
                   </button>
                   <button onClick={leaveConference} className='text-white p-3 rounded-full bg-red-500'>
                     <FaPhone/>
                   </button>
-                  <button onClick={toggleMicHandler} className='text-white bg-purple p-3 rounded-full'>
+                  <button onClick={toggleMicHandler} className={`text-white p-3 rounded-full ${!localMicOn ? 'bg-purple' : 'bg-red-500'}`}>
                   { !localMicOn ?  <FaMicrophone/> : <FaMicrophoneAltSlash/>}
                   </button>
-                  <button onClick={toggleShowChat} className="text-white bg-purple p-3 rounded-full">
+                  <button onClick={toggleShowChat} className={`text-white ${!showChat ? 'bg-purple' : 'bg-red-500'}  p-3 rounded-full`}>
                     {!showChat ? <TbMessageCircle2/> : <TbMessageCircleOff/>}
                   </button>
                   </div>
@@ -260,8 +175,6 @@ meeting.sendChatMessage(JSON.stringify({message:messageText}));
   </form>
 </>)}/>         
                 </>
-                   
-              
                 ) : joined === "JOINING" ? (<div className="flex flex-col my-12 gap-4 items-center">
                   <FadeLoader color="#703BF7"  />
                   <p className="text-white text-lg">Joining the meeting...</p>
@@ -272,29 +185,45 @@ meeting.sendChatMessage(JSON.stringify({message:messageText}));
                   <div className="mx-auto my-12 flex gap-8 items-center sm:flex-col lg:flex-row justify-around">
 
 <div className="max-w-xl flex flex-col gap-4">
+
+  
   
 <div className="max-w-sm relative top-0 left-0 max-h-64 w-full h-full">
-  {!micMuted && showCamera && joined !== "JOINED" && <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-darkGray/60">
+  {!selectedAudioTrack && enabledMic &&  joined !== "JOINED" && <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-darkGray/60">
+   
    <FaMicrophoneAltSlash className='text-purple text-5xl'/>
     </div>}
- {displayCamera && showCamera && joined !== "JOINED" && <ReactPlayer url={displayCamera as MediaStream} playing muted controls={false} height={'100%'} width={'100%'} playsinline onError={(err) => {
-            console.log(err, "participant video error");
-          }} />}
-  {!displayCamera || !showCamera && joined !== "JOINED" && <div className="w-full h-full rounded-lg bg-darkGray p-2">
+  { selectedCameraTrack && enabledCam && joined !== "JOINED" ? <ReactPlayer playing playsinline url={selectedCameraTrack} width={'100%'} height={'100%'}/> : <div className="w-full h-full rounded-lg bg-darkGray p-2">
     <Image width={256} height={256} src={cameraImg} alt="" className="w-full h-full"/>
     </div>}
-<audio  playsInline muted={micMuted} ref={micRef}></audio>
 </div>
 
 
 <div className='flex self-center max-w-sm w-full my-4 p-2 rounded-lg mx-auto m-0 bg-darkGray gap-6 justify-center items-center sticky top-0 left-0'>
-                  <button onClick={toggleCamera} className={`text-white ${displayCamera ? 'bg-purple' : 'bg-red-500'} p-3 rounded-full`}>
-                   {displayCamera && showCamera ? <RiCameraOffFill/> : <FaCamera/>}  
+                  <button onClick={()=>setEnabledCamera(!enabledCam)}  className={`text-white ${enabledCam ? 'bg-purple' : 'bg-red-500'} p-3 rounded-full`}>
+                    <FaCamera/>  
                   </button>
-                  <button onClick={toggleTestMic} className={`text-white bg-purple p-3 rounded-full ${micMuted ? 'bg-purple' : 'bg-red-500'}`}>
-                  { !micMuted ?  <FaMicrophone/> : <FaMicrophoneAltSlash/>}
+                  <button onClick={()=>setEnabledMic(!enabledMic)} className={`text-white bg-purple p-3 rounded-full ${ enabledMic ? 'bg-purple' : 'bg-red-500'}`}>
+                    <FaMicrophone/> 
                   </button>             
                   </div>
+
+
+  <div className="flex gap-4 p-2">
+<SelectionBar selectedOption={selectedMic as string} setChange={selectMic} placeholder={<p className="text-white flex gap-1 items-center">Mics <FaMicrophone/> </p>}>
+  {accessMics.length > 0 && accessMics.map((item)=>(<SelectListItem key={item.deviceId} value={item} label={item.deviceId}/>))}
+</SelectionBar>
+
+<SelectionBar selectedOption={selectedCam as string} setChange={selectCam}  placeholder={<p className="text-white flex gap-1 items-center">Cams <FaCamera/> </p>}>
+  {accessCams.length > 0 && accessCams.map((item)=>(<SelectListItem key={item.deviceId} value={item} label={item.deviceId}/>))}
+</SelectionBar>
+
+<SelectionBar selectedOption={selectedSpeakers as string} setChange={selectSpeakers}  placeholder={<p className="text-white flex gap-1 items-center">Spks <FaSpeakerDeck/> </p>}>
+  {accessSpeakers.length > 0 && accessSpeakers.map((item)=>(<SelectListItem key={item.deviceId} value={item} label={item.deviceId}/>))}
+</SelectionBar>
+
+    
+  </div>
 </div>
                     
 <div className="flex gap-6 flex-col items-center">

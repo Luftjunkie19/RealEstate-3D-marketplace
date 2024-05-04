@@ -1,16 +1,15 @@
 "use client";
+import { PaymentForm } from "react-square-web-payments-sdk";
 
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { supabase } from '@/utils/supabase/client';
-import { createClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
-import Image from 'next/image';
-import { redirect } from 'next/navigation';
+
 
 import React, { ChangeEvent, useState } from 'react'
 import toast from 'react-hot-toast';
 
-import { FaCamera } from 'react-icons/fa6'
+import { FaCamera, FaWpforms } from 'react-icons/fa6'
+import { RetrieveTokenStatusResponse } from "square";
 
 type Props = {}
 
@@ -104,8 +103,21 @@ function Page({}: Props) {
 
 
   return (
-    <div className="min-h-screen w-screen">
-        
+    <PaymentForm cardTokenizeResponseReceived={(token, verifiedBuyer) => {
+      console.info('Token:', token);
+      console.info('Verified Buyer:', verifiedBuyer);
+    }}  applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}
+    locationId={process.env.NEXT_PUBLIC_SQUARE_APP_SEC}>
+<div className="min-h-screen w-screen">
+      <div className="mx-auto m-0 flex justify-center p-4">
+      <ul className="steps">
+  <li data-content='📝' className="step step-primary"></li>
+  <li data-content='🏠' className="step step-primary"></li>
+  <li className="step" data-content='💸'></li>
+  <li className="step" data-content="✅"></li>
+</ul>
+      </div>
+
           <form action={formAction} className="mx-auto p-6 my-8 max-w-6xl bg-darkGray rounded-lg flex flex-col gap-3">
               <p className="text-2xl text-white font-bold">List your Real Estate</p>
 
@@ -168,6 +180,8 @@ function Page({}: Props) {
           </form>
           
     </div>
+    </PaymentForm>
+ 
   )
 }
 
