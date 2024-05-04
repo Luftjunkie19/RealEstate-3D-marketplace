@@ -9,7 +9,7 @@ type Props = {}
 import { BsFillHousesFill } from "react-icons/bs";
 import { FaMessage, FaStar } from 'react-icons/fa6';
 import { supabase } from '@/utils/supabase/client';
-import Offer from '../components/main-page/items/Offer';
+import Offer from '../components/profile/items/Offer';
 
 function CurrentUserPage({}: Props) {
   const [object, setObject]=useState<any[]>([]);
@@ -23,6 +23,7 @@ function CurrentUserPage({}: Props) {
   }
   const [activeTab, setActiveTab]=useState<number>(0);
 const tabs:tabObject[]=[{id:1, content:'Properties', tabIcon:BsFillHousesFill}, {id:2, content:'Messages', tabIcon:FaMessage}, {id:3, content:'Favourited', tabIcon:FaStar}]
+// eslint-disable-next-line react-hooks/exhaustive-deps
 const getDataNeeded=async ()=>{
   if(user){
     const {data:yourListings, error:yourListingsError} = await supabase.from('listings').select('*').eq('listed_by', user.id);
@@ -44,7 +45,7 @@ const getDataNeeded=async ()=>{
 useEffect(()=>{
   getDataNeeded();
 
-}, [])
+}, [getDataNeeded])
 
     return (
     <div className='w-screen min-h-screen'>
@@ -61,14 +62,16 @@ useEffect(()=>{
 
     <div role="tablist" className="tabs tabs-bordered border-purple max-w-xl mx-auto m-0">
         {tabs.map((tabItem)=>(<a onClick={()=>setActiveTab(tabItem.id)} key={tabItem.id} role='tab' className={`tab ${activeTab === tabItem.id && 'tab-active text-purple'} font-bold flex items-center gap-2`}>
-            {tabItem.content}
+            <p className='sm:hidden lg:block'>{tabItem.content}</p>
             <tabItem.tabIcon className={`${activeTab === tabItem.id ? 'text-purple' : 'text-white'}`}/>
             </a>))}
 </div>
 
+{activeTab === 1 && object.length > 0 && <div className='flex flex-col mx-auto m-0 items-center my-2 gap-2 max-h-96 overflow-y-scroll'>
+  {object.map((item:any)=>(<Offer listedBy={item.listed_by} key={item.id} photoURL={item.images[0]} offerTitle={item.property_name} bathRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} squareMetrage={item.square_footage} id={item.id}/>))}
+  </div>}
 <div className="flex flex-wrap gap-4 mx-auto m-0 p-4 max-w-screen-2xl">
-{activeTab === 1 && object.length > 0 && object.map((item:any)=><><Offer imageUrl={item.images[0]} name={item.property_name} description={item.description} barthRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} squareMetrage={item.square_footage} id={item.id}/></>)}
-{activeTab === 3 && favourites.length > 0 &&  <><p>{favourites.length} properties appeal to you.</p></>}
+{activeTab === 3 &&   <><p>{favourites.length} properties appeal to you.</p></>}
 </div>
 </>
     
