@@ -8,7 +8,6 @@ function PayForm({}: Props) {
       <GooglePay/>
       <ApplePay/>
       <CreditCard/>
-      
     </div>
   )
 }

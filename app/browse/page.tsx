@@ -14,37 +14,37 @@ function Page({}: Props) {
                   Find Your Dream Property
               </p>
               <p className="max-w-5xl">
-                  Welcome to Estatein, where your dream property awaits in every corner of our beautiful world. Explore our curated selection of properties, each offering a unique story and a chance to redefine your life. With categories to suit every dreamer, your journey
+                  Welcome to VirtuEstate, where your dream property awaits in every corner of our beautiful world. Explore our curated selection of properties, each offering a unique story and a chance to redefine your life. With categories to suit every dreamer, your journey
               </p>
           </div>
 
           <div className="flex flex-col mx-auto m-0 my-3">
-              <div className="max-w-3xl self-center flex gap-2 items-center p-4 rounded-t-lg bg-darkGray">
-                  <input className="p-2 w-full max-w-md rounded-sm" />
+              <div className="max-w-3xl self-center flex gap-4 items-center p-4 rounded-t-lg bg-darkGray">
+                  <input className="p-2 w-full max-w-md rounded-lg outline-none" />
                   <button className="bg-purple rounded-xl p-3">
                        <FaSearch size={20} className='text-white'/>
                   </button>
               </div>
 
-              <div className="flex flex-wrap gap-2 self-center items-center justify-center bg-darkGray rounded-lg max-w-7xl">
+              <div className="flex sm:flex-col xl:flex-row flex-wrap gap-2 self-center items-center justify-center bg-darkGray rounded-lg sm:max-w-2xl xl:max-w-5xl w-full">
               <div className="flex gap-4 items-center p-4 rounded-lg ">
                   <IoLocationSharp size={18} className='text-white'/>
-            <input className="p-2 rounded-sm"/>
+            <input className="p-2 rounded-lg outline-none text-white"/>
               </div>
                 <div className="flex gap-4 items-center p-4 rounded-lg ">
                   <BiSolidBuildingHouse size={18} className='text-white'/>
-            <input className="p-2 rounded-sm"/>
+            <input className="p-2 rounded-lg outline-none text-white"/>
               </div>
               
                       <div className="flex gap-4 items-center p-4 rounded-lg ">
                   <FaMoneyBillWave size={18} className='text-white'/>
-            <input className="p-2 rounded-sm"/>
+            <input className="p-2 rounded-lg outline-none text-white"/>
         </div>
                   
                     
                       <div className="flex gap-4 items-center p-4 rounded-lg ">
                   <FaCube size={18} className='text-white'/>
-            <input className="p-2 rounded-sm"/>
+            <input className="p-2 rounded-lg outline-none text-white"/>
         </div>
                   
               </div>
@@ -55,7 +55,7 @@ function Page({}: Props) {
 
           </div>
 
-          
+          <div className="p-4"></div>
 
     </div>
   )

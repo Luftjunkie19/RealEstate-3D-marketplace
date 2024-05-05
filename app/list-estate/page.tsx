@@ -103,10 +103,15 @@ function Page({}: Props) {
 
 
   return (
-    <PaymentForm cardTokenizeResponseReceived={(token, verifiedBuyer) => {
+    <PaymentForm formProps={{
+      className:''
+    }} 
+    cardTokenizeResponseReceived={(token, verifiedBuyer) => {
       console.info('Token:', token);
       console.info('Verified Buyer:', verifiedBuyer);
-    }}  applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}
+    }}
+    createPaymentRequest={()=>({})}  
+    applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}
     locationId={process.env.NEXT_PUBLIC_SQUARE_APP_SEC}>
 <div className="min-h-screen w-screen">
       <div className="mx-auto m-0 flex justify-center p-4">
