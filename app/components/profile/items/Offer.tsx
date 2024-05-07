@@ -9,11 +9,14 @@ import ModalDialog from '../../ModalDialog'
 import { supabase } from '@/utils/supabase/client'
 import toast from 'react-hot-toast'
 import DialogContent from './DialogContent'
+import { useAuthContext } from '@/utils/hooks/useAuthContext'
 
 
 type Props = {photoURL:string, listedBy:string, offerTitle:string, bathRooms:boolean, bedRooms:boolean, isForRent:boolean, price:number, id:string, squareMetrage:number}
 
 function Offer({photoURL, offerTitle,listedBy, bathRooms, bedRooms, isForRent, price, id, squareMetrage}: Props) {
+
+  const {user}=useAuthContext();
 
   const deleteOffer=async ()=>{
     await supabase.from('listings').delete().filter('listed_by', 'eq', listedBy).filter('id', 'eq', id);
@@ -46,10 +49,12 @@ function Offer({photoURL, offerTitle,listedBy, bathRooms, bedRooms, isForRent, p
               </div>}
     </div>
 </div>
+{user && listedBy === user.id && 
 <div className="absolute top-0 p-2 right-0 flex gap-4">
 <ModalDialog buttonTitle={<FaPencil className=' text-info lg:text-xl'/>} dialogTitle={'Update of property'} dialogDescription={'If you want to provide any changes about your property. Do it here.'} dialogContent={<DialogContent collectionsName='listings' propertyId={id}/>}/>
   <button onClick={deleteOffer}><FaTrashCan className='text-red-500 md:text-xl'/></button>
 </div>
+}
 
     </div>
   

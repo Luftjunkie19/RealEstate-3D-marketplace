@@ -1,19 +1,22 @@
+
 'use client';
 
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { FaUser } from 'react-icons/fa6';
 import { IoMenu } from "react-icons/io5";
 import Drawer from './Drawer';
 import { User } from '@supabase/supabase-js';
+import { useAtom } from 'jotai';
+import { userThreadAtom } from '@/atoms';
 type Props = {}
 
 function Navbar({}: Props) {
 
   const [show, setShown]=useState(false);
-
+  const [userThread, setUserThread]=useAtom(userThreadAtom);
   const openDrawer=()=>{
     setShown(true);
   }
@@ -23,9 +26,39 @@ function Navbar({}: Props) {
   }
   const {user, dispatch}=useAuthContext();
 
+  const fetchCreateThreadId= useCallback(async ()=>{
+    if(user){
+      if(!userThread){
+        try {
+        const fetchData= await fetch('/api/user-thread', {method:'POST', body:JSON.stringify({currentUser:user}), headers:{
+          'Content-Type': 'application/json',
+        }});
+        const response = await fetchData.json();
+  
+        if(!response.success){
+          return;
+        }
+  
+          setUserThread(response.userThread);
+        
+        } catch (error) {
+        setUserThread(null);  
+        }
+      }
+      }
+  }, [setUserThread, user, userThread]);
+  useEffect(()=>{
+
+    fetchCreateThreadId();
+
+
+  },[fetchCreateThreadId])
+
   const handleSignOut= async()=>{
     await fetch('/api/signOut');
-    if(dispatch) dispatch({type:'LOGOUT', payload:null});
+
+    dispatch!({type:'LOGOUT', payload:null});
+
   }
 
 

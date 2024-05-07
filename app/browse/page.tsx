@@ -4,9 +4,13 @@ import { BiSolidBuildingHouse } from "react-icons/bi";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaCube } from "react-icons/fa6";
 
+import MainContent from '../components/browse/MainContent';
+
 type Props = {}
 
 function Page({}: Props) {
+ 
+
   return (
       <div className="min-h-screen w-screen">
           <div className="flex py-16 pl-8 flex-col gap-4 border-b-2 border-darkGray">
@@ -51,11 +55,10 @@ function Page({}: Props) {
 
               
 
-        
-
+    
           </div>
 
-          <div className="p-4"></div>
+    <MainContent/>     
 
     </div>
   )

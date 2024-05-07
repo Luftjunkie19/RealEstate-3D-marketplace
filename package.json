@@ -32,6 +32,7 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.0.2",
     "install": "^0.13.0",
+    "jotai": "^2.8.0",
     "jsonwebtoken": "^9.0.2",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
@@ -40,7 +41,7 @@
     "next-auth": "^4.24.7",
     "next-transpile-modules": "^10.0.1",
     "npm": "^10.5.2",
-    "openai": "^4.38.5",
+    "openai": "^4.42.0",
     "plaiceholder": "^3.0.0",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
@@ -59,6 +60,7 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.163.0",
+    "ts-node": "^10.9.2",
     "zod": "^3.23.6"
   },
   "devDependencies": {
