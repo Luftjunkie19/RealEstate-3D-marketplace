@@ -10,12 +10,14 @@ import toast from 'react-hot-toast';
 
 import { FaCamera, FaWpforms } from 'react-icons/fa6'
 import { RetrieveTokenStatusResponse } from "square";
+import PayForm from "../components/list-estate/PayForm";
 
 type Props = {}
 
 function Page({}: Props) {
   const {user}=useAuthContext();
-
+  const [currentStep, setCurrentStep]=useState(1);
+  const [objectToInsert, setObjectToInsert]=useState<Object | null>(null);
   const [images, setImages] = useState<File[]>([]); // Set initial state to an array of Files
 
   const formAction = async (formData: FormData) => {
@@ -50,33 +52,27 @@ function Page({}: Props) {
         }
       }
   
-
-      toast.success('Property Successfully added');
-      // Insert property data into the database
- await fetch('/api/insert', {
-        method: "POST",
-        body: JSON.stringify({
-          object: {
-            listed_by: user?.id,
-            address,
-            rent_offer: isForRent ? isForRent : false,
-            geometric_positions: geometricPositions,
-            bathrooms: Number(bathroomsQty),
-            bedrooms: Number(bedroomsQty),
-            square_footage: Number(squareFootage),
-            description: propertyDescription,
-            price: Number(propertyPrice),
-            property_name: propertyName,
-            images: uploadedImageUrls, // Associate uploaded image URLs with the property
-          },
-          collection: 'listings'
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      setObjectToInsert({
+        object: {
+          listed_by: user?.id,
+          address,
+          rent_offer: isForRent ? isForRent : false,
+          geometric_positions: geometricPositions,
+          bathrooms: Number(bathroomsQty),
+          bedrooms: Number(bedroomsQty),
+          square_footage: Number(squareFootage),
+          description: propertyDescription,
+          price: Number(propertyPrice),
+          property_name: propertyName,
+          images: uploadedImageUrls, // Associate uploaded image URLs with the property
+        },
+        collection: 'listings'
       });
-      
-      window.location.href='/';
+
+      toast.success('Property object Successfully created !');
+      setCurrentStep(2);
+      // Insert property data into the database
+
    
      
     } catch (error) {
@@ -106,9 +102,13 @@ function Page({}: Props) {
     <PaymentForm formProps={{
       className:''
     }} 
-    cardTokenizeResponseReceived={(token, verifiedBuyer) => {
-      console.info('Token:', token);
-      console.info('Verified Buyer:', verifiedBuyer);
+    cardTokenizeResponseReceived={async (token, verifiedBuyer) => {
+      const response = await fetch('/api/payments', {method:"POST", body:JSON.stringify({sourceId:token.token}), headers:{
+        'Content-Type': 'application/json'
+      }});
+
+      const jsonedRes= await response.json();
+      console.log(jsonedRes);
     }}
     createPaymentRequest={()=>({})}  
     applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}
@@ -116,13 +116,14 @@ function Page({}: Props) {
 <div className="min-h-screen w-screen">
       <div className="mx-auto m-0 flex justify-center p-4">
       <ul className="steps">
-  <li data-content='📝' className="step step-primary"></li>
-  <li data-content='🏠' className="step step-primary"></li>
-  <li className="step" data-content='💸'></li>
-  <li className="step" data-content="✅"></li>
+  <li data-content='📝' className={`step ${currentStep > 0 && 'step-primary'} `}></li>
+  <li data-content='🏠' className={`step ${currentStep > 1 && 'step-primary'}`}></li>
+  <li className={`step ${currentStep > 2 && 'step-primary'}`} data-content='💸'></li>
+  <li className={`step ${currentStep > 3 && 'step-primary'}`} data-content="✅"></li>
 </ul>
       </div>
 
+{currentStep === 1 &&
           <form action={formAction} className="mx-auto p-6 my-8 max-w-6xl bg-darkGray rounded-lg flex flex-col gap-3">
               <p className="text-2xl text-white font-bold">List your Real Estate</p>
 
@@ -183,6 +184,9 @@ function Page({}: Props) {
 
 <button type="submit" className='self-end max-w-60 w-full text-white text-lg font-semibold bg-purple p-2 rounded-xl'>List your property</button>
           </form>
+}
+
+{currentStep === 2 && <PayForm/>}
           
     </div>
     </PaymentForm>
