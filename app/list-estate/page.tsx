@@ -1,16 +1,15 @@
 "use client";
-import { PaymentForm } from "react-square-web-payments-sdk";
-
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { supabase } from '@/utils/supabase/client';
-
+import { PaymentForm } from 'react-square-web-payments-sdk';
 
 import React, { ChangeEvent, useState } from 'react'
 import toast from 'react-hot-toast';
 
 import { FaCamera, FaWpforms } from 'react-icons/fa6'
-import { RetrieveTokenStatusResponse } from "square";
 import PayForm from "../components/list-estate/PayForm";
+import { submitPayment } from '@/utils/square/server';
+import { redirect } from 'next/navigation';
 
 type Props = {}
 
@@ -71,7 +70,6 @@ function Page({}: Props) {
 
       toast.success('Property object Successfully created !');
       setCurrentStep(2);
-      // Insert property data into the database
 
    
      
@@ -99,20 +97,20 @@ function Page({}: Props) {
 
 
   return (
-    <PaymentForm formProps={{
-      className:''
-    }} 
-    cardTokenizeResponseReceived={async (token, verifiedBuyer) => {
-      const response = await fetch('/api/payments', {method:"POST", body:JSON.stringify({sourceId:token.token}), headers:{
-        'Content-Type': 'application/json'
-      }});
-
-      const jsonedRes= await response.json();
-      console.log(jsonedRes);
-    }}
-    createPaymentRequest={()=>({})}  
-    applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}
-    locationId={process.env.NEXT_PUBLIC_SQUARE_APP_SEC}>
+<PaymentForm  cardTokenizeResponseReceived={async (token) => {
+  if(token.token){
+   const submitedPayment= await submitPayment(token.token);
+   if(submitedPayment!.payment && submitedPayment!.payment.status === "COMPLETED"){
+    setCurrentStep(4);
+    toast.success('Successfully paid the fee for publishing');
+    await fetch('/api/insert', {method:'POST', body:JSON.stringify({object:objectToInsert, collection:'listings'}), headers:{
+      'Content-Type':'application/json'
+    }});
+    redirect('/');
+   }
+  }
+        console.log(token);
+      }}  locationId={process.env.NEXT_PUBLIC_SQUARE_APP_SEC} applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}>
 <div className="min-h-screen w-screen">
       <div className="mx-auto m-0 flex justify-center p-4">
       <ul className="steps">
@@ -190,7 +188,6 @@ function Page({}: Props) {
           
     </div>
     </PaymentForm>
- 
   )
 }
 

@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast';
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AuthProvider from "@/utils/contexts/userContext";
 import HelperChat from "./components/HelperAIChat/HelperChat";
-
 
 
 export const metadata: Metadata = {
