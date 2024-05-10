@@ -12,14 +12,14 @@ const { paymentsApi } = new Client({
   environment:Environment.Sandbox
 });
 
-export async function submitPayment(sourceId) {
+export async function submitPayment(sourceId:string) {
   try {
     const { result } = await paymentsApi.createPayment({
       idempotencyKey: randomUUID(),
       sourceId,
       amountMoney: {
         currency: "USD",
-        amount: 500 as any,
+        amount: 2000 as any,
       },
     });
     console.log(result);
