@@ -9,11 +9,13 @@ import toast from 'react-hot-toast';
 import { FaCamera, FaWpforms } from 'react-icons/fa6'
 import PayForm from "../components/list-estate/PayForm";
 import { submitPayment } from '@/utils/square/server';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { FaCheckCircle } from 'react-icons/fa';
 
 type Props = {}
 
 function Page({}: Props) {
+  const router= useRouter();
   const {user}=useAuthContext();
   const [currentStep, setCurrentStep]=useState(1);
   const [objectToInsert, setObjectToInsert]=useState<Object | null>(null);
@@ -55,7 +57,7 @@ function Page({}: Props) {
         object: {
           listed_by: user?.id,
           address,
-          rent_offer: isForRent ? isForRent : false,
+          rent_offer: isForRent ? true : false,
           geometric_positions: geometricPositions,
           bathrooms: Number(bathroomsQty),
           bedrooms: Number(bedroomsQty),
@@ -100,18 +102,15 @@ function Page({}: Props) {
 <PaymentForm  cardTokenizeResponseReceived={async (token) => {
   if(token.token){
    const submitedPayment= await submitPayment(token.token);
-   if(submitedPayment!.payment && submitedPayment!.payment.status === "COMPLETED"){
-    setCurrentStep(4);
-    toast.success('Successfully paid the fee for publishing');
-    await fetch('/api/insert', {method:'POST', body:JSON.stringify({object:objectToInsert, collection:'listings'}), headers:{
-      'Content-Type':'application/json'
-    }});
-    redirect('/');
+   if(!submitedPayment!.errors && submitedPayment!.payment!.status === "COMPLETED"){
+    console.log(submitedPayment);
+    setCurrentStep(3);
+    toast.success('Successfully paid the fee for publishing');  
    }
   }
         console.log(token);
       }}  locationId={process.env.NEXT_PUBLIC_SQUARE_APP_SEC} applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}>
-<div className="min-h-screen w-screen">
+<div className="min-h-screen w-screen cursor-default">
       <div className="mx-auto m-0 flex justify-center p-4">
       <ul className="steps">
   <li data-content='📝' className={`step ${currentStep > 0 && 'step-primary'} `}></li>
@@ -138,7 +137,7 @@ function Page({}: Props) {
                         <input name="property-price" type='number' className="p-2 outline-none rounded-lg"/>
                       </div>
 
-                        <div className="flex flex-col gap-2 col-span-1">
+                        <div className="flex flex-col gap-2 col-span-1 cursor-default">
                         <p className="text-white font-semibold">Address, City</p>
                         <input name="property-address" className="p-2 outline-none rounded-lg"/>
                       </div>
@@ -185,7 +184,27 @@ function Page({}: Props) {
 }
 
 {currentStep === 2 && <PayForm/>}
-          
+
+{currentStep === 3 && <button onClick={async()=>{
+  console.log(objectToInsert);
+     await fetch('/api/insert', {method:'POST', 
+     body:JSON.stringify(objectToInsert), 
+     headers:{
+      'Content-Type':'application/json'
+    }});
+    setCurrentStep(4);
+
+}} className='bg-purple mx-auto m-0 flex items-center justify-center p-2 text-lg font-semibold text-white rounded-xl max-w-60 w-full'>Publish</button>}
+
+
+{currentStep === 4 && <div className='w-full flex flex-col gap-6 items-center bg-darkGray p-4 rounded-xl max-w-xs mx-auto m-0'>
+  <FaCheckCircle className=' text-green-500 text-5xl'/>
+  <p className='text-white text-xl font-bold'>Your property has been listed !</p>
+  <p className=' text-xs text-white'>In a second you will be redirected to the main page.</p>
+  <button className='bg-purple p-2 rounded-lg text-white font-semibold' onClick={()=>router.push('/')}>Go back to main page.</button>
+  </div>}
+
+
     </div>
     </PaymentForm>
   )

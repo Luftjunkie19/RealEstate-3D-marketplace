@@ -94,7 +94,7 @@ async function DetailedPage({params}: Props) {
             <button className='text-xl'><FaHeart/></button>
           </div>
 
-<div className="flex gap-4 px-2 items-center w-full">
+<div className="flex gap-4 px-2 cursor-pointer items-center w-full">
   {<Link href={`/profile/${data[0].listed_by}`}>
 <FaUserCircle className=' text-5xl text-white'/>
   </Link>}
