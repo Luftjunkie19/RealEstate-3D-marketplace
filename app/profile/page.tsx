@@ -7,14 +7,15 @@ import {formatDistance, formatDistanceToNow} from 'date-fns'
 import { IconType } from 'react-icons/lib';
 type Props = {}
 import { BsFillHousesFill } from "react-icons/bs";
-import { FaMessage, FaStar } from 'react-icons/fa6';
+import { FaMessage, FaPencil, FaStar } from 'react-icons/fa6';
 import { supabase } from '@/utils/supabase/client';
 import Offer from '../components/profile/items/Offer';
+import { useRouter } from 'next/navigation';
 
 function CurrentUserPage({}: Props) {
   const [object, setObject]=useState<any[]>([]);
   const [favourites, setFavourites]=useState<any[]>([]);
-
+  const router= useRouter();
   const {user}=useAuthContext();
   interface tabObject{
     id:number,
@@ -57,6 +58,7 @@ useEffect(()=>{
     <p className='text-4xl font-bold text-white'>{user.user_metadata.full_name}</p>
     <p className='text-white text-sm'>{user.user_metadata.email}</p>
     <p className=' text-green-400 font-semibold'>Last time signed in: {formatDistanceToNow(user.last_sign_in_at as string)}</p>
+    <button onClick={()=>router.push('/update-profile')} className='bg-purple p-2 rounded-xl text-white flex gap-2 items-center justify-center max-w-sm'>Edit profile <FaPencil/> </button>
     </div>
     </div>
 
@@ -70,8 +72,8 @@ useEffect(()=>{
 {activeTab === 1 && object.length > 0 && <div className='flex flex-col mx-auto m-0 items-center my-2 gap-2 max-h-96 overflow-y-scroll'>
   {object.map((item:any)=>(<Offer listedBy={item.listed_by} key={item.id} photoURL={item.images[0]} offerTitle={item.property_name} bathRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} squareMetrage={item.square_footage} id={item.id}/>))}
   </div>}
-<div className="flex flex-wrap gap-4 mx-auto m-0 p-4 max-w-screen-2xl">
-{activeTab === 3 &&   <><p>{favourites.length} properties appeal to you.</p></>}
+<div className="flex flex-wrap gap-4 mx-auto m-0 p-4">
+{activeTab === 3 &&   <><p className='text-white text-center'>{favourites.length} properties appeal to you.</p></>}
 </div>
 </>
     

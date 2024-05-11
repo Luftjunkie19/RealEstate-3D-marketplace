@@ -23,24 +23,24 @@ function Page({}: Props) {
           </div>
 
           <div className="flex flex-col mx-auto m-0 my-3">
-              <div className="max-w-3xl self-center flex gap-4 items-center p-4 rounded-t-lg bg-darkGray">
+              <div className="max-w-md self-center flex gap-4 items-center p-4 rounded-t-lg bg-darkGray">
                   <input className="p-2 w-full max-w-md rounded-lg outline-none" />
                   <button className="bg-purple rounded-xl p-3">
                        <FaSearch size={20} className='text-white'/>
                   </button>
               </div>
 
-              <div className="flex sm:flex-col xl:flex-row flex-wrap gap-2 self-center items-center justify-center bg-darkGray rounded-lg sm:max-w-2xl xl:max-w-5xl w-full">
+              <div className="flex sm:flex-col xl:flex-row flex-wrap gap-2 self-center items-center justify-center bg-darkGray rounded-lg sm:max-w-2xl xl:max-w-6xl w-full">
               <div className="flex gap-4 items-center p-4 rounded-lg ">
                   <IoLocationSharp size={18} className='text-white'/>
             <input className="p-2 rounded-lg outline-none text-white"/>
               </div>
-                <div className="flex gap-4 items-center p-4 rounded-lg ">
+                <div className="flex gap-4 items-center p-4 rounded-lg">
                   <BiSolidBuildingHouse size={18} className='text-white'/>
             <input className="p-2 rounded-lg outline-none text-white"/>
               </div>
               
-                      <div className="flex gap-4 items-center p-4 rounded-lg ">
+            <div className="flex gap-4 items-center p-4 rounded-lg">
                   <FaMoneyBillWave size={18} className='text-white'/>
             <input className="p-2 rounded-lg outline-none text-white"/>
         </div>

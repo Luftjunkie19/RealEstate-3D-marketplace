@@ -11,17 +11,6 @@ function DialogContent({propertyId, collectionsName}: Props) {
 
   
 
-    useEffect(()=>{
-        const loadProperty= async ()=>{
-            const loadedObject=  await supabase.from(collectionsName).select('*').eq('id', propertyId).limit(1);
-        if(loadedObject.data){
-            setProperty(loadedObject.data[0]);
-        }
-            }
-
-        loadProperty();
-    },[]);
-
     const formSubmission= async (formData:FormData)=>{
         const propertyName= formData.get('property-name');
         const address= formData.get('address');
@@ -34,7 +23,7 @@ function DialogContent({propertyId, collectionsName}: Props) {
   return (
     
     
-    <form action={formSubmission} className='grid  sm:grid-cols-1 md:grid-cols-2 gap-2'>
+    <form action={formSubmission} className='grid sm:grid-cols-1 md:grid-cols-2 gap-2'>
     {property && <>    
     <div className="flex flex-col gap-1">
     <p>Property Name</p>

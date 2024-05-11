@@ -11,6 +11,8 @@ import PayForm from "../components/list-estate/PayForm";
 import { submitPayment } from '@/utils/square/server';
 import { useRouter } from 'next/navigation';
 import { FaCheckCircle } from 'react-icons/fa';
+import PayableOffers from '../components/list-estate/PayableOffers';
+import { randomUUID } from 'crypto';
 
 type Props = {}
 
@@ -19,6 +21,7 @@ function Page({}: Props) {
   const {user}=useAuthContext();
   const [currentStep, setCurrentStep]=useState(1);
   const [objectToInsert, setObjectToInsert]=useState<Object | null>(null);
+  const [selectedOfferOption, setSelectedOfferOption]=useState<number | null>(null);
   const [images, setImages] = useState<File[]>([]); // Set initial state to an array of Files
 
   const formAction = async (formData: FormData) => {
@@ -80,6 +83,10 @@ function Page({}: Props) {
       toast.error('An error occurred while adding the property');
     }
   };
+
+  const selectOption= (param:number)=>{
+    setSelectedOfferOption(param);
+  }
   
   const handleImages = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
@@ -95,15 +102,36 @@ function Page({}: Props) {
     setImages(Array.from(e.target.files));
   };
   
+  const finalAmount= selectedOfferOption ?  (20 + (selectedOfferOption)).toFixed(2) : 20.00
 
 
 
   return (
-<PaymentForm  cardTokenizeResponseReceived={async (token) => {
+<PaymentForm createPaymentRequest={() => ({
+        countryCode: "US",
+        currencyCode: "USD",
+        lineItems: [
+          {
+            amount: `${finalAmount}`,
+            label: "Fee to list the real estate",
+          }
+        ],
+        total: {
+          amount: `${finalAmount}`,
+          label: "Basical Fee + Promotion Fee",
+        },
+      })}  cardTokenizeResponseReceived={async (token) => {
   if(token.token){
-   const submitedPayment= await submitPayment(token.token);
+   const submitedPayment= await submitPayment(token.token, selectedOfferOption);
    if(!submitedPayment!.errors && submitedPayment!.payment!.status === "COMPLETED"){
     console.log(submitedPayment);
+    setObjectToInsert({object:{...(objectToInsert as any).object,  is_promoted:true, promotion_details:{
+      paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
+      currency: submitedPayment?.payment?.amountMoney?.currency,
+      receiptUrl:submitedPayment?.payment?.receiptUrl,
+      orderId:submitedPayment?.payment?.orderId,
+      paymentId: submitedPayment?.payment?.id,
+    }}, collection: (objectToInsert as any).collection})
     setCurrentStep(3);
     toast.success('Successfully paid the fee for publishing');  
    }
@@ -183,7 +211,10 @@ function Page({}: Props) {
           </form>
 }
 
-{currentStep === 2 && <PayForm/>}
+{currentStep === 2 && <div className='flex flex-col gap-6 p-4'>
+<PayableOffers selectOption={selectOption} selectedOption={selectedOfferOption}/>
+  <PayForm selectedOption={selectedOfferOption}/>
+</div> }
 
 {currentStep === 3 && <button onClick={async()=>{
   console.log(objectToInsert);
