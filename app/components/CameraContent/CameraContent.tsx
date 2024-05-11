@@ -39,13 +39,14 @@ import Image from "next/image";
 import SelectionBar from "./items/SelectionBar";
 import SelectListItem from "./items/SelectItem";
 import { PlaybackDeviceInfo } from "@videosdk.live/react-sdk/dist/types/deviceInfo";
+import { useRouter } from "next/navigation";
 ;
 
 export default function CameraContent({meetingID, selectMic, selectCam, selectedSpeakers, selectSpeakers, selectedCam, selectedMic,  accessCams, accessSpeakers, accessMics, selectedAudioTrack, selectedCameraTrack, setEnabledCamera, setEnabledMic, enabledCam, enabledMic}: Props) {
   //Manage showing screen
     const [joined, setJoined] = useState<string | null>(null);
     const [showChat, setShowChat]=useState<boolean>(true);
-  
+    const router= useRouter();
   
     const { join, participants, toggleMic, toggleWebcam, leave, localMicOn, localWebcamOn, end, meeting
      } = useMeeting({
@@ -100,7 +101,7 @@ export default function CameraContent({meetingID, selectMic, selectCam, selected
     const leaveConference= ()=>{
       if(participants.size === 1){
         end();
-        window.location.href='/';
+        router.push('/');
       }
       leave();
       setJoined(null);

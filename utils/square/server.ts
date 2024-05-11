@@ -12,14 +12,15 @@ const { paymentsApi } = new Client({
   environment:Environment.Sandbox
 });
 
-export async function submitPayment(sourceId:string) {
+export async function submitPayment(sourceId:string, additionalPayment:number | null) {
   try {
+    const additionalPaymentResult= 2000 + Number(additionalPayment as number * 100);
     const { result } = await paymentsApi.createPayment({
       idempotencyKey: randomUUID(),
       sourceId,
       amountMoney: {
         currency: "USD",
-        amount: 2000 as any,
+        amount: additionalPayment !== null ? additionalPaymentResult : 2000 as any,
       },
     });
     console.log(result);
