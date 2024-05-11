@@ -64,9 +64,8 @@ uploadUserData();
     }
 
   return (
-    <div className='w-screen h-screen'>  
-    <p>{JSON.stringify(userImg)}</p>     
-       <form action={updateProfile} className=' bg-darkGray p-4 rounded-xl max-w-3xl mx-auto my-6 m-0 flex justify-around items-center'>
+    <div className='w-screen h-screen'>     
+       <form action={updateProfile} className=' bg-darkGray py-8 px-4 rounded-xl max-w-3xl mx-auto my-6 m-0 flex justify-around items-center'>
         <div className="flex flex-col gap-4 items-center">
         {userImg ? <Image src={userImg} className='w-36 h-36 rounded-full' width={96} height={96} alt='' /> : <Image  className='w-36 h-36 rounded-full' width={96} height={96} alt='' src={DefaultImg}/>}
         <input onChange={selectProfileImg} type="file" className="file-input file-input-bordered bg-purple w-full max-w-64" />

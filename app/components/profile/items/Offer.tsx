@@ -27,7 +27,7 @@ function Offer({photoURL, offerTitle,listedBy, bathRooms, bedRooms, isForRent, p
 
 
   return (
-    <div className='max-w-2xl w-full bg-darkGray rounded-lg p-4 flex gap-4 relative top-0 left-0'>
+    <Link href={`/estate/${id}`} className='max-w-2xl w-full bg-darkGray rounded-lg p-4 flex gap-4 relative top-0 left-0'>
      
 <Image src={photoURL} alt='' width={64} height={64} className='w-16 h-16 rounded-lg object-cover border border-purple'/>
 <div className="flex flex-col gap-1">
@@ -58,7 +58,7 @@ function Offer({photoURL, offerTitle,listedBy, bathRooms, bedRooms, isForRent, p
 </div>
 }
 
-    </div>
+    </Link>
   
   )
 }
