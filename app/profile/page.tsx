@@ -2,7 +2,7 @@
 
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {formatDistance, formatDistanceToNow} from 'date-fns'
 import { IconType } from 'react-icons/lib';
 type Props = {}
@@ -24,8 +24,8 @@ function CurrentUserPage({}: Props) {
   }
   const [activeTab, setActiveTab]=useState<number>(0);
 const tabs:tabObject[]=[{id:1, content:'Properties', tabIcon:BsFillHousesFill}, {id:2, content:'Messages', tabIcon:FaMessage}, {id:3, content:'Favourited', tabIcon:FaStar}]
-// eslint-disable-next-line react-hooks/exhaustive-deps
-const getDataNeeded=async ()=>{
+
+const getDataNeeded= useCallback(async ()=>{
   if(user){
     const {data:yourListings, error:yourListingsError} = await supabase.from('listings').select('*').eq('listed_by', user.id);
 
@@ -34,19 +34,24 @@ const getDataNeeded=async ()=>{
     }
   
 
-    const {data, error}= await supabase.from('users').select('favourite_properties').eq('id', user.id);
+    const {data, error}= await supabase.from('users').select('favourite_properties').eq('email', user.email).limit(1);
 
-    if(data && !error){
-      setFavourites(data);
-    }
+if(data && data.length > 0){
+  (data as any)[0].favourite_properties.map(async (item:string)=>{
+  const {data:propertyData} = await supabase.from('listings').select('*').eq('id', item).limit(1);
+  if(propertyData && propertyData.length > 0){
+    setFavourites([...favourites, propertyData[0]]);
   }
-
-
+  })
 }
+
+
+  }
+}, [favourites, user])
 useEffect(()=>{
   getDataNeeded();
 
-}, [getDataNeeded])
+}, [])
 
     return (
     <div className='w-screen min-h-screen'>
@@ -58,7 +63,7 @@ useEffect(()=>{
     <p className='text-4xl font-bold text-white'>{user.user_metadata.full_name}</p>
     <p className='text-white text-sm'>{user.user_metadata.email}</p>
     <p className=' text-green-400 font-semibold'>Last time signed in: {formatDistanceToNow(user.last_sign_in_at as string)}</p>
-    <button onClick={()=>router.push('/update-profile')} className='bg-purple p-2 rounded-xl text-white flex gap-2 items-center justify-center max-w-sm'>Edit profile <FaPencil/> </button>
+    <button onClick={()=>router.push('/update-profile')} className='bg-purple p-2 rounded-xl text-white flex gap-2 items-center justify-center max-w-52 w-full'>Edit profile <FaPencil/> </button>
     </div>
     </div>
 
@@ -72,9 +77,12 @@ useEffect(()=>{
 {activeTab === 1 && object.length > 0 && <div className='flex flex-col mx-auto m-0 items-center my-2 gap-2 max-h-96 overflow-y-scroll'>
   {object.map((item:any)=>(<Offer listedBy={item.listed_by} key={item.id} photoURL={item.images[0]} offerTitle={item.property_name} bathRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} squareMetrage={item.square_footage} id={item.id}/>))}
   </div>}
-<div className="flex flex-wrap gap-4 mx-auto m-0 p-4">
-{activeTab === 3 &&   <><p className='text-white text-center'>{favourites.length} properties appeal to you.</p></>}
+  {activeTab === 3 && <>  
+<div className={`flex mx-auto m-0 justify-center items-center flex-wrap gap-4 max-w-5xl p-4`}>
+{favourites.length === 0 && <p className='text-white text-lg'>No favourite properties yet.</p>}
+{favourites.length > 0 && favourites.map((item)=>(<Offer key={item.id} photoURL={item.images[0]} listedBy={item.listed_by} offerTitle={item.property_name} bathRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} id={item.id} squareMetrage={item.square_footage}/>))}
 </div>
+  </>}
 </>
     
     }

@@ -17,15 +17,13 @@ import { FaHeart, FaUserCircle } from 'react-icons/fa';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import ContactBtn from '@/app/components/estate-components/ContactBtn';
+import { useAuthContext } from '@/utils/hooks/useAuthContext';
+import LoveBtn from '@/app/components/estate-components/LoveBtn';
 
 async function DetailedPage({params}: Props) {
-
     const {id}=params;
 
     const {data}= await supabase.from('listings').select('*').eq('id', id).limit(1);
-
-
-
 
 
   return (
@@ -91,7 +89,7 @@ async function DetailedPage({params}: Props) {
         <div className="max-w-xs flex flex-col gap-6 w-full bg-darkGray p-4 rounded-lg">
           <div className="flex w-full justify-between items-center p-2">
             <p className='text-white font-semibold text-sm'>{format(data[0].listed_at, 'do MMMM yyyy')}</p>
-            <button className='text-xl'><FaHeart/></button>
+          <LoveBtn propertyId={id}/>
           </div>
 
 <div className="flex gap-4 px-2 cursor-pointer items-center w-full">
