@@ -3,8 +3,9 @@ import { HiOutlineCubeTransparent } from "react-icons/hi2";
 
 import { BiSolidCartAdd } from 'react-icons/bi';
 import { MdOutlineGridOn } from "react-icons/md";
-
+import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 
 type Props = {}
 
@@ -22,13 +23,14 @@ function DimensionalPlanner({}: Props) {
                   <HiOutlineCubeTransparent className="text-2xl"/>
               </button>
           </div>
-          <Canvas className='w-full h-screen'>
+          <Canvas className='w-full h-full' >
+            <OrbitControls/>
               <ambientLight />
 
 
               <mesh rotation-x={-Math.PI / 2}>
                   <planeGeometry />
-                  <meshBasicMaterial color="white" />
+                  <meshBasicMaterial side={THREE.DoubleSide} color="white" />
               </mesh>
               
 
