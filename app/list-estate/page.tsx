@@ -1,21 +1,27 @@
 "use client";
-
-import React, {
-  ChangeEvent,
-  useState,
-} from 'react';
-
-import toast from 'react-hot-toast';
-import { FaCamera } from 'react-icons/fa6';
-
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { supabase } from '@/utils/supabase/client';
+import { PaymentForm } from 'react-square-web-payments-sdk';
+
+import React, { ChangeEvent, useState } from 'react'
+import toast from 'react-hot-toast';
+
+import { FaCamera, FaWpforms } from 'react-icons/fa6'
+import PayForm from "../components/list-estate/PayForm";
+import { submitPayment } from '@/utils/square/server';
+import { useRouter } from 'next/navigation';
+import { FaCheckCircle } from 'react-icons/fa';
+import PayableOffers from '../components/list-estate/PayableOffers';
+import { randomUUID } from 'crypto';
 
 type Props = {}
 
 function Page({}: Props) {
+  const router= useRouter();
   const {user}=useAuthContext();
-
+  const [currentStep, setCurrentStep]=useState(1);
+  const [objectToInsert, setObjectToInsert]=useState<Object | null>(null);
+  const [selectedOfferOption, setSelectedOfferOption]=useState<number | null>(null);
   const [images, setImages] = useState<File[]>([]); // Set initial state to an array of Files
 
   const formAction = async (formData: FormData) => {
@@ -50,33 +56,26 @@ function Page({}: Props) {
         }
       }
   
-
-      toast.success('Property Successfully added');
-      // Insert property data into the database
- await fetch('/api/insert', {
-        method: "POST",
-        body: JSON.stringify({
-          object: {
-            listed_by: user?.id,
-            address,
-            rent_offer: isForRent ? isForRent : false,
-            geometric_positions: geometricPositions,
-            bathrooms: Number(bathroomsQty),
-            bedrooms: Number(bedroomsQty),
-            square_footage: Number(squareFootage),
-            description: propertyDescription,
-            price: Number(propertyPrice),
-            property_name: propertyName,
-            images: uploadedImageUrls, // Associate uploaded image URLs with the property
-          },
-          collection: 'listings'
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      setObjectToInsert({
+        object: {
+          listed_by: user?.id,
+          address,
+          rent_offer: isForRent ? true : false,
+          geometric_positions: geometricPositions,
+          bathrooms: Number(bathroomsQty),
+          bedrooms: Number(bedroomsQty),
+          square_footage: Number(squareFootage),
+          description: propertyDescription,
+          price: Number(propertyPrice),
+          property_name: propertyName,
+          images: uploadedImageUrls, // Associate uploaded image URLs with the property
+        },
+        collection: 'listings'
       });
-      
-      window.location.href='/';
+
+      toast.success('Property object Successfully created !');
+      setCurrentStep(2);
+
    
      
     } catch (error) {
@@ -84,6 +83,10 @@ function Page({}: Props) {
       toast.error('An error occurred while adding the property');
     }
   };
+
+  const selectOption= (param:number)=>{
+    setSelectedOfferOption(param);
+  }
   
   const handleImages = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
@@ -99,12 +102,53 @@ function Page({}: Props) {
     setImages(Array.from(e.target.files));
   };
   
+  const finalAmount= selectedOfferOption ?  (20 + (selectedOfferOption)).toFixed(2) : 20.00
 
 
 
   return (
-    <div className="min-h-screen w-screen">
-        
+<PaymentForm createPaymentRequest={() => ({
+        countryCode: "US",
+        currencyCode: "USD",
+        lineItems: [
+          {
+            amount: `${finalAmount}`,
+            label: "Fee to list the real estate",
+          }
+        ],
+        total: {
+          amount: `${finalAmount}`,
+          label: "Basical Fee + Promotion Fee",
+        },
+      })}  cardTokenizeResponseReceived={async (token) => {
+  if(token.token){
+   const submitedPayment= await submitPayment(token.token, selectedOfferOption);
+   if(!submitedPayment!.errors && submitedPayment!.payment!.status === "COMPLETED"){
+    console.log(submitedPayment);
+    setObjectToInsert({object:{...(objectToInsert as any).object,  is_promoted:true, promotion_details:{
+      paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
+      currency: submitedPayment?.payment?.amountMoney?.currency,
+      receiptUrl:submitedPayment?.payment?.receiptUrl,
+      orderId:submitedPayment?.payment?.orderId,
+      paymentId: submitedPayment?.payment?.id,
+    }}, collection: (objectToInsert as any).collection})
+    setCurrentStep(3);
+    toast.success('Successfully paid the fee for publishing');  
+   }
+  }
+        console.log(token);
+      }}  locationId={process.env.NEXT_PUBLIC_SQUARE_APP_SEC} applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}>
+<div className="min-h-screen w-screen cursor-default">
+      <div className="mx-auto m-0 flex justify-center p-4">
+      <ul className="steps">
+  <li data-content='📝' className={`step ${currentStep > 0 && 'step-primary'} `}></li>
+  <li data-content='🏠' className={`step ${currentStep > 1 && 'step-primary'}`}></li>
+  <li className={`step ${currentStep > 2 && 'step-primary'}`} data-content='💸'></li>
+  <li className={`step ${currentStep > 3 && 'step-primary'}`} data-content="✅"></li>
+</ul>
+      </div>
+
+{currentStep === 1 &&
           <form action={formAction} className="mx-auto p-6 my-8 max-w-6xl bg-darkGray rounded-lg flex flex-col gap-3">
               <p className="text-2xl text-white font-bold">List your Real Estate</p>
 
@@ -121,7 +165,7 @@ function Page({}: Props) {
                         <input name="property-price" type='number' className="p-2 outline-none rounded-lg"/>
                       </div>
 
-                        <div className="flex flex-col gap-2 col-span-1">
+                        <div className="flex flex-col gap-2 col-span-1 cursor-default">
                         <p className="text-white font-semibold">Address, City</p>
                         <input name="property-address" className="p-2 outline-none rounded-lg"/>
                       </div>
@@ -165,8 +209,35 @@ function Page({}: Props) {
 
 <button type="submit" className='self-end max-w-60 w-full text-white text-lg font-semibold bg-purple p-2 rounded-xl'>List your property</button>
           </form>
-          
+}
+
+{currentStep === 2 && <div className='flex flex-col gap-6 p-4'>
+<PayableOffers selectOption={selectOption} selectedOption={selectedOfferOption}/>
+  <PayForm selectedOption={selectedOfferOption}/>
+</div> }
+
+{currentStep === 3 && <button onClick={async()=>{
+  console.log(objectToInsert);
+     await fetch('/api/insert', {method:'POST', 
+     body:JSON.stringify(objectToInsert), 
+     headers:{
+      'Content-Type':'application/json'
+    }});
+    setCurrentStep(4);
+
+}} className='bg-purple mx-auto m-0 flex items-center justify-center p-2 text-lg font-semibold text-white rounded-xl max-w-60 w-full'>Publish</button>}
+
+
+{currentStep === 4 && <div className='w-full flex flex-col gap-6 items-center bg-darkGray p-4 rounded-xl max-w-xs mx-auto m-0'>
+  <FaCheckCircle className=' text-green-500 text-5xl'/>
+  <p className='text-white text-xl font-bold'>Your property has been listed !</p>
+  <p className=' text-xs text-white'>In a second you will be redirected to the main page.</p>
+  <button className='bg-purple p-2 rounded-lg text-white font-semibold' onClick={()=>router.push('/')}>Go back to main page.</button>
+  </div>}
+
+
     </div>
+    </PaymentForm>
   )
 }
 

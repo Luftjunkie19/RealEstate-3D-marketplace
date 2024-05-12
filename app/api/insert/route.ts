@@ -11,7 +11,5 @@ export async function POST (req:Request){
 
       const data = await supabaseDatabase.from(collection).insert([object]);
 
-     
-
       return Response.json(data);
 }

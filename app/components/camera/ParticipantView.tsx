@@ -12,7 +12,7 @@ type Props = {participantId:any, key:any}
 
 function ParticipantView({participantId,key}: Props) {
   const micRef = useRef<HTMLAudioElement>(null);
-  const { webcamStream, micStream, webcamOn, micOn, isLocal, displayName, participant, isActiveSpeaker, isMainParticipant } =
+  const { webcamStream, micStream, webcamOn, micOn, isLocal, displayName, participant, isActiveSpeaker, isMainParticipant} =
     useParticipant(participantId);
 const {meeting}=useMeeting();
   const videoStream = useMemo(() => {
@@ -67,7 +67,9 @@ const {meeting}=useMeeting();
             console.log(err, "participant video error");
           }}
         />
-      ) :(<Image src={participant.metaData.avatar_url} className='sm:w-16 sm:h-16 md:w-60 rounded-2xl md:h-44 object-fill' alt='' width={256} height={192} />)}
+      ) :(<>
+     {participant.metaData && participant.metaData.avatar_url && <Image src={participant.metaData.avatar_url} className='sm:w-16 sm:h-16 md:w-60 rounded-2xl md:h-44 object-fill' alt='' width={256} height={192} />} 
+      </>)}
         
         <div className="flex gap-6 items-center sm:hidden lg:flex">
         <p className='text-white font-semibold'>{displayName}</p>
