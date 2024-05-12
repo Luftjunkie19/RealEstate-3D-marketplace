@@ -37,7 +37,7 @@ const getDataNeeded= useCallback(async ()=>{
     const {data, error}= await supabase.from('users').select('favourite_properties').eq('email', user.email).limit(1);
 
 if(data && data.length > 0){
-  (data as any)[0].favourite_properties.map(async (item:string)=>{
+  (data as any[])[0].favourite_properties.map(async (item:string)=>{
   const {data:propertyData} = await supabase.from('listings').select('*').eq('id', item).limit(1);
   if(propertyData && propertyData.length > 0){
     setFavourites([...favourites, propertyData[0]]);

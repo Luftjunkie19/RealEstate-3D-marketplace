@@ -1,18 +1,22 @@
 "use client";
-import { useAuthContext } from '@/utils/hooks/useAuthContext';
-import { supabase } from '@/utils/supabase/client';
+import React, {
+  ChangeEvent,
+  useState,
+} from 'react';
+
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { FaCheckCircle } from 'react-icons/fa';
+import { FaCamera } from 'react-icons/fa6';
 import { PaymentForm } from 'react-square-web-payments-sdk';
 
-import React, { ChangeEvent, useState } from 'react'
-import toast from 'react-hot-toast';
-
-import { FaCamera, FaWpforms } from 'react-icons/fa6'
-import PayForm from "../components/list-estate/PayForm";
+import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { submitPayment } from '@/utils/square/server';
-import { useRouter } from 'next/navigation';
-import { FaCheckCircle } from 'react-icons/fa';
+import { supabase } from '@/utils/supabase/client';
+
 import PayableOffers from '../components/list-estate/PayableOffers';
-import { randomUUID } from 'crypto';
+import PayForm from '../components/list-estate/PayForm';
+import DimensionalPlanner from '../components/list-estate/3D-presentation/DimensionalPlanner';
 
 type Props = {}
 
@@ -125,20 +129,20 @@ function Page({}: Props) {
    const submitedPayment= await submitPayment(token.token, selectedOfferOption);
    if(!submitedPayment!.errors && submitedPayment!.payment!.status === "COMPLETED"){
     console.log(submitedPayment);
-    setObjectToInsert({object:{...(objectToInsert as any).object,  is_promoted:true, promotion_details:{
+    setObjectToInsert({object:{...(objectToInsert as any).object,  is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
       paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
       currency: submitedPayment?.payment?.amountMoney?.currency,
       receiptUrl:submitedPayment?.payment?.receiptUrl,
       orderId:submitedPayment?.payment?.orderId,
       paymentId: submitedPayment?.payment?.id,
-    }}, collection: (objectToInsert as any).collection})
+    } : null}, collection: (objectToInsert as any).collection})
     setCurrentStep(3);
     toast.success('Successfully paid the fee for publishing');  
    }
   }
         console.log(token);
       }}  locationId={process.env.NEXT_PUBLIC_SQUARE_APP_SEC} applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}>
-<div className="min-h-screen w-screen cursor-default">
+<div className="min-h-screen w-screen ">
       <div className="mx-auto m-0 flex justify-center p-4">
       <ul className="steps">
   <li data-content='📝' className={`step ${currentStep > 0 && 'step-primary'} `}></li>
@@ -148,7 +152,7 @@ function Page({}: Props) {
 </ul>
       </div>
 
-{currentStep === 1 &&
+{currentStep === 2 &&
           <form action={formAction} className="mx-auto p-6 my-8 max-w-6xl bg-darkGray rounded-lg flex flex-col gap-3">
               <p className="text-2xl text-white font-bold">List your Real Estate</p>
 
@@ -211,28 +215,33 @@ function Page({}: Props) {
           </form>
 }
 
-{currentStep === 2 && <div className='flex flex-col gap-6 p-4'>
+
+{currentStep === 1 && 
+<DimensionalPlanner/>
+}
+
+{currentStep === 3 && <div className='flex flex-col gap-6 p-4'>
 <PayableOffers selectOption={selectOption} selectedOption={selectedOfferOption}/>
   <PayForm selectedOption={selectedOfferOption}/>
 </div> }
 
-{currentStep === 3 && <button onClick={async()=>{
-  console.log(objectToInsert);
-     await fetch('/api/insert', {method:'POST', 
-     body:JSON.stringify(objectToInsert), 
-     headers:{
-      'Content-Type':'application/json'
-    }});
-    setCurrentStep(4);
 
-}} className='bg-purple mx-auto m-0 flex items-center justify-center p-2 text-lg font-semibold text-white rounded-xl max-w-60 w-full'>Publish</button>}
 
 
 {currentStep === 4 && <div className='w-full flex flex-col gap-6 items-center bg-darkGray p-4 rounded-xl max-w-xs mx-auto m-0'>
   <FaCheckCircle className=' text-green-500 text-5xl'/>
   <p className='text-white text-xl font-bold'>Your property has been listed !</p>
   <p className=' text-xs text-white'>In a second you will be redirected to the main page.</p>
-  <button className='bg-purple p-2 rounded-lg text-white font-semibold' onClick={()=>router.push('/')}>Go back to main page.</button>
+  <button className='bg-purple p-2 rounded-lg text-white font-semibold' onClick={async()=>{
+  console.log(objectToInsert);
+     await fetch('/api/insert', {method:'POST', 
+     body:JSON.stringify(objectToInsert), 
+     headers:{
+      'Content-Type':'application/json'
+    }});
+    router.push('/');
+
+}}>Go back to main page.</button>
   </div>}
 
 
