@@ -1,16 +1,15 @@
 "use client";
 
+import React, {
+  ChangeEvent,
+  useState,
+} from 'react';
+
+import toast from 'react-hot-toast';
+import { FaCamera } from 'react-icons/fa6';
+
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { supabase } from '@/utils/supabase/client';
-import { createClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
-import Image from 'next/image';
-import { redirect } from 'next/navigation';
-
-import React, { ChangeEvent, useState } from 'react'
-import toast from 'react-hot-toast';
-
-import { FaCamera } from 'react-icons/fa6'
 
 type Props = {}
 
