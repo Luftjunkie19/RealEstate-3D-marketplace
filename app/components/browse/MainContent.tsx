@@ -15,6 +15,8 @@ function MainContent({filters}:Props) {
      const {data}= await supabase.from('listings').select('*');
      setListings(data);
       }, []);
+
+    
     
     
   useEffect(()=>{
