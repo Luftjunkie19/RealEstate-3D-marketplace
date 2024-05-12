@@ -1,11 +1,18 @@
 'use client'
-import { RiRobot3Line } from "react-icons/ri";
-import { useChat } from 'ai/react'
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Message } from "openai/resources/beta/threads/messages.mjs";
-import { userThreadAtom } from "@/atoms";
-import { useAtom } from "jotai";
-import toast from "react-hot-toast";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+import { useAtom } from 'jotai';
+import { Message } from 'openai/resources/beta/threads/messages.mjs';
+import toast from 'react-hot-toast';
+import { RiRobot3Line } from 'react-icons/ri';
+
+import { userThreadAtom } from '@/atoms';
+
 type Props={
   openState:boolean
 }
@@ -106,7 +113,7 @@ export default function Chat({openState}:Props) {
   }, [userThread]);
 
   useEffect(()=>{
-    const fetchInterval= setInterval(fetchMessages, 1000);
+    const fetchInterval= setInterval(fetchMessages, 5000);
 
     return ()=>clearInterval(fetchInterval);
   },[fetchMessages]);
