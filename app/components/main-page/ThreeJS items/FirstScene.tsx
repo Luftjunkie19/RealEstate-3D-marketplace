@@ -12,7 +12,7 @@ import {
 import { Canvas } from '@react-three/fiber';
 
 function FirstScene() {
-  const object = useGLTF('/assets/simple_real_estate.glb');
+  const object = useGLTF('/simple_real_estate.glb');
     
   return (
       <Canvas camera={{ fov: 50, near: 0.1, far: 1000, position: [0, 10, 50] }}>
