@@ -33,6 +33,7 @@
     "daisyui": "^4.10.2",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.0.2",
+    "gltfjsx": "^6.2.16",
     "install": "^0.13.0",
     "jotai": "^2.8.0",
     "jsonwebtoken": "^9.0.2",
