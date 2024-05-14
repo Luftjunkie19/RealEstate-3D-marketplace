@@ -239,7 +239,7 @@ const fourthWallControls = useControls('Wall 4', {
                   <meshBasicMaterial  side={THREE.DoubleSide} color="red" />
               </mesh>
     
-   
+    
 
     <mesh scale-x={levaControls.floorYScale} rotation-y={1.57} rotation-z={secondWallControls.wallRotation.z} rotation-x={secondWallControls.wallRotation.x} position-x={levaControls.floorXScale / 2} position-y={secondWallControls.wallYScale / 2} position-z={secondWallControls.wallPosition.z} >
                   <planeGeometry  />
