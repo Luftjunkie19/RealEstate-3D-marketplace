@@ -1,9 +1,12 @@
-import Image from 'next/image'
-import React from 'react'
-import { FaCircleXmark } from 'react-icons/fa6'
+import React from 'react';
 
-import image from '@/assets/images.jpeg'
-import { Gltf3dObject } from '../GltfObject'
+import Image from 'next/image';
+import { FaCircleXmark } from 'react-icons/fa6';
+
+import image from '@/assets/images.jpeg';
+import { models3D } from '@/assets/Models3D';
+
+import { Gltf3dObject } from '../GltfObject';
 
 type Props = {isOpen?:boolean, close:()=>void, addModel:(paramObject:Gltf3dObject)=>void}
 
@@ -13,11 +16,7 @@ function FurnitureDrawer({isOpen, close, addModel}: Props) {
 addModel({
   gltfObjectUrl:passedObj.modelUrl,
   scale:passedObj.scale,
-  position:[
-    0,
-    0,
-    0
-  ]
+  position:passedObj.position
 });
     close();
   }
@@ -32,27 +31,15 @@ addModel({
             </button>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-1 overflow-y-auto">
-        <button className="flex flex-col gap-2 p-4 rounded-lg max-w-60 w-full bg-darkGray border-2 border-bgColor">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-1 overflow-y-auto">
+        {models3D.map((model) => (
+           <button key={model.modelUrl} className="flex flex-col gap-2 p-4 rounded-lg max-w-60 w-full bg-darkGray border-2 border-bgColor" onClick={()=>selectModel(model)}>
           <Image src={image} width={128} height={128} alt="" className="w-full h-24 rounded-md"/>
-          <p className="text-white font-semibold text-xl">Chair</p>
+          <p className="text-white font-semibold text-xl">{model.name}</p>
           </button>
-          <button className="flex flex-col gap-2 p-4 rounded-lg max-w-60 w-full bg-darkGray border-2 border-bgColor">
-          <Image src={image} width={128} height={128} alt="" className="w-full h-24 rounded-md"/>
-          <p className="text-white font-semibold text-xl">Bed</p>
-          </button>
-          <button className="flex flex-col gap-2 p-4 rounded-lg max-w-60 w-full bg-darkGray border-2 border-bgColor">
-          <Image src={image} width={128} height={128} alt="" className="w-full h-24 rounded-md"/>
-          <p className="text-white font-semibold text-xl">Toilet</p>
-          </button>
-          <button className="flex flex-col gap-2 p-4 rounded-lg max-w-60 w-full bg-darkGray border-2 border-bgColor">
-          <Image src={image} width={128} height={128} alt="" className="w-full h-24 rounded-md"/>
-          <p className="text-white font-semibold text-xl">Wardrobe</p>
-          </button>
-          <button className="flex flex-col gap-2 p-4 rounded-lg max-w-60 w-full bg-darkGray border-2 border-bgColor">
-          <Image src={image} width={128} height={128} alt="" className="w-full h-24 rounded-md"/>
-          <p className="text-white font-semibold text-xl">Desk</p>
-          </button>
+        ))}
+       
+        
         </div>
     </div>
   )

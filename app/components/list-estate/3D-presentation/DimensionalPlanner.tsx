@@ -7,7 +7,14 @@ import React, {
 
 import { useControls } from 'leva';
 import { BiSolidCartAdd } from 'react-icons/bi';
-import { FaArrowDown, FaArrowLeft, FaArrowRight, FaArrowUp, FaHome } from 'react-icons/fa';
+import {
+  FaArrowDown,
+  FaArrowLeft,
+  FaArrowRight,
+  FaArrowUp,
+  FaHome,
+} from 'react-icons/fa';
+import { GiExitDoor } from 'react-icons/gi';
 import { HiOutlineCubeTransparent } from 'react-icons/hi2';
 import { MdOutlineGridOn } from 'react-icons/md';
 import { RiSave2Fill } from 'react-icons/ri';
@@ -15,19 +22,12 @@ import * as THREE from 'three';
 
 import {
   CameraControls,
-  Gltf,
-  Grid,
-  Html,
-  PivotControls,
-  TransformControls,
-  TransformControlsProps,
+  Grid,CycleRaycast
 } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 
-import { BedModel } from '../../3DmodelsEditable/Bed';
 import FurnitureDrawer from './drawers/FurnitureDrawer';
-import { GiExitDoor } from 'react-icons/gi';
-import { Gltf3dObject } from './GltfObject';
+import GltfObject, { Gltf3dObject } from './GltfObject';
 
 type Props = {
   set3dObject: (object: Object | null) => void,
@@ -241,12 +241,6 @@ const fourthWallControls = useControls('Wall 4', {
               <button onClick={()=>setFurnitureDrawer(!furnitureDrawer)}>
                   <BiSolidCartAdd className="text-2xl"/>
               </button>
-                 <button>
-                  <MdOutlineGridOn className="text-2xl"/>
-              </button>
-                 <button>
-                  <HiOutlineCubeTransparent className="text-2xl"/>
-              </button>
               <button onClick={()=>set3dObject({
                 floor:{
                   mesh:floorRef.current,
@@ -257,7 +251,7 @@ const fourthWallControls = useControls('Wall 4', {
                 {mesh:wall3Ref.current, geometry:wall3PlaneRef.current},
                 {mesh:wall4Ref.current, geometry:wall4PlaneRef.current}
                 ],
-                objects:null,
+                objects:models,
               })}>
                 <RiSave2Fill className="text-2xl"/>
               </button>
@@ -283,7 +277,7 @@ const fourthWallControls = useControls('Wall 4', {
                   <meshBasicMaterial  side={THREE.DoubleSide} color="red" />
               </mesh>
     
-   {models!.length > 0 && models?.map(())}
+   {models!.length > 0 && models?.map((item, i)=>(<GltfObject position={item.position} key={i} gltfObjectUrl={item.gltfObjectUrl} scale={item.scale} />))}
     
 
 
@@ -323,25 +317,26 @@ groupRef:groupRef.current,
 
 
           </Canvas>
-          <div className="absolute bottom-10 left-0 m-8 flex gap-6 items-center">
+          <div className="sticky bottom-0 left-0 m-12 flex gap-6 items-center">
           <button className="bg-purple p-3 rounded-lg h-fit">
           <FaHome size={20} className="text-white"/>
         </button>
-        <div className="flex flex-col items-center">
-        <button className="bg-purple p-3 rounded-lg w-fit">
+        <div className="flex flex-col items-center gap-2">
+        <button className="bg-purple p-3 text-white rounded-lg w-fit">
           <FaArrowUp fontSize={14}/>
         </button>
-        <div className="flex gap-6">
-        <button className="bg-purple p-3 rounded-lg">
+        <div className="flex gap-2">
+        <button className="bg-purple p-3 text-white rounded-lg">
           <FaArrowLeft fontSize={14}/>
         </button>
-        <button className="bg-purple p-3 rounded-lg">
+        <button className="bg-purple p-3 text-white rounded-lg">
+          <FaArrowDown fontSize={14}/>
+        </button>
+        <button className="bg-purple p-3 text-white rounded-lg">
           <FaArrowRight fontSize={14}/>
         </button>
         </div>
-        <button className="bg-purple p-3 rounded-lg">
-          <FaArrowDown fontSize={14}/>
-        </button>
+
         </div>
           </div>
     </div>
