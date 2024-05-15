@@ -1,3 +1,5 @@
+import {useRef} from 'react';
+
 import { Gltf, TransformControls } from '@react-three/drei'
 import React from 'react'
 import { Vector3 } from 'three'
@@ -9,9 +11,10 @@ export type Gltf3dObject = {
 }
 
 function GltfObject({scale, gltfObjectUrl, position}: Gltf3dObject) {
+  const gltfObjectRef=useRef<any>(null);
   return (
-    <TransformControls>
-        <Gltf src={gltfObjectUrl} scale={scale} position={position} castShadow receiveShadow/>
+    <TransformControls object={gltfObjectRef} mode="translate" showX showZ showY>
+        <Gltf ref={gltfObjectRef} src={gltfObjectUrl} scale={scale} position={position} castShadow receiveShadow/>
     </TransformControls>
   )
 }

@@ -1,18 +1,27 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable react/jsx-no-undef */
-/* eslint-disable react/jsx-key */
-/* eslint-disable react/no-children-prop */
 'use client';
-import React, { Suspense } from 'react';
+import React, {
+  Suspense,
+  useRef,
+} from 'react';
 
 import {
+  Gltf,
   OrbitControls,
-  useGLTF,
 } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
+import {
+  Canvas,
+  useFrame,
+} from '@react-three/fiber';
 
 function FirstScene() {
-  const object = useGLTF('/simple_real_estate.glb');
+
+  const gltfReference=useRef<any>(null);
+
+  useFrame((alpha, passed)=>{
+    if(gltfReference.current){
+      gltfReference.current.rotation.x += passed;
+    }
+  })
     
   return (
       <Canvas camera={{ fov: 50, near: 0.1, far: 1000, position: [0, 10, 50] }}>
@@ -20,8 +29,8 @@ function FirstScene() {
       <ambientLight />
 
         <Suspense>
-
-          <primitive  object={object.scene} />
+ 
+        <Gltf src="/simple_real_estate.glb" ref={gltfReference}/>
 
       </Suspense>
 
