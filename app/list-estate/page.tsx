@@ -25,8 +25,16 @@ function Page({}: Props) {
   const {user}=useAuthContext();
   const [currentStep, setCurrentStep]=useState(1);
   const [objectToInsert, setObjectToInsert]=useState<Object | null>(null);
+  const [object3D, set3dObject]=useState<Object | null>(null);
   const [selectedOfferOption, setSelectedOfferOption]=useState<number | null>(null);
   const [images, setImages] = useState<File[]>([]); // Set initial state to an array of Files
+
+
+  const set3DFunction=(object:Object | null)=>{
+    set3dObject(object);
+    setCurrentStep(3);
+  }
+
 
   const formAction = async (formData: FormData) => {
     try {
@@ -217,7 +225,7 @@ function Page({}: Props) {
 
 
 {currentStep === 1 && 
-<DimensionalPlanner/>
+<DimensionalPlanner object3D={object3D} set3dObject={set3DFunction}/>
 }
 
 {currentStep === 3 && <div className='flex flex-col gap-6 p-4'>

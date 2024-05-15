@@ -7,7 +7,7 @@ import React, {
 
 import { useControls } from 'leva';
 import { BiSolidCartAdd } from 'react-icons/bi';
-import { FaHome } from 'react-icons/fa';
+import { FaArrowDown, FaArrowLeft, FaArrowRight, FaArrowUp, FaHome } from 'react-icons/fa';
 import { HiOutlineCubeTransparent } from 'react-icons/hi2';
 import { MdOutlineGridOn } from 'react-icons/md';
 import { RiSave2Fill } from 'react-icons/ri';
@@ -15,26 +15,46 @@ import * as THREE from 'three';
 
 import {
   CameraControls,
+  Gltf,
   Grid,
   Html,
+  PivotControls,
+  TransformControls,
+  TransformControlsProps,
 } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 
 import { BedModel } from '../../3DmodelsEditable/Bed';
 import FurnitureDrawer from './drawers/FurnitureDrawer';
+import { GiExitDoor } from 'react-icons/gi';
+import { Gltf3dObject } from './GltfObject';
 
-type Props = {}
+type Props = {
+  set3dObject: (object: Object | null) => void,
+  object3D: Object | null
+}
 
-function DimensionalPlanner({ }: Props) {
-
+function DimensionalPlanner({ set3dObject, object3D }: Props) {
   const [furnitureDrawer, setFurnitureDrawer]=useState(false);
   const groupRef= useRef<THREE.Group>(null);
-  const floorRef=useRef<THREE.PlaneGeometry>(null);
-  const floorPlaneRef= useRef<THREE.Mesh>(null);
+  const floorRef=useRef<THREE.Mesh>(null);
+  const floorPlaneRef= useRef<THREE.PlaneGeometry>(null);
   const wall1Ref=useRef<THREE.Mesh>(null);
+  const wall1PlaneRef=useRef<THREE.PlaneGeometry>(null);
    const wall2Ref=useRef<THREE.Mesh>(null);
+   const wall2PlaneRef=useRef<THREE.PlaneGeometry>(null);
     const wall3Ref=useRef<THREE.Mesh>(null);
+    const wall3PlaneRef=useRef<THREE.PlaneGeometry>(null);
      const wall4Ref=useRef<THREE.Mesh>(null);
+     const objectReference=useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
+     const wall4PlaneRef=useRef<THREE.PlaneGeometry>(null);
+     const transformControlsRef=useRef<any>(null);
+
+const [models, setModels]=useState<Gltf3dObject[] | null>([]);
+
+const selectModels=(paramObject:Gltf3dObject)=>{
+  setModels([...(models as Gltf3dObject[]), paramObject]);
+}
 
 const levaControls =  useControls("floor", {
         floorPosition: {
@@ -227,51 +247,67 @@ const fourthWallControls = useControls('Wall 4', {
                  <button>
                   <HiOutlineCubeTransparent className="text-2xl"/>
               </button>
-              <button>
+              <button onClick={()=>set3dObject({
+                floor:{
+                  mesh:floorRef.current,
+                  geometry:floorPlaneRef.current
+                },
+                walls:[{mesh:wall1Ref.current, geometry:wall1PlaneRef.current}, 
+                  {mesh:wall2Ref.current, geometry:wall2PlaneRef.current}, 
+                {mesh:wall3Ref.current, geometry:wall3PlaneRef.current},
+                {mesh:wall4Ref.current, geometry:wall4PlaneRef.current}
+                ],
+                objects:null,
+              })}>
                 <RiSave2Fill className="text-2xl"/>
+              </button>
+              <button>
+                <GiExitDoor className='text-2xl text-red-500'/>
               </button>
           </div>
 
-<FurnitureDrawer isOpen={furnitureDrawer} close={()=>setFurnitureDrawer(false)}/>
+<FurnitureDrawer addModel={selectModels} isOpen={furnitureDrawer} close={()=>setFurnitureDrawer(false)}/>
 
 
-          <div className='w-full h-screen'>        
+          <div className='w-full h-screen relative top-0 left-0'>        
           <Canvas>
     
    <CameraControls makeDefault/>
               <ambientLight />
 
-<Grid cellSize={1} args={[15.5, 15.5]} sectionSize={2.5} scale={10} position-y={-0.5} />
+<Grid cellSize={0.1} args={[20, 20]} sectionSize={1} scale={10} position-y={-0.5} />
 
 <group ref={groupRef} >
    <mesh ref={wall1Ref} rotation-y={1.57} rotation-x={firstWallControls.wallRotation.x}  scale-y={firstWallControls.wall1YScale} scale-z={firstWallControls.wall1ZScale} scale-x={levaControls.floorYScale} position-z={firstWallControls.wall1Position.z} position-y={firstWallControls.wall1Position.y} position-x={-levaControls.floorXScale / 2} >
-                  <planeGeometry />
+                  <planeGeometry ref={wall1PlaneRef} />
                   <meshBasicMaterial  side={THREE.DoubleSide} color="red" />
               </mesh>
     
+   {models!.length > 0 && models?.map(())}
     
 
+
     <mesh ref={wall2Ref} scale-x={levaControls.floorYScale} rotation-y={1.57} rotation-z={secondWallControls.wallRotation.z} rotation-x={secondWallControls.wallRotation.x} position-x={levaControls.floorXScale / 2} position-y={secondWallControls.wallYScale / 2} position-z={secondWallControls.wallPosition.z} >
-                  <planeGeometry  />
+                  <planeGeometry ref={wall2PlaneRef}  />
                   <meshBasicMaterial side={THREE.DoubleSide} color="green" />
               </mesh>
     
 
 
         <mesh ref={wall3Ref} scale-x={levaControls.floorXScale} position-x={thirdWallContols.wallPosition.x} position-y={thirdWallContols.wallPosition.y} position-z={-levaControls.floorYScale / 2} rotation-x={thirdWallContols.wallRotation.x} rotation-y={thirdWallContols.wallRotation.y} rotation-z={thirdWallContols.wallRotation.z}>
-                  <planeGeometry />
+                  <planeGeometry ref={wall3PlaneRef} />
                   <meshBasicMaterial side={THREE.DoubleSide} color="purple" />
               </mesh>
 
                 <mesh ref={wall4Ref} rotation-x={fourthWallControls.wallRotation.x} rotation-y={fourthWallControls.wallRotation.y} rotation-z={fourthWallControls.wallRotation.z} scale-z={fourthWallControls.wallZScale} scale-y={fourthWallControls.wallYScale}  scale-x={levaControls.floorXScale} position-x={fourthWallControls.wallPosition.x} position-z={levaControls.floorYScale / 2} position-y={fourthWallControls.wallPosition.y}>
-                  <planeGeometry />
+                  <planeGeometry ref={wall4PlaneRef} />
                   <meshBasicMaterial side={THREE.DoubleSide} color="blue" />
               </mesh>
 
-                  <BedModel/>
 
 
-<mesh ref={floorPlaneRef} onClick={()=>console.log({
+
+<mesh ref={floorRef} onClick={()=>console.log({
 firstWall: wall1Ref.current,
 secondWall: wall2Ref.current,
 thirdWall: wall3Ref.current,
@@ -280,18 +316,34 @@ floor: floorRef.current,
 floorPlane: floorPlaneRef.current,
 groupRef:groupRef.current,
               })}  rotation-x={-Math.PI / 2}>
-                  <planeGeometry ref={floorRef} args={[levaControls.floorXScale, levaControls.floorYScale, levaControls.floorZScale]} />
+                  <planeGeometry ref={floorPlaneRef} args={[levaControls.floorXScale, levaControls.floorYScale, levaControls.floorZScale]} />
                   <meshBasicMaterial side={THREE.DoubleSide} color="white" />
               </mesh>
 </group>
 
-      <Html occlude wrapperClass="absolute bottom-0 left-0 flex gap-4">
-        <button>
-          <FaHome size={28} className="text-white"/>
-        </button>
-      </Html>
 
           </Canvas>
+          <div className="absolute bottom-10 left-0 m-8 flex gap-6 items-center">
+          <button className="bg-purple p-3 rounded-lg h-fit">
+          <FaHome size={20} className="text-white"/>
+        </button>
+        <div className="flex flex-col items-center">
+        <button className="bg-purple p-3 rounded-lg w-fit">
+          <FaArrowUp fontSize={14}/>
+        </button>
+        <div className="flex gap-6">
+        <button className="bg-purple p-3 rounded-lg">
+          <FaArrowLeft fontSize={14}/>
+        </button>
+        <button className="bg-purple p-3 rounded-lg">
+          <FaArrowRight fontSize={14}/>
+        </button>
+        </div>
+        <button className="bg-purple p-3 rounded-lg">
+          <FaArrowDown fontSize={14}/>
+        </button>
+        </div>
+          </div>
     </div>
 
     </div>
