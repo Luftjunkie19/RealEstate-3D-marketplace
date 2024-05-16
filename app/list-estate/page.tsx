@@ -80,7 +80,8 @@ function Page({}: Props) {
           description: propertyDescription,
           price: Number(propertyPrice),
           property_name: propertyName,
-          images: uploadedImageUrls, // Associate uploaded image URLs with the property
+          images: uploadedImageUrls,
+          
         },
         collection: 'listings'
       });
@@ -137,14 +138,15 @@ function Page({}: Props) {
    const submitedPayment= await submitPayment(token.token, selectedOfferOption);
    if(!submitedPayment!.errors && submitedPayment!.payment!.status === "COMPLETED"){
     console.log(submitedPayment);
-    setObjectToInsert({object:{...(objectToInsert as any).object,  is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
+    console.log(object3D);
+    setObjectToInsert({object:{...(objectToInsert as any).object, presentation_object:object3D,  is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
       paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
       currency: submitedPayment?.payment?.amountMoney?.currency,
       receiptUrl:submitedPayment?.payment?.receiptUrl,
       orderId:submitedPayment?.payment?.orderId,
       paymentId: submitedPayment?.payment?.id,
     } : null}, collection: (objectToInsert as any).collection})
-    setCurrentStep(3);
+    setCurrentStep(4);
     toast.success('Successfully paid the fee for publishing');  
    }
   }
@@ -160,7 +162,7 @@ function Page({}: Props) {
 </ul>
       </div>
 
-{currentStep === 2 &&
+{currentStep === 1 &&
           <form action={formAction} className="mx-auto p-6 my-8 max-w-6xl bg-darkGray rounded-lg flex flex-col gap-3">
               <p className="text-2xl text-white font-bold">List your Real Estate</p>
 
@@ -224,8 +226,8 @@ function Page({}: Props) {
 }
 
 
-{currentStep === 1 && 
-<DimensionalPlanner object3D={object3D} set3dObject={set3DFunction}/>
+{currentStep === 2 && 
+<DimensionalPlanner moveForward={()=>setCurrentStep(3)} object3D={object3D} set3dObject={set3DFunction}/>
 }
 
 {currentStep === 3 && <div className='flex flex-col gap-6 p-4'>

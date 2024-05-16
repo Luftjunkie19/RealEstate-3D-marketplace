@@ -13,7 +13,7 @@ export type Gltf3dObject = {
 function GltfObject({scale, gltfObjectUrl, position}: Gltf3dObject) {
   const gltfObjectRef=useRef<any>(null);
   return (
-    <TransformControls object={gltfObjectRef} mode="translate" showX showZ showY>
+    <TransformControls object={gltfObjectRef} onChange={()=>console.log(gltfObjectRef.current)} mode="translate" showX showZ showY>
         <Gltf ref={gltfObjectRef} src={gltfObjectUrl} scale={scale} position={position} castShadow receiveShadow/>
     </TransformControls>
   )
