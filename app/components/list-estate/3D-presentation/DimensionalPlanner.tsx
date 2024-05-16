@@ -31,10 +31,11 @@ import GltfObject, { Gltf3dObject } from './GltfObject';
 
 type Props = {
   set3dObject: (object: Object | null) => void,
-  object3D: Object | null
+  object3D: Object | null,
+  moveForward: ()=>void,
 }
 
-function DimensionalPlanner({ set3dObject, object3D }: Props) {
+function DimensionalPlanner({ set3dObject, object3D, moveForward}: Props) {
   const [furnitureDrawer, setFurnitureDrawer]=useState(false);
   const groupRef= useRef<THREE.Group>(null);
   const floorRef=useRef<THREE.Mesh>(null);
@@ -46,9 +47,7 @@ function DimensionalPlanner({ set3dObject, object3D }: Props) {
     const wall3Ref=useRef<THREE.Mesh>(null);
     const wall3PlaneRef=useRef<THREE.PlaneGeometry>(null);
      const wall4Ref=useRef<THREE.Mesh>(null);
-     const objectReference=useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
      const wall4PlaneRef=useRef<THREE.PlaneGeometry>(null);
-     const transformControlsRef=useRef<any>(null);
 
 const [models, setModels]=useState<Gltf3dObject[] | null>([]);
 
@@ -242,12 +241,14 @@ const fourthWallControls = useControls('Wall 4', {
                   <BiSolidCartAdd className="text-2xl"/>
               </button>
               <button onClick={()=>set3dObject({
+                group:groupRef.current,
                 floor:{
                   mesh:floorRef.current,
                   geometry:floorPlaneRef.current
                 },
-                walls:[{mesh:wall1Ref.current, geometry:wall1PlaneRef.current}, 
-                  {mesh:wall2Ref.current, geometry:wall2PlaneRef.current}, 
+                walls:[
+                {mesh:wall1Ref.current, geometry:wall1PlaneRef.current}, 
+                {mesh:wall2Ref.current, geometry:wall2PlaneRef.current}, 
                 {mesh:wall3Ref.current, geometry:wall3PlaneRef.current},
                 {mesh:wall4Ref.current, geometry:wall4PlaneRef.current}
                 ],
@@ -255,7 +256,7 @@ const fourthWallControls = useControls('Wall 4', {
               })}>
                 <RiSave2Fill className="text-2xl"/>
               </button>
-              <button>
+              <button onClick={moveForward}>
                 <GiExitDoor className='text-2xl text-red-500'/>
               </button>
           </div>
@@ -301,15 +302,7 @@ const fourthWallControls = useControls('Wall 4', {
 
 
 
-<mesh ref={floorRef} onClick={()=>console.log({
-firstWall: wall1Ref.current,
-secondWall: wall2Ref.current,
-thirdWall: wall3Ref.current,
-fourthWall: wall4Ref.current,
-floor: floorRef.current,
-floorPlane: floorPlaneRef.current,
-groupRef:groupRef.current,
-              })}  rotation-x={-Math.PI / 2}>
+<mesh ref={floorRef} rotation-x={-Math.PI / 2}>
                   <planeGeometry ref={floorPlaneRef} args={[levaControls.floorXScale, levaControls.floorYScale, levaControls.floorZScale]} />
                   <meshBasicMaterial side={THREE.DoubleSide} color="white" />
               </mesh>

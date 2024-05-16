@@ -13,16 +13,7 @@ import {
   useFrame,
 } from '@react-three/fiber';
 
-function FirstScene() {
-
-  const gltfReference=useRef<any>(null);
-
-  useFrame((alpha, passed)=>{
-    if(gltfReference.current){
-      gltfReference.current.rotation.x += passed;
-    }
-  })
-    
+function FirstScene() {    
   return (
       <Canvas camera={{ fov: 50, near: 0.1, far: 1000, position: [0, 10, 50] }}>
   <OrbitControls/>
@@ -30,7 +21,7 @@ function FirstScene() {
 
         <Suspense>
  
-        <Gltf src="/simple_real_estate.glb" ref={gltfReference}/>
+        <Gltf src="/simple_real_estate.glb" />
 
       </Suspense>
 
