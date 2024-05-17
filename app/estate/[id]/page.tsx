@@ -19,6 +19,7 @@ import Link from 'next/link';
 import ContactBtn from '@/app/components/estate-components/ContactBtn';
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import LoveBtn from '@/app/components/estate-components/LoveBtn';
+import EstateCanvas from '@/app/components/estate/EstateCanvas';
 
 async function DetailedPage({params}: Props) {
     const {id}=params;
@@ -28,7 +29,9 @@ async function DetailedPage({params}: Props) {
 
   return (
     <div className='min-h-screen w-screen'>
+      
         {data && data[0] && <>
+
       <div className="mx-auto m-0 flex justify-center">
       <Carousel className='max-w-4xl'>
   <CarouselContent className='w-full h-80'>
@@ -42,6 +45,11 @@ async function DetailedPage({params}: Props) {
 </Carousel>
       </div>
         
+      {data[0].presentation_object && <div className=' max-w-7xl w-full mx-auto m-0 h-96'>
+  <EstateCanvas object3D={data[0].presentation_object}/>
+  </div>}
+
+
       <div className="flex px-2 py-4 items-center gap-2 flex-wrap">
 
 <p className="py-2 bg-darkGray px-4 rounded-xl items-center flex gap-2 border border-darkGray text-white">

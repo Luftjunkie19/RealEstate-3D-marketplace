@@ -1,16 +1,15 @@
 {
   "floor": {
     "mesh": {
-      "object": {
-        "up": [
-          0,
-          1,
-          0
-        ],
-        "type": "Mesh",
-        "uuid": "a1c9ff8e-b104-41e4-a203-20fbdc842071",
-        "layers": 1,
-        "matrix": [
+      "id": 17,
+      "uuid": "84f902b7-95eb-48c7-a253-12a1053f8de5",
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "matrix": {
+        "elements": [
           1,
           0,
           0,
@@ -27,66 +26,115 @@
           0,
           0,
           1
+        ]
+      },
+      "material": {
+        "side": 2,
+        "type": "MeshBasicMaterial",
+        "uuid": "df13e4e7-28bc-49af-a56d-38db180316f8",
+        "color": 16777215,
+        "metadata": {
+          "type": "Material",
+          "version": 4.6,
+          "generator": "Material.toJSON"
+        },
+        "blendColor": 0,
+        "reflectivity": 1,
+        "envMapRotation": [
+          0,
+          0,
+          0,
+          "XYZ"
         ],
-        "geometry": "0554808c-fb10-4e35-8b84-06ffe093d33a",
-        "material": "c95b2821-36b5-4a80-9871-d76dbc21f133"
+        "refractionRatio": 0.98
       },
-      "metadata": {
-        "type": "Object",
-        "version": 4.6,
-        "generator": "Object3D.toJSON"
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
       },
-      "materials": [
-        {
-          "type": "MeshBasicMaterial",
-          "uuid": "c95b2821-36b5-4a80-9871-d76dbc21f133",
-          "color": 16777215,
-          "blendColor": 0,
-          "reflectivity": 1,
-          "envMapRotation": [
-            0,
-            0,
-            0,
-            "XYZ"
-          ],
-          "refractionRatio": 0.98
-        }
-      ],
-      "geometries": [
-        {
-          "data": {
-            "attributes": {}
-          },
-          "type": "BufferGeometry",
-          "uuid": "0554808c-fb10-4e35-8b84-06ffe093d33a"
-        }
-      ]
+      "rotation": {
+        "_x": -1.5707963267948966,
+        "_y": 0,
+        "_z": 0,
+        "_order": "XYZ",
+        "isEuler": true
+      },
+      "matrixWorld": {
+        "elements": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          2.220446049250313e-16,
+          -1,
+          0,
+          0,
+          1,
+          2.220446049250313e-16,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
     },
     "geometry": {
-      "type": "PlaneGeometry",
-      "uuid": "159b9760-f899-46e1-8d7f-c3465d0e8a88",
-      "width": 4.42,
-      "height": 4.359999999999999,
-      "metadata": {
-        "type": "BufferGeometry",
-        "version": 4.6,
-        "generator": "BufferGeometry.toJSON"
+      "id": 441,
+      "uuid": "d6918ec4-3f4e-40f2-86c4-1d353f46c2e7",
+      "morph": {},
+      "width": 6.61,
+      "height": 5.3100000000000005,
+      "uvArrayAttribute": {
+        "0": 0,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 0,
+        "5": 0,
+        "6": 1,
+        "7": 0
       },
-      "widthSegments": 1,
-      "heightSegments": 1
+      "normalArrayAttribute": {
+        "0": 0,
+        "1": 0,
+        "2": 1,
+        "3": 0,
+        "4": 0,
+        "5": 1,
+        "6": 0,
+        "7": 0,
+        "8": 1,
+        "9": 0,
+        "10": 0,
+        "11": 1
+      },
+      "positionArrayAttribute": {
+        "0": -3.305000066757202,
+        "1": 2.6549999713897705,
+        "2": 0,
+        "3": 3.305000066757202,
+        "4": 2.6549999713897705,
+        "5": 0,
+        "6": -3.305000066757202,
+        "7": -2.6549999713897705,
+        "8": 0,
+        "9": 3.305000066757202,
+        "10": -2.6549999713897705,
+        "11": 0
+      }
     }
   },
   "group": {
-    "object": {
-      "up": [
-        0,
-        1,
-        0
-      ],
-      "type": "Group",
-      "uuid": "08dd6c0e-8372-4c3d-a8b7-c6e7b1ff7002",
-      "layers": 1,
-      "matrix": [
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "martix": {
+      "elements": [
         1,
         0,
         0,
@@ -105,105 +153,54 @@
         1
       ]
     },
-    "metadata": {
-      "type": "Object",
-      "version": 4.6,
-      "generator": "Object3D.toJSON"
+    "position": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "rotation": {
+      "_x": 0,
+      "_y": 0,
+      "_z": 0,
+      "_order": "XYZ",
+      "isEuler": true
+    },
+    "matrixWorld": {
+      "elements": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
     }
   },
   "walls": [
     {
       "mesh": {
-        "object": {
-          "up": [
-            0,
-            1,
-            0
-          ],
-          "type": "Mesh",
-          "uuid": "bfec68fa-cb9c-41ea-9741-d59cd6d2091d",
-          "layers": 1,
-          "matrix": [
-            0.00347198445879703,
-            0,
-            -4.359998617582799,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0.9999996829318347,
-            0,
-            0.0007963267107332639,
-            0,
-            -2.21,
-            0.5,
-            0,
-            1
-          ],
-          "geometry": "aa63a978-83c9-472b-9ef1-e7fc3fb038f7",
-          "material": "6ef0f73c-e87d-433f-9e4d-8eec4ae5da76"
+        "id": 13,
+        "uuid": "cb5e1f35-8398-4b10-968d-ea8e2393bf0f",
+        "scale": {
+          "x": 5.3100000000000005,
+          "y": 1,
+          "z": 1
         },
-        "metadata": {
-          "type": "Object",
-          "version": 4.6,
-          "generator": "Object3D.toJSON"
-        },
-        "materials": [
-          {
-            "type": "MeshBasicMaterial",
-            "uuid": "6ef0f73c-e87d-433f-9e4d-8eec4ae5da76",
-            "color": 16777215,
-            "blendColor": 0,
-            "reflectivity": 1,
-            "envMapRotation": [
-              0,
-              0,
-              0,
-              "XYZ"
-            ],
-            "refractionRatio": 0.98
-          }
-        ],
-        "geometries": [
-          {
-            "data": {
-              "attributes": {}
-            },
-            "type": "BufferGeometry",
-            "uuid": "aa63a978-83c9-472b-9ef1-e7fc3fb038f7"
-          }
-        ]
-      },
-      "geometry": {
-        "type": "PlaneGeometry",
-        "uuid": "a1213188-8f31-4c67-ba3f-42323acf0ac8",
-        "width": 1,
-        "height": 1,
-        "metadata": {
-          "type": "BufferGeometry",
-          "version": 4.6,
-          "generator": "BufferGeometry.toJSON"
-        },
-        "widthSegments": 1,
-        "heightSegments": 1
-      }
-    },
-    {
-      "mesh": {
-        "object": {
-          "up": [
+        "matrix": {
+          "elements": [
+            0.004228494833993631,
             0,
-            1,
-            0
-          ],
-          "type": "Mesh",
-          "uuid": "17a501a2-c6d2-40a2-a5c8-5a536aced8c4",
-          "layers": 1,
-          "matrix": [
-            0.00347198445879703,
-            0,
-            -4.359998617582799,
+            -5.309998316368043,
             0,
             0,
             1,
@@ -213,149 +210,251 @@
             0,
             0.0007963267107332639,
             0,
-            2.21,
+            -3.305,
             0.5,
             0,
             1
+          ]
+        },
+        "material": {
+          "side": 2,
+          "type": "MeshBasicMaterial",
+          "uuid": "78f1a7c9-1bd6-4078-a6d1-ad02dce77c94",
+          "color": 16711680,
+          "metadata": {
+            "type": "Material",
+            "version": 4.6,
+            "generator": "Material.toJSON"
+          },
+          "blendColor": 0,
+          "reflectivity": 1,
+          "envMapRotation": [
+            0,
+            0,
+            0,
+            "XYZ"
           ],
-          "geometry": "9e556dbc-a249-46b1-88d9-ada9c02b9ff8",
-          "material": "44409173-9eec-48c4-b577-0c4dd4a10863"
+          "refractionRatio": 0.98
         },
-        "metadata": {
-          "type": "Object",
-          "version": 4.6,
-          "generator": "Object3D.toJSON"
+        "position": {
+          "x": -3.305,
+          "y": 0.5,
+          "z": 0
         },
-        "materials": [
-          {
-            "type": "MeshBasicMaterial",
-            "uuid": "44409173-9eec-48c4-b577-0c4dd4a10863",
-            "color": 16777215,
-            "blendColor": 0,
-            "reflectivity": 1,
-            "envMapRotation": [
-              0,
-              0,
-              0,
-              "XYZ"
-            ],
-            "refractionRatio": 0.98
-          }
-        ],
-        "geometries": [
-          {
-            "data": {
-              "attributes": {}
-            },
-            "type": "BufferGeometry",
-            "uuid": "9e556dbc-a249-46b1-88d9-ada9c02b9ff8"
-          }
-        ]
+        "rotation": {
+          "_x": 0,
+          "_y": 1.57,
+          "_z": 0,
+          "_order": "XYZ",
+          "isEuler": true
+        },
+        "matrixWorld": {
+          "elements": [
+            0.004228494833993631,
+            0,
+            -5.309998316368043,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0.9999996829318347,
+            0,
+            0.0007963267107332639,
+            0,
+            -3.305,
+            0.5,
+            0,
+            1
+          ]
+        }
       },
       "geometry": {
-        "type": "PlaneGeometry",
-        "uuid": "d22db068-29fa-4461-8043-f18998d655a4",
+        "id": 5,
+        "uuid": "3b759543-9900-4550-b3c1-12c94a5635bc",
+        "morph": {},
         "width": 1,
         "height": 1,
-        "metadata": {
-          "type": "BufferGeometry",
-          "version": 4.6,
-          "generator": "BufferGeometry.toJSON"
+        "uvArrayAttribute": {
+          "0": 0,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 0,
+          "5": 0,
+          "6": 1,
+          "7": 0
         },
-        "widthSegments": 1,
-        "heightSegments": 1
+        "normalArrayAttribute": {
+          "0": 0,
+          "1": 0,
+          "2": 1,
+          "3": 0,
+          "4": 0,
+          "5": 1,
+          "6": 0,
+          "7": 0,
+          "8": 1,
+          "9": 0,
+          "10": 0,
+          "11": 1
+        },
+        "positionArrayAttribute": {
+          "0": -0.5,
+          "1": 0.5,
+          "2": 0,
+          "3": 0.5,
+          "4": 0.5,
+          "5": 0,
+          "6": -0.5,
+          "7": -0.5,
+          "8": 0,
+          "9": 0.5,
+          "10": -0.5,
+          "11": 0
+        }
       }
     },
     {
       "mesh": {
-        "object": {
-          "up": [
+        "id": 14,
+        "uuid": "7e8697e5-7f5d-4fff-90fe-9c32bb7d5d10",
+        "scale": {
+          "x": 5.3100000000000005,
+          "y": 1,
+          "z": 1
+        },
+        "matrix": {
+          "elements": [
+            0.004228494833993631,
             0,
-            1,
-            0
-          ],
-          "type": "Mesh",
-          "uuid": "aa184517-386b-4f74-bb3d-02de0858deae",
-          "layers": 1,
-          "matrix": [
-            4.42,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
+            -5.309998316368043,
             0,
             0,
             1,
             0,
             0,
+            0.9999996829318347,
+            0,
+            0.0007963267107332639,
+            0,
+            3.305,
             0.5,
-            -2.1799999999999997,
+            0,
             1
+          ]
+        },
+        "material": {
+          "side": 2,
+          "type": "MeshBasicMaterial",
+          "uuid": "6a70f898-8394-462b-a0d1-3d2317487103",
+          "color": 32768,
+          "metadata": {
+            "type": "Material",
+            "version": 4.6,
+            "generator": "Material.toJSON"
+          },
+          "blendColor": 0,
+          "reflectivity": 1,
+          "envMapRotation": [
+            0,
+            0,
+            0,
+            "XYZ"
           ],
-          "geometry": "9fb1bacd-a87a-48dd-966f-84fb7ec19499",
-          "material": "739091ce-6c79-4f3a-9170-e0bdefeeb3ff"
+          "refractionRatio": 0.98
         },
-        "metadata": {
-          "type": "Object",
-          "version": 4.6,
-          "generator": "Object3D.toJSON"
+        "position": {
+          "x": 3.305,
+          "y": 0.5,
+          "z": 0
         },
-        "materials": [
-          {
-            "type": "MeshBasicMaterial",
-            "uuid": "739091ce-6c79-4f3a-9170-e0bdefeeb3ff",
-            "color": 16777215,
-            "blendColor": 0,
-            "reflectivity": 1,
-            "envMapRotation": [
-              0,
-              0,
-              0,
-              "XYZ"
-            ],
-            "refractionRatio": 0.98
-          }
-        ],
-        "geometries": [
-          {
-            "data": {
-              "attributes": {}
-            },
-            "type": "BufferGeometry",
-            "uuid": "9fb1bacd-a87a-48dd-966f-84fb7ec19499"
-          }
-        ]
+        "rotation": {
+          "_x": 0,
+          "_y": 1.57,
+          "_z": 0,
+          "_order": "XYZ",
+          "isEuler": true
+        },
+        "matrixWorld": {
+          "elements": [
+            0.004228494833993631,
+            0,
+            -5.309998316368043,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0.9999996829318347,
+            0,
+            0.0007963267107332639,
+            0,
+            3.305,
+            0.5,
+            0,
+            1
+          ]
+        }
       },
       "geometry": {
-        "type": "PlaneGeometry",
-        "uuid": "79c88baa-62a5-4adf-8ebb-b2b265122e5e",
+        "id": 7,
+        "uuid": "8d4bab47-05e4-494a-a55c-fd5fce71cef2",
+        "morph": {},
         "width": 1,
         "height": 1,
-        "metadata": {
-          "type": "BufferGeometry",
-          "version": 4.6,
-          "generator": "BufferGeometry.toJSON"
+        "uvArrayAttribute": {
+          "0": 0,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 0,
+          "5": 0,
+          "6": 1,
+          "7": 0
         },
-        "widthSegments": 1,
-        "heightSegments": 1
+        "normalArrayAttribute": {
+          "0": 0,
+          "1": 0,
+          "2": 1,
+          "3": 0,
+          "4": 0,
+          "5": 1,
+          "6": 0,
+          "7": 0,
+          "8": 1,
+          "9": 0,
+          "10": 0,
+          "11": 1
+        },
+        "positionArrayAttribute": {
+          "0": -0.5,
+          "1": 0.5,
+          "2": 0,
+          "3": 0.5,
+          "4": 0.5,
+          "5": 0,
+          "6": -0.5,
+          "7": -0.5,
+          "8": 0,
+          "9": 0.5,
+          "10": -0.5,
+          "11": 0
+        }
       }
     },
     {
       "mesh": {
-        "object": {
-          "up": [
-            0,
-            1,
-            0
-          ],
-          "type": "Mesh",
-          "uuid": "6c93a359-7e7c-4c31-809d-75e83fd049f9",
-          "layers": 1,
-          "matrix": [
-            4.42,
+        "id": 15,
+        "uuid": "a006226d-0662-44a1-8cac-3dca2a2332fe",
+        "scale": {
+          "x": 6.61,
+          "y": 1,
+          "z": 1
+        },
+        "matrix": {
+          "elements": [
+            6.61,
             0,
             0,
             0,
@@ -369,76 +468,237 @@
             0,
             0,
             0.5,
-            2.1799999999999997,
+            -2.6550000000000002,
             1
+          ]
+        },
+        "material": {
+          "side": 2,
+          "type": "MeshBasicMaterial",
+          "uuid": "9ba1dfc0-78ed-44fa-90a0-38520508adab",
+          "color": 8388736,
+          "metadata": {
+            "type": "Material",
+            "version": 4.6,
+            "generator": "Material.toJSON"
+          },
+          "blendColor": 0,
+          "reflectivity": 1,
+          "envMapRotation": [
+            0,
+            0,
+            0,
+            "XYZ"
           ],
-          "geometry": "c012b4e5-002f-4885-82b1-02c12a6a5851",
-          "material": "84e02ed2-cf7a-47eb-829f-a2b808769857"
+          "refractionRatio": 0.98
         },
-        "metadata": {
-          "type": "Object",
-          "version": 4.6,
-          "generator": "Object3D.toJSON"
+        "position": {
+          "x": 0,
+          "y": 0.5,
+          "z": -2.6550000000000002
         },
-        "materials": [
-          {
-            "type": "MeshBasicMaterial",
-            "uuid": "84e02ed2-cf7a-47eb-829f-a2b808769857",
-            "color": 16777215,
-            "blendColor": 0,
-            "reflectivity": 1,
-            "envMapRotation": [
-              0,
-              0,
-              0,
-              "XYZ"
-            ],
-            "refractionRatio": 0.98
-          }
-        ],
-        "geometries": [
-          {
-            "data": {
-              "attributes": {}
-            },
-            "type": "BufferGeometry",
-            "uuid": "c012b4e5-002f-4885-82b1-02c12a6a5851"
-          }
-        ]
+        "rotation": {
+          "_x": 0,
+          "_y": 0,
+          "_z": 0,
+          "_order": "XYZ",
+          "isEuler": true
+        },
+        "matrixWorld": {
+          "elements": [
+            6.61,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0.5,
+            -2.6550000000000002,
+            1
+          ]
+        }
       },
       "geometry": {
-        "type": "PlaneGeometry",
-        "uuid": "b63f1dab-2de6-4713-a936-808cddcacaf0",
+        "id": 9,
+        "uuid": "970edc6e-3ef7-4ce1-8f1a-0888df21c386",
+        "morph": {},
         "width": 1,
         "height": 1,
-        "metadata": {
-          "type": "BufferGeometry",
-          "version": 4.6,
-          "generator": "BufferGeometry.toJSON"
+        "uvArrayAttribute": {
+          "0": 0,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 0,
+          "5": 0,
+          "6": 1,
+          "7": 0
         },
-        "widthSegments": 1,
-        "heightSegments": 1
+        "normalArrayAttribute": {
+          "0": 0,
+          "1": 0,
+          "2": 1,
+          "3": 0,
+          "4": 0,
+          "5": 1,
+          "6": 0,
+          "7": 0,
+          "8": 1,
+          "9": 0,
+          "10": 0,
+          "11": 1
+        },
+        "positionArrayAttribute": {
+          "0": -0.5,
+          "1": 0.5,
+          "2": 0,
+          "3": 0.5,
+          "4": 0.5,
+          "5": 0,
+          "6": -0.5,
+          "7": -0.5,
+          "8": 0,
+          "9": 0.5,
+          "10": -0.5,
+          "11": 0
+        }
+      }
+    },
+    {
+      "mesh": {
+        "id": 16,
+        "uuid": "851f20b5-f59f-423a-a38c-6dbe190dcd09",
+        "scale": {
+          "x": 6.61,
+          "y": 1,
+          "z": 1
+        },
+        "matrix": {
+          "elements": [
+            6.61,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0.5,
+            2.6550000000000002,
+            1
+          ]
+        },
+        "material": {
+          "side": 2,
+          "type": "MeshBasicMaterial",
+          "uuid": "e7e42551-e0dc-4b34-833d-22c735363ee8",
+          "color": 255,
+          "metadata": {
+            "type": "Material",
+            "version": 4.6,
+            "generator": "Material.toJSON"
+          },
+          "blendColor": 0,
+          "reflectivity": 1,
+          "envMapRotation": [
+            0,
+            0,
+            0,
+            "XYZ"
+          ],
+          "refractionRatio": 0.98
+        },
+        "position": {
+          "x": 0,
+          "y": 0.5,
+          "z": 2.6550000000000002
+        },
+        "rotation": {
+          "_x": 0,
+          "_y": 0,
+          "_z": 0,
+          "_order": "XYZ",
+          "isEuler": true
+        },
+        "matrixWorld": {
+          "elements": [
+            6.61,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0.5,
+            2.6550000000000002,
+            1
+          ]
+        }
+      },
+      "geometry": {
+        "id": 11,
+        "uuid": "fca0274a-3473-402e-a84c-f430164cf715",
+        "morph": {},
+        "width": 1,
+        "height": 1,
+        "uvArrayAttribute": {
+          "0": 0,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 0,
+          "5": 0,
+          "6": 1,
+          "7": 0
+        },
+        "normalArrayAttribute": {
+          "0": 0,
+          "1": 0,
+          "2": 1,
+          "3": 0,
+          "4": 0,
+          "5": 1,
+          "6": 0,
+          "7": 0,
+          "8": 1,
+          "9": 0,
+          "10": 0,
+          "11": 1
+        },
+        "positionArrayAttribute": {
+          "0": -0.5,
+          "1": 0.5,
+          "2": 0,
+          "3": 0.5,
+          "4": 0.5,
+          "5": 0,
+          "6": -0.5,
+          "7": -0.5,
+          "8": 0,
+          "9": 0.5,
+          "10": -0.5,
+          "11": 0
+        }
       }
     }
   ],
-  "objects": [
-    {
-      "scale": 0.0055,
-      "position": [
-        0,
-        0,
-        0
-      ],
-      "gltfObjectUrl": "/bed_version_03.glb"
-    },
-    {
-      "scale": 0.25,
-      "position": [
-        0,
-        0,
-        0
-      ],
-      "gltfObjectUrl": "/eletric_desk.glb"
-    }
-  ]
+  "objects": []
 }

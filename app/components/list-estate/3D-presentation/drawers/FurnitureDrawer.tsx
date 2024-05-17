@@ -14,9 +14,12 @@ function FurnitureDrawer({isOpen, close, addModel}: Props) {
 
   const selectModel=(passedObj:any)=>{
 addModel({
-  gltfObjectUrl:passedObj.modelUrl,
-  scale:passedObj.scale,
-  position:passedObj.position
+  gltfObjectUrl: passedObj.modelUrl,
+  scale: passedObj.scale,
+  position: passedObj.position,
+  setObjectToEdit: function (obj: any): void {
+    throw new Error('Function not implemented.');
+  }
 });
     close();
   }

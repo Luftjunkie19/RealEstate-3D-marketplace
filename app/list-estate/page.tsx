@@ -139,7 +139,7 @@ function Page({}: Props) {
    if(!submitedPayment!.errors && submitedPayment!.payment!.status === "COMPLETED"){
     console.log(submitedPayment);
     console.log(object3D);
-    setObjectToInsert({object:{...(objectToInsert as any).object, presentation_object:object3D,  is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
+    setObjectToInsert({object:{...(objectToInsert as any)!.object, presentation_object:object3D,  is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
       paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
       currency: submitedPayment?.payment?.amountMoney?.currency,
       receiptUrl:submitedPayment?.payment?.receiptUrl,
