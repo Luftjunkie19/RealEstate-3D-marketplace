@@ -1,6 +1,7 @@
 'use client';
 
 import React, {
+  useCallback,
   useRef,
   useState,
 } from 'react';
@@ -22,12 +23,19 @@ import * as THREE from 'three';
 
 import {
   CameraControls,
-  Grid,CycleRaycast
+  Grid,CycleRaycast,
+  useTexture
 } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useLoader } from '@react-three/fiber';
 
 import FurnitureDrawer from './drawers/FurnitureDrawer';
 import GltfObject, { Gltf3dObject } from './GltfObject';
+import ElementManagment from './drawers/ElementManagment';
+import Floor from './3D-components/Floor';
+import Wall1 from './3D-components/Wall1';
+import Wall2 from './3D-components/Wall2';
+import Wall3 from './3D-components/Wall3';
+import Wall4 from './3D-components/Wall4';
 
 type Props = {
   set3dObject: (object: Object | null) => void,
@@ -36,26 +44,79 @@ type Props = {
 }
 
 function DimensionalPlanner({ set3dObject, object3D, moveForward}: Props) {
+  const [gltfObjects, setGltfObjects]=useState<any[]>([]);
   const [furnitureDrawer, setFurnitureDrawer]=useState(false);
   const groupRef= useRef<THREE.Group>(null);
+  //
   const floorRef=useRef<THREE.Mesh>(null);
+  const floorMaterialRef=useRef<THREE.MeshBasicMaterial>(null);
   const floorPlaneRef= useRef<THREE.PlaneGeometry>(null);
+  //
   const wall1Ref=useRef<THREE.Mesh>(null);
   const wall1PlaneRef=useRef<THREE.PlaneGeometry>(null);
+  const wall1MaterialRef=useRef<THREE.MeshBasicMaterial>(null);
+  //
    const wall2Ref=useRef<THREE.Mesh>(null);
    const wall2PlaneRef=useRef<THREE.PlaneGeometry>(null);
+   const wall2MaterialRef=useRef<THREE.MeshBasicMaterial>(null);
+
+  //
     const wall3Ref=useRef<THREE.Mesh>(null);
     const wall3PlaneRef=useRef<THREE.PlaneGeometry>(null);
+    const wall3MaterialRef=useRef<THREE.MeshBasicMaterial>(null);
+
+  //
      const wall4Ref=useRef<THREE.Mesh>(null);
      const wall4PlaneRef=useRef<THREE.PlaneGeometry>(null);
+     const wall4MaterialRef=useRef<THREE.MeshBasicMaterial>(null);
 
+const [objectToEdit, setObjectToEdit]=useState<any>(null);
 const [models, setModels]=useState<Gltf3dObject[] | null>([]);
+
+
+const selectToEdit= (obj:any)=>{
+  setObjectToEdit(obj);
+}
 
 const selectModels=(paramObject:Gltf3dObject)=>{
   setModels([...(models as Gltf3dObject[]), paramObject]);
 }
 
+const saveChanges=(obj:any)=>{
+  if(gltfObjects.find((item)=>item.uuid === obj.uuid)){
+    const gltfObjectIndex= gltfObjects.findIndex((item)=>item.uuid === obj.uuid);
+    gltfObjects[gltfObjectIndex]=obj;
+  }else{
+    setGltfObjects([...gltfObjects, obj]);
+  }
+  console.log(gltfObjects)
+  setObjectToEdit(null);
+}
+
+
 const levaControls =  useControls("floor", {
+  materialColour:{
+value:'#fff'
+  },
+  material:{
+    value:'',
+    options:{
+    null:'',
+     texture1: './textures/brick.jpg',
+     texture2:'./textures/brick2.jpg',
+     texture3:'./textures/brick3.jpg',
+     texture4:'./textures/brick4.jpg',
+     texture5:'./textures/brick5.png',
+     texture6:'./textures/brick6.png',
+     texture7:'./textures/brick7.png',
+     texture8:'./textures/brick8.png',
+     texture9:'./textures/brick9.jpg',
+     texture10:'./textures/brick10.jpg',
+     texture11: './textures/desk1.jpg',
+     texture12: './textures/desk2.jpg',
+     texture13:'./textures/desk3.jpg'
+    }
+  },
         floorPosition: {
             value:{
                 x: 0,
@@ -86,6 +147,27 @@ const levaControls =  useControls("floor", {
 });
 
 const firstWallControls= useControls('Wall 1', {
+  materialColour:{
+    value:'#32a852'
+      },
+      material:{
+        value:null,
+        options:[
+          './textures/brick.jpg',
+        './textures/brick2.jpg',
+         './textures/brick3.jpg',
+         './textures/brick4.jpg',
+       './textures/brick5.png',
+         './textures/brick6.png',
+          './textures/brick7.png',
+          './textures/brick8.png',
+         './textures/brick9.jpg',
+         './textures/brick10.jpg',
+          './textures/desk1.jpg',
+          './textures/desk2.jpg',
+          './textures/desk3.jpg'
+        ]
+      },
     wall1Position:{
         value:{
               x: 0,
@@ -123,6 +205,27 @@ const firstWallControls= useControls('Wall 1', {
 });
 
 const secondWallControls= useControls('Wall 2', {
+  materialColour:{
+    value:'#9673ff'
+      },
+      material:{
+        value:null,
+        options:[
+          './textures/brick.jpg',
+        './textures/brick2.jpg',
+         './textures/brick3.jpg',
+         './textures/brick4.jpg',
+       './textures/brick5.png',
+         './textures/brick6.png',
+          './textures/brick7.png',
+          './textures/brick8.png',
+         './textures/brick9.jpg',
+         './textures/brick10.jpg',
+          './textures/desk1.jpg',
+          './textures/desk2.jpg',
+          './textures/desk3.jpg'
+        ]
+      },
     wallPosition:{
         value:{
               x: 0,
@@ -160,6 +263,28 @@ const secondWallControls= useControls('Wall 2', {
 });
 
 const thirdWallContols= useControls('Wall 3', {
+  materialColour:{
+    value:'#ff4fe2'
+      },
+      material:{
+        value:null,
+        options:[
+          './textures/brick.jpg',
+        './textures/brick2.jpg',
+         './textures/brick3.jpg',
+         './textures/brick4.jpg',
+       './textures/brick5.png',
+         './textures/brick6.png',
+          './textures/brick7.png',
+          './textures/brick8.png',
+         './textures/brick9.jpg',
+         './textures/brick10.jpg',
+          './textures/desk1.jpg',
+          './textures/desk2.jpg',
+          './textures/desk3.jpg'
+        ],
+       
+      },
     wallPosition:{
         value:{
               x: 0,
@@ -197,6 +322,27 @@ const thirdWallContols= useControls('Wall 3', {
 });
 
 const fourthWallControls = useControls('Wall 4', {
+  materialColour:{
+    value:'#72ff4f'
+      },
+      material:{
+        value:null,
+        options:[
+          './textures/brick.jpg',
+        './textures/brick2.jpg',
+         './textures/brick3.jpg',
+         './textures/brick4.jpg',
+       './textures/brick5.png',
+         './textures/brick6.png',
+          './textures/brick7.png',
+          './textures/brick8.png',
+         './textures/brick9.jpg',
+         './textures/brick10.jpg',
+          './textures/desk1.jpg',
+          './textures/desk2.jpg',
+          './textures/desk3.jpg'
+        ]
+      },
     wallPosition:{
         value:{
               x: 0,
@@ -234,6 +380,7 @@ const fourthWallControls = useControls('Wall 4', {
 });
 
 
+
   return (
       <div className='w-full h-full flex'>
           <div className="flex h-screen max-w-16 rounded-r-xl w-full p-4 flex-col gap-6 items-center bg-purple text-white">
@@ -241,18 +388,136 @@ const fourthWallControls = useControls('Wall 4', {
                   <BiSolidCartAdd className="text-2xl"/>
               </button>
               <button onClick={()=>set3dObject({
-                group:groupRef.current,
+                group:{
+                  position:groupRef.current!.position,
+                  martix:groupRef.current!.matrix,
+                  matrixWorld:groupRef.current!.matrixWorld,
+                  scale:groupRef.current!.scale,
+                  rotation: groupRef.current!.rotation
+                },
                 floor:{
-                  mesh:floorRef.current,
-                  geometry:floorPlaneRef.current
+                  mesh:{
+                    position:floorRef.current!.position,
+                    scale: floorRef.current!.scale,
+                    matrixWorld: floorRef.current!.matrixWorld,
+                    matrix: floorRef.current!.matrix,
+                    rotation: floorRef.current!.rotation,
+                    uuid:floorRef.current!.uuid,
+                    id:floorRef.current!.id,
+                    material:floorRef.current!.material,
+                    map: {
+                      object:floorMaterialRef.current!.map,
+                      texturePath: levaControls.material,
+                    },
+                    colour: levaControls.materialColour,
+                  },
+                  geometry:{
+                    width: floorPlaneRef.current!.parameters.width,
+                    height: floorPlaneRef.current!.parameters.height,
+                    normalArrayAttribute: floorPlaneRef.current!.attributes.normal.array,
+                    positionArrayAttribute: floorPlaneRef.current!.attributes.position.array,
+                    uvArrayAttribute: floorPlaneRef.current!.attributes.uv.array,
+                    uuid:floorPlaneRef.current!.uuid,
+                    morph: floorPlaneRef.current!.morphAttributes,
+                    id: floorPlaneRef.current!.id
+                  }
                 },
                 walls:[
-                {mesh:wall1Ref.current, geometry:wall1PlaneRef.current}, 
-                {mesh:wall2Ref.current, geometry:wall2PlaneRef.current}, 
-                {mesh:wall3Ref.current, geometry:wall3PlaneRef.current},
-                {mesh:wall4Ref.current, geometry:wall4PlaneRef.current}
+                {mesh:{
+                  position:wall1Ref.current!.position,
+                  scale: wall1Ref.current!.scale,
+                  matrixWorld: wall1Ref.current!.matrixWorld,
+                  matrix: wall1Ref.current!.matrix,
+                  rotation: wall1Ref.current!.rotation,
+                  uuid:wall1Ref.current!.uuid,
+                  id:wall1Ref.current!.id,
+                  material: wall1Ref.current!.material,
+                  colour: firstWallControls.materialColour,
+                  map: {
+                    texturePath: firstWallControls.material,
+                  },
+                }, geometry:{
+                    width: wall1PlaneRef.current!.parameters.width,
+                    height: wall1PlaneRef.current!.parameters.height,
+                    normalArrayAttribute: wall1PlaneRef.current!.attributes.normal.array,
+                    positionArrayAttribute: wall1PlaneRef.current!.attributes.position.array,
+                    uvArrayAttribute: wall1PlaneRef.current!.attributes.uv.array,
+                    morph: wall1PlaneRef.current!.morphAttributes,
+                    uuid:wall1PlaneRef.current!.uuid,
+                    id: wall1PlaneRef.current!.id
+                  }}, 
+                  {mesh:{
+                    position:wall2Ref.current!.position,
+                    scale: wall2Ref.current!.scale,
+                    matrixWorld: wall2Ref.current!.matrixWorld,
+                    matrix: wall2Ref.current!.matrix,
+                    rotation: wall2Ref.current!.rotation,
+                    uuid:wall2Ref.current!.uuid,
+                    id:wall2Ref.current!.id,
+                    material: wall2Ref.current!.material,
+                    map: {
+                      texturePath: secondWallControls.material,
+                    },
+                    colour: secondWallControls.materialColour,
+                  }, geometry:{
+                      width: wall2PlaneRef.current!.parameters.width,
+                      height: wall2PlaneRef.current!.parameters.height,
+                      normalArrayAttribute: wall2PlaneRef.current!.attributes.normal.array,
+                      positionArrayAttribute: wall2PlaneRef.current!.attributes.position.array,
+                      uvArrayAttribute: wall2PlaneRef.current!.attributes.uv.array,
+                      morph: wall2PlaneRef.current!.morphAttributes,
+                      uuid:wall2PlaneRef.current!.uuid,
+                      id: wall2PlaneRef.current!.id
+                    }}, 
+                    {mesh:{
+                      map: {
+                        texturePath: thirdWallContols.material,
+                      },
+                      colour: thirdWallContols.materialColour,
+                      position:wall3Ref.current!.position,
+                      scale: wall3Ref.current!.scale,
+                      matrixWorld: wall3Ref.current!.matrixWorld,
+                      matrix: wall3Ref.current!.matrix,
+                      rotation: wall3Ref.current!.rotation,
+                      uuid:wall3Ref.current!.uuid,
+                      id:wall3Ref.current!.id,
+                      material: wall3Ref.current!.material,
+                      
+                    }, geometry:{
+                        width: wall3PlaneRef.current!.parameters.width,
+                        height: wall3PlaneRef.current!.parameters.height,
+                        normalArrayAttribute: wall3PlaneRef.current!.attributes.normal.array,
+                        positionArrayAttribute: wall3PlaneRef.current!.attributes.position.array,
+                        uvArrayAttribute: wall3PlaneRef.current!.attributes.uv.array,
+                        uuid:wall3PlaneRef.current!.uuid,
+                        morph: wall3PlaneRef.current!.morphAttributes,
+                        id: wall3PlaneRef.current!.id
+                      }}, 
+                      {mesh:{
+                        map: {
+                          texturePath: fourthWallControls.material,
+                        },
+                        colour: fourthWallControls.materialColour,
+                        position:wall4Ref.current!.position,
+                        scale: wall4Ref.current!.scale,
+                        matrixWorld: wall4Ref.current!.matrixWorld,
+                        matrix: wall4Ref.current!.matrix,
+                        rotation: wall4Ref.current!.rotation,
+                        uuid:wall4Ref.current!.uuid,
+                        id:wall4Ref.current!.id,
+                        material: wall4Ref.current!.material,
+                      }, geometry:{
+                          width: wall4PlaneRef.current!.parameters.width,
+                          morph: wall4PlaneRef.current!.morphAttributes,
+                          height: wall4PlaneRef.current!.parameters.height,
+                          normalArrayAttribute: wall4PlaneRef.current!.attributes.normal.array,
+                          positionArrayAttribute: wall4PlaneRef.current!.attributes.position.array,
+                          uvArrayAttribute: wall4PlaneRef.current!.attributes.uv.array,
+                          uuid:wall4PlaneRef.current!.uuid,
+                          id: wall4PlaneRef.current!.id,
+                        }}, 
                 ],
-                objects:models,
+                objects:gltfObjects,
               })}>
                 <RiSave2Fill className="text-2xl"/>
               </button>
@@ -263,6 +528,8 @@ const fourthWallControls = useControls('Wall 4', {
 
 <FurnitureDrawer addModel={selectModels} isOpen={furnitureDrawer} close={()=>setFurnitureDrawer(false)}/>
 
+<ElementManagment saveChanges={saveChanges} objectToEdit={objectToEdit}/>
+
 
           <div className='w-full h-screen relative top-0 left-0'>        
           <Canvas>
@@ -272,42 +539,21 @@ const fourthWallControls = useControls('Wall 4', {
 
 <Grid cellSize={0.1} args={[20, 20]} sectionSize={1} scale={10} position-y={-0.5} />
 
-<group ref={groupRef} >
-   <mesh ref={wall1Ref} rotation-y={1.57} rotation-x={firstWallControls.wallRotation.x}  scale-y={firstWallControls.wall1YScale} scale-z={firstWallControls.wall1ZScale} scale-x={levaControls.floorYScale} position-z={firstWallControls.wall1Position.z} position-y={firstWallControls.wall1Position.y} position-x={-levaControls.floorXScale / 2} >
-                  <planeGeometry ref={wall1PlaneRef} />
-                  <meshBasicMaterial  side={THREE.DoubleSide} color="red" />
-              </mesh>
+<group ref={groupRef}>
     
-   {models!.length > 0 && models?.map((item, i)=>(<GltfObject position={item.position} key={i} gltfObjectUrl={item.gltfObjectUrl} scale={item.scale} />))}
+   {models!.length > 0 && models?.map((item, i)=>(<GltfObject setObjectToEdit={selectToEdit} position={item.position} key={i} gltfObjectUrl={item.gltfObjectUrl} scale={item.scale} />))}
     
+<Wall1 wallMaterialRef={wall1MaterialRef} wallRef={wall1Ref} wallPlaneRef={wall1PlaneRef} wallControls={firstWallControls} levaControls={levaControls}/>
 
+<Wall2 wallMaterialRef={wall2MaterialRef} wallControls={secondWallControls} levaControls={levaControls} wallRef={wall2Ref} wallPlaneRef={wall2PlaneRef}/>
 
-    <mesh ref={wall2Ref} scale-x={levaControls.floorYScale} rotation-y={1.57} rotation-z={secondWallControls.wallRotation.z} rotation-x={secondWallControls.wallRotation.x} position-x={levaControls.floorXScale / 2} position-y={secondWallControls.wallYScale / 2} position-z={secondWallControls.wallPosition.z} >
-                  <planeGeometry ref={wall2PlaneRef}  />
-                  <meshBasicMaterial side={THREE.DoubleSide} color="green" />
-              </mesh>
+<Wall3 wallMaterialRef={wall3MaterialRef} wallControls={thirdWallContols} levaControls={levaControls} wallRef={wall3Ref} wallPlaneRef={wall3PlaneRef}/>
     
+<Wall4 wallMaterialRef={wall4MaterialRef} levaControls={levaControls} wallControls={fourthWallControls} wallPlaneRef={wall4PlaneRef} wallRef={wall4Ref}/>
 
 
-        <mesh ref={wall3Ref} scale-x={levaControls.floorXScale} position-x={thirdWallContols.wallPosition.x} position-y={thirdWallContols.wallPosition.y} position-z={-levaControls.floorYScale / 2} rotation-x={thirdWallContols.wallRotation.x} rotation-y={thirdWallContols.wallRotation.y} rotation-z={thirdWallContols.wallRotation.z}>
-                  <planeGeometry ref={wall3PlaneRef} />
-                  <meshBasicMaterial side={THREE.DoubleSide} color="purple" />
-              </mesh>
-
-                <mesh ref={wall4Ref} rotation-x={fourthWallControls.wallRotation.x} rotation-y={fourthWallControls.wallRotation.y} rotation-z={fourthWallControls.wallRotation.z} scale-z={fourthWallControls.wallZScale} scale-y={fourthWallControls.wallYScale}  scale-x={levaControls.floorXScale} position-x={fourthWallControls.wallPosition.x} position-z={levaControls.floorYScale / 2} position-y={fourthWallControls.wallPosition.y}>
-                  <planeGeometry ref={wall4PlaneRef} />
-                  <meshBasicMaterial side={THREE.DoubleSide} color="blue" />
-              </mesh>
-
-
-
-
-<mesh ref={floorRef} rotation-x={-Math.PI / 2}>
-                  <planeGeometry ref={floorPlaneRef} args={[levaControls.floorXScale, levaControls.floorYScale, levaControls.floorZScale]} />
-                  <meshBasicMaterial side={THREE.DoubleSide} color="white" />
-              </mesh>
+<Floor floorMaterialRef={floorMaterialRef} levaControls={levaControls} floorRef={floorRef} floorPlaneRef={floorPlaneRef}/>
 </group>
-
 
           </Canvas>
           <div className="sticky bottom-0 left-0 m-12 flex gap-6 items-center">

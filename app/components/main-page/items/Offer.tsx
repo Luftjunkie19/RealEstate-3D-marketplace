@@ -7,6 +7,7 @@ import { IoBed } from 'react-icons/io5';
 import { MdSell } from 'react-icons/md';
 import { RxRulerSquare } from 'react-icons/rx';
 import Link from 'next/link';
+import ImageDefault from '@/assets/images.jpeg'
 
 type Props = {imageUrl: string, name:string, description: string, barthRooms:number, bedRooms:number, isForRent: boolean, price:number, squareMetrage:number, id:number}
 
@@ -17,7 +18,8 @@ function Offer({name, imageUrl, description, barthRooms, bedRooms, isForRent, pr
     return (
       <div className='p-6 flex flex-col gap-2 lg:max-w-sm w-full border-2 border-darkGray rounded-xl shadow-lg overflow-hidden'>
        
-          <Image src={imageUrl}  width={256} height={256} className='w-full object-cover p-2 h-64 rounded-lg'  alt=""/>
+
+        {/* {imageUrl && <Image src={imageUrl}  width={256} height={256} className='w-full object-cover p-2 h-64 rounded-lg'  alt=""/>} */}
           
           <div className="flex flex-col gap-3">
               <p className="text-2xl font-bold text-white">{name}</p>
