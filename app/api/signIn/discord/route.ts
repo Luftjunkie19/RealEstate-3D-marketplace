@@ -4,7 +4,7 @@ export async function POST (req:Request){
 
 
    const result = await supabase.auth.signInWithOAuth({provider:'discord', options:{
-      redirectTo:window.location.origin
+      redirectTo: '/'
    }});
 
   
