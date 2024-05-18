@@ -5,7 +5,9 @@ import { cookies } from "next/headers";
 export async function POST (req:Request){
 
 
-   const result = await supabase.auth.signInWithOAuth({provider:'google'});
+   const result = await supabase.auth.signInWithOAuth({provider:'google', options:{
+      redirectTo:'/'
+   }});
 
    return Response.json(result);
 }
