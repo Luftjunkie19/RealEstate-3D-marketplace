@@ -47,14 +47,36 @@ function Page({}: Props) {
       const bedroomsQty = formData.get('bedrooms');
       const providedAddress = formData.get('property-address');
       const isForRent = formData.get('isForRent');
+
+      if(!propertyName || !propertyPrice || !squareFootage || !propertyDescription || !bathroomsQty || !bedroomsQty || !providedAddress || isForRent === null){
+        return toast.error('Please fill all the required fields');
+       }
   
       // Fetch geocode data
       const fetchData = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${providedAddress}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`);
       const fetchResult = await fetchData.json();
-  
+
+      if(!fetchResult){
+       return toast.error('Please provide a valid address');
+      }
+
       const address = fetchResult.results[0].formatted_address;
       const geometricPositions = fetchResult.results[0].geometry.location;
   
+      if(!address || !geometricPositions){
+        return toast.error('Please address accessed.');
+       }
+
+       if(images.length === 0){
+        return toast.error('Please provide at least one image of the property');
+       }
+
+
+       if(images.length > 6){
+        return toast.error('Only 6 images are possible to add.');
+       }
+
+
       // Upload images
       const uploadedImageUrls: string[] = [];
       for (const image of images) {
