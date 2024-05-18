@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import { RiRobot3Line } from 'react-icons/ri';
 
 import { userThreadAtom } from '@/atoms';
+import { RunSubmitToolOutputsParams } from 'openai/resources/beta/threads/runs/runs.mjs';
 
 type Props={
   openState:boolean
@@ -21,6 +22,7 @@ export default function Chat({openState}:Props) {
   const [messageContent, setMessageContent]=useState('');
     const [userThread]=useAtom(userThreadAtom);
   const chatRef=useRef<HTMLDivElement>(null);
+  const [run, setRun]=useState<any>(null);
 
 
   const startRun= async (thread:string, assistantId:string): Promise<string> =>{
@@ -33,12 +35,15 @@ export default function Chat({openState}:Props) {
         }),
       });
       const {run, success, error}= await fetchData.json();
+
      
       if(!run || !success){
         toast.error('Unsuccessfully done !');
         return ''
       };
-  
+
+      setRun(run);
+
       return run.id;
       
     } catch (error) {
@@ -59,7 +64,7 @@ export default function Chat({openState}:Props) {
         }});
 
         const {run, success, error}= await runRetrieved.json();
-
+    
         if(error){
           toast.error(error);
           return;
@@ -69,6 +74,8 @@ export default function Chat({openState}:Props) {
           return;
         }
 
+        
+        
         if(run.status === 'completed'){
           clearInterval(intervalId);
           fetchMessages();
@@ -80,6 +87,7 @@ export default function Chat({openState}:Props) {
           toast.error('Failed to run');
           return;
         }
+        setRun(run);
         
       } catch (error) {
         console.log(error);
@@ -138,6 +146,99 @@ export default function Chat({openState}:Props) {
 
    pollRunStatus(userThread, runId);
   };
+
+  const handleSubmitAction = useCallback( async ()=>{
+    const toolOutputs: RunSubmitToolOutputsParams.ToolOutput[] = [];
+
+    for (const toolCall of run?.required_action?.submit_tool_outputs
+      .tool_calls ?? []) {
+      console.log(`toolCall`, toolCall);
+      if (toolCall.function.name === "getProperty") {
+        const { propertyData, country, success, errorMessage } = JSON.parse(
+          toolCall.function.arguments
+        );
+        if (!success || errorMessage) {
+          toast.error(
+            errorMessage ?? "Something went wrong fetching data for stocks",
+            { position: "bottom-center" }
+          );
+        }
+
+        if (!country) {
+          toast.error("No symbol found", { position: "bottom-center" });
+        }
+        
+        if (!propertyData) {
+          toast.error("No symbol found", { position: "bottom-center" });
+        }
+
+        try {
+          const response = await fetch(`/api/getProperty`, {
+            method: "POST",
+            body: JSON.stringify({ country, propertyData }),
+            headers:{
+              'Content-Type': 'application/json',
+            }
+          });
+
+          const { error, success, price } = await response.json();
+          if (!success || error || !price) {
+            toast.error(error ?? "Something went wrong fetching stock", {
+              position: "bottom-center",
+            });
+            return;
+          }
+
+          const propertyObject = {
+            propertyData,
+            price,
+          };
+
+          console.log("New Property", propertyData);
+
+          toolOutputs.push({
+            tool_call_id: toolCall.id,
+            output: JSON.stringify(propertyObject),
+          });
+
+          
+        } catch (error) {
+          console.log("Error fetching stock", error);
+          toast.error("Error fetching stock", { position: "bottom-center" });
+        }
+      } else {
+        throw new Error(
+          `Unknown tool call function: ${toolCall.function.name}`
+        );
+      }
+    }
+
+    console.log("toolOutputs", toolOutputs);
+    if (toolOutputs.length > 0) {
+      const response = await fetch("/api/run/submit-tool-output",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify( {
+          runId: run?.id,
+          threadId: userThread,
+          toolOutputs: toolOutputs,
+        })
+      });
+
+      const fullResponse= await response.json();
+
+      console.log("Response data from submit tool output", fullResponse);
+
+      if (fullResponse.success) {
+        toast.success("Submitted action", { position: "bottom-center" });
+        setRun(fullResponse.run);
+      } else {
+        toast.success("Submitted action", { position: "bottom-center" });
+      }
+    }
+  },[run?.id, run?.required_action?.submit_tool_outputs.tool_calls, userThread]);
 
 //   useEffect(() => {
 //     //3️⃣ bring the last item into view  
