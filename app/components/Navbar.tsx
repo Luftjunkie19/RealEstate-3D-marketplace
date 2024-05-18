@@ -74,20 +74,23 @@ function Navbar({}: Props) {
               <Link href={'/browse'}>
                   Browse
               </Link>
-        {!user ?  <>
-               <Link href={'/list-estate'}>
-                  Add Estate
-        </Link>
+        {!user ?  
         <Link href={'/sign-in'}>
               <button className="bg-purple p-2 flex gap-2 items-center text-white rounded-xl">
                   <FaSignInAlt />
                   Sign In
               </button>
         </Link>
-        </> : <Link className='flex items-center gap-2' href={'/profile'}>
+         : 
+         <>
+            <Link href={'/list-estate'}>
+                  Add Estate
+        </Link>
+         <Link className='flex items-center gap-2' href={'/profile'}>
           <FaUser/>
           Profile
         </Link>
+         </>
         }
 
         {user && <button onClick={handleSignOut} className=' bg-red-600 flex items-center gap-2 text-white p-2 rounded-xl'>
