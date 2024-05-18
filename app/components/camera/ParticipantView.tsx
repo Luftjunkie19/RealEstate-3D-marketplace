@@ -68,7 +68,7 @@ const {meeting}=useMeeting();
           }}
         />
       ) :(<>
-     {participant.metaData && participant.metaData.avatar_url && <Image src={participant.metaData.avatar_url} className='sm:w-16 sm:h-16 md:w-60 rounded-2xl md:h-44 object-fill' alt='' width={256} height={192} />} 
+     {participant.metaData && (participant.metaData as any).avatar_url && <Image src={(participant.metaData as any).avatar_url} className='sm:w-16 sm:h-16 md:w-60 rounded-2xl md:h-44 object-fill' alt=''  />} 
       </>)}
         
         <div className="flex gap-6 items-center sm:hidden lg:flex">
