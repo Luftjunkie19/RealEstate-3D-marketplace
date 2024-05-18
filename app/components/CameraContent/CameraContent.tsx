@@ -67,9 +67,9 @@ export default function CameraContent({meetingID, selectMic, selectCam, selected
       
           const { senderId, senderName, message } = messageData;
       
-          console.log(messageData.text, message);
+          console.log((messageData as any).text, message);
           
-          const messageText = JSON.parse(messageData.text).message!;
+          const messageText = JSON.parse((messageData as any).text).message!;
       
         
         
@@ -154,7 +154,7 @@ meeting.sendChatMessage(JSON.stringify({message:messageText}));
   <p className="text-lg justify-center p-2 text-white font-semibold flex gap-4 items-center w-full border-bgColor border-b-2">Chat <FaRegMessage className="text-xl text-purple"/></p>
  <div className=" h-3/4 overflow-y-auto px-2 flex flex-col gap-2">
   {meeting.messages.map((message, i)=> (<div key={i} className=" bg-bgColor text-white p-2 rounded-lg">
-    <p>{message.senderName}: {JSON.parse(message.text).message}</p>
+    <p>{message.senderName}: {JSON.parse((message as any).text).message}</p>
   </div>))}
  </div>
   <form action={sendMessage} className="flex items-center justify-around sticky bottom-0 left-0 gap-2 w-full bg-bgColor p-2 ">
@@ -167,7 +167,7 @@ meeting.sendChatMessage(JSON.stringify({message:messageText}));
 <ChatDrawer shownChat={showChat} closeChat={()=>setShowChat(false)} content={(<>
  <div className=" h-3/4 overflow-y-auto px-2 flex flex-col gap-2">
   {meeting.messages.map((message, i)=> (<div key={i} className=" bg-bgColor text-white p-2 rounded-lg">
-    <p>{message.senderName}: {JSON.parse(message.text).message}</p>
+    <p>{message.senderName}: {JSON.parse((message as any).text).message}</p>
   </div>))}
  </div>
   <form action={sendMessage} className="flex items-center justify-around sticky bottom-0 left-0 gap-2 w-full bg-bgColor p-2 ">
