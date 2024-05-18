@@ -6,7 +6,7 @@ export async function POST (req:Request){
 
 
    const result = await supabase.auth.signInWithOAuth({provider:'google', options:{
-      redirectTo:'/'
+      redirectTo:'https://real-estate-3-d-marketplace.vercel.app'
    }});
 
    return Response.json(result);
