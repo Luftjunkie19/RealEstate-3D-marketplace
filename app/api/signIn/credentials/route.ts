@@ -1,6 +1,7 @@
 import { supabase } from "@/utils/supabase/client";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 
 export async function POST(request:Request){
@@ -28,7 +29,7 @@ export async function POST(request:Request){
     }
         const signedInUser= await supabase.auth.signInWithPassword({email, password});
 
-        
+        redirect('/');
 
     return Response.json(signedInUser);
 
