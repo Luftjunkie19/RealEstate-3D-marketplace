@@ -57,21 +57,21 @@ function ElementManagment({objectToEdit, saveChanges}: Props) {
                 <p className='text-white'>Position X</p>
                 <input  onChange={(e)=>{
                     objectToEdit.position.x = +e.target.value;
-                }}  type="range" min={0} max="10" step={0.01}  className="range range-primary max-w-60" />
+                }}  type="range" min={"-10"} max="10" step={0.01}  className="range range-primary max-w-60" />
             </div>
 
             <div className="flex flex-col gap-2">
                 <p className='text-white'>Position Y</p>
                 <input  onChange={(e)=>{
                     objectToEdit.position.y = +e.target.value;
-                }}  type="range" min={0} max="10" step={0.01}  className="range range-primary max-w-60" />
+                }}  type="range" min={"-10"} max="10" step={0.01}  className="range range-primary max-w-60" />
             </div>
 
             <div className="flex flex-col gap-2">
                 <p className='text-white'>Position Z</p>
                 <input  onChange={(e)=>{
                     objectToEdit.position.z = +e.target.value;
-                }}  type="range" min={0} max="10" step={0.01}  className="range range-primary max-w-60" />
+                }}  type="range" min={"-10"}  max="10" step={0.01}  className="range range-primary max-w-60" />
             </div>
 
             <button onClick={()=>saveChanges({scale:objectToEdit.scale, rotation: objectToEdit.rotation, position: objectToEdit.position, matrix:objectToEdit.matrix, matrixWorld:objectToEdit.matrixWorld, up: objectToEdit.up, uuid:objectToEdit.uuid, modelPath:objectToEdit.gltfObjectUrl}, objectToEdit.gltfObjectUrl ? true : false)} className='bg-darkGray p-2 rounded-xl text-white w-40 max-w-[80%]'>Submit</button>
