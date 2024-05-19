@@ -1,5 +1,5 @@
 'use client';
-
+import { GiBrickWall } from "react-icons/gi";
 import React, {
   useCallback,
   useRef,
@@ -36,6 +36,7 @@ import Wall1 from './3D-components/Wall1';
 import Wall2 from './3D-components/Wall2';
 import Wall3 from './3D-components/Wall3';
 import Wall4 from './3D-components/Wall4';
+import AdditionalWall from "./3D-components/AdditionalWall";
 
 type Props = {
   set3dObject: (object: Object | null) => void,
@@ -45,6 +46,7 @@ type Props = {
 
 function DimensionalPlanner({ set3dObject, object3D, moveForward}: Props) {
   const [gltfObjects, setGltfObjects]=useState<any[]>([]);
+  const [additionalWalls, setAdditionalWalls]=useState<any[]>([]);
   const [furnitureDrawer, setFurnitureDrawer]=useState(false);
   const groupRef= useRef<THREE.Group>(null);
   //
@@ -82,12 +84,16 @@ const selectModels=(paramObject:Gltf3dObject)=>{
   setModels([...(models as Gltf3dObject[]), paramObject]);
 }
 
-const saveChanges=(obj:any)=>{
-  if(gltfObjects.find((item)=>item.uuid === obj.uuid)){
-    const gltfObjectIndex= gltfObjects.findIndex((item)=>item.uuid === obj.uuid);
-    gltfObjects[gltfObjectIndex]=obj;
+const saveChanges=(obj:any, isGltf:boolean)=>{
+  if(isGltf){
+    if(gltfObjects.find((item)=>item.uuid === obj.uuid)){
+      const gltfObjectIndex= gltfObjects.findIndex((item)=>item.uuid === obj.uuid);
+      gltfObjects[gltfObjectIndex]=obj;
+    }else{
+      setGltfObjects([...gltfObjects, obj]);
+    }
   }else{
-    setGltfObjects([...gltfObjects, obj]);
+    setAdditionalWalls([{mesh:{...obj}, geometry:{ width: 1 * obj.scale.x, height: 1 * obj.scale.y}}]);
   }
   console.log(gltfObjects)
   setObjectToEdit(null);
@@ -379,8 +385,21 @@ const fourthWallControls = useControls('Wall 4', {
   },
 });
 
-
-
+const addNewWall= ()=>{
+  setAdditionalWalls([...additionalWalls,   {mesh:{
+    map: {
+      texturePath: null,
+    },
+    colour: 'green',
+    position:{x:0, y:0.5, z:0},
+    scale: {x:1, y:1, z:1},
+    rotation: {x:0, y:1.57, z:0},
+    
+  }, geometry:{
+      width: 1,
+      height: 1,
+    }},])
+}
   return (
       <div className='w-full h-full flex'>
           <div className="flex h-screen max-w-16 rounded-r-xl w-full p-4 flex-col gap-6 items-center bg-purple text-white">
@@ -550,7 +569,7 @@ const fourthWallControls = useControls('Wall 4', {
 <Wall3 wallMaterialRef={wall3MaterialRef} wallControls={thirdWallContols} levaControls={levaControls} wallRef={wall3Ref} wallPlaneRef={wall3PlaneRef}/>
     
 <Wall4 wallMaterialRef={wall4MaterialRef} levaControls={levaControls} wallControls={fourthWallControls} wallPlaneRef={wall4PlaneRef} wallRef={wall4Ref}/>
-
+{additionalWalls.length > 0 && additionalWalls.map((item, i)=>(<AdditionalWall selectWallToEdit={selectToEdit} width={item.geometry.width} height={item.geometry.height} rotation={item.mesh.rotation} scale={item.mesh.scale} position={item.mesh.position} wallColour={item.mesh.colour} key={i}/>))}
 
 <Floor floorMaterialRef={floorMaterialRef} levaControls={levaControls} floorRef={floorRef} floorPlaneRef={floorPlaneRef}/>
 </group>
@@ -577,6 +596,9 @@ const fourthWallControls = useControls('Wall 4', {
         </div>
 
         </div>
+        <button className='bg-purple p-3 rounded-lg'>
+<GiBrickWall onClick={addNewWall} className="text-white"/>
+        </button>
           </div>
     </div>
 

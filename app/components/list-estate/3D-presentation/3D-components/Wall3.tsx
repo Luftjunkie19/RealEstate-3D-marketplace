@@ -40,7 +40,7 @@ function Wall3({wallRef, wallPlaneRef, wallControls, levaControls, wallMaterialR
     <mesh ref={wallRef} scale-x={levaControls.floorXScale} position-x={wallControls.wallPosition.x} position-y={wallControls.wallPosition.y} position-z={-levaControls.floorYScale / 2} rotation-x={wallControls.wallRotation.x} rotation-y={wallControls.wallRotation.y} rotation-z={wallControls.wallRotation.z}>
     <planeGeometry ref={wallPlaneRef} />
     <meshBasicMaterial side={THREE.DoubleSide} color={wallControls.materialColour} />
-     { loadMap && <meshBasicMaterial ref={wallMaterialRef} map={loadMap && loadMap} side={THREE.DoubleSide} color={wallControls.materialColour} />}
+     { loadMap && <meshBasicMaterial  ref={wallMaterialRef} map={loadMap && loadMap} side={THREE.DoubleSide} color={wallControls.materialColour} />}
 </mesh>
 
   )

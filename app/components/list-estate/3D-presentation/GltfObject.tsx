@@ -21,6 +21,7 @@ function GltfObject({scale, gltfObjectUrl, position, setObjectToEdit}: Gltf3dObj
     <TransformControls  
     object={gltfObjectRef.current as Object3D<Object3DEventMap>} mode="translate" showX showZ showY>
         <Gltf 
+     
        onClick={()=>setObjectToEdit({...gltfObjectRef.current, gltfObjectUrl})} 
         ref={gltfObjectRef} 
         src={gltfObjectUrl} 
