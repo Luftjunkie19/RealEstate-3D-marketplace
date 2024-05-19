@@ -21,7 +21,7 @@ export const models3D: Model3D[] = [
     { modelUrl: "/corner_desk.glb", scale:0.5, position: [0, 0, 0], name:'Corner Desk'},
     { modelUrl: "/wardrobe.glb", scale:0.5, position: [0, 0, 0], name:'Wardrobe'},
     { modelUrl: "/fridge.glb", scale:0.5, position: [0, 0, 0], name:'Fridge'},
-    { modelUrl: "/device.glb", scale:0.5, position: [0, 0, 0], name:'Device'},
-    { modelUrl: "/pc_object.glb", scale:0.5, position: [0, 0, 0], name:'PC'},
+    { modelUrl: "/device.glb", scale:0.0085, position: [0, 0, 0], name:'Device'},
+    { modelUrl: "/pc_object.glb", scale:0.009, position: [0, 0, 0], name:'PC'},
     { modelUrl: "/basic_keyboard.glb", scale:0.5, position: [0, 0, 0], name:'Keyboard'},
 ];
