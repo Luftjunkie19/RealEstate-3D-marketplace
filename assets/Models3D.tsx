@@ -15,7 +15,7 @@ export const models3D: Model3D[] = [
     { modelUrl: "/scifi_desk.glb", scale:0.5, position: [0, 0, 0], name:'Desk v2'},
     { modelUrl: "/toilet.glb", scale:0.5, position: [0, 0, 0], name:'Toilet'},
     { modelUrl: "/office_chair.glb", scale:0.5, position: [0, 0, 0], name:'Office Chair'},
-    { modelUrl: "/mattress.glb", scale:0.5, position: [0, 0, 0], name:'Mattress'},
+    { modelUrl: "/mattress.glb", scale:0.0015, position: [0, 0, 0], name:'Mattress'},
     { modelUrl: "/coffee_table.glb", scale:0.5, position: [0, 0, 0], name:'Coffee Table'},
     { modelUrl: "/curved_chair.glb", scale:0.5, position: [0, 0, 0], name:'Curved Chair'},
     { modelUrl: "/corner_desk.glb", scale:0.5, position: [0, 0, 0], name:'Corner Desk'},
