@@ -48,7 +48,7 @@ function Page({}: Props) {
       const providedAddress = formData.get('property-address');
       const isForRent = formData.get('isForRent');
 
-      if(!propertyName || !propertyPrice || !squareFootage || !propertyDescription || !bathroomsQty || !bedroomsQty || !providedAddress || isForRent === null){
+      if(!propertyName || !propertyPrice || !squareFootage || !propertyDescription || !bathroomsQty || !bedroomsQty || !providedAddress ){
         return toast.error('Please fill all the required fields');
        }
   
