@@ -34,7 +34,7 @@ addModel({
             </button>
         </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-1 overflow-y-auto">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-1 overflow-y-scroll">
         {models3D.map((model) => (
            <button key={model.modelUrl} className="flex flex-col gap-2 p-4 rounded-lg max-w-60 w-full bg-darkGray border-2 border-bgColor" onClick={()=>selectModel(model)}>
           <Image src={image} width={128} height={128} alt="" className="w-full h-24 rounded-md"/>
