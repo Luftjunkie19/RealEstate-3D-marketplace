@@ -24,7 +24,7 @@ function EstateCanvas({object3D}: Props) {
   <meshStandardMaterial side={2} color={wall.mesh.material.color} />
 </mesh>))}
 
-{object3D.objects.length > 0 && object3D.objects.map((item, i)=>(<GltfObject rotation={item.rotation} scale={item.scale} position={item.position} gltfObjectUrl={item.modelPath} key={i} />))}
+{object3D.objects && object3D.objects.length > 0 && object3D.objects.map((item, i)=>(<GltfObject rotation={item.rotation} scale={item.scale} position={item.position} gltfObjectUrl={item.modelPath} key={i} />))}
 {object3D.additionalWalls && object3D.additionalWalls.length > 0 && object3D.additionalWalls.map((item, i)=>(<AdditionalWall width={item.geometry.width} height={item.geometry.height} rotation={item.mesh.rotation} position={item.mesh.position} key={i} scale={item.mesh.scale}/>))}
   </group>
 </Stage>
