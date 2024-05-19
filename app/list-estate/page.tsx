@@ -184,7 +184,7 @@ function Page({}: Props) {
 </ul>
       </div>
 
-{currentStep === 1 &&
+{currentStep === 2 &&
           <form action={formAction} className="mx-auto p-6 my-8 max-w-6xl bg-darkGray rounded-lg flex flex-col gap-3">
               <p className="text-2xl text-white font-bold">List your Real Estate</p>
 
@@ -248,7 +248,7 @@ function Page({}: Props) {
 }
 
 
-{currentStep === 2 && 
+{currentStep === 1 && 
 <DimensionalPlanner moveForward={()=>setCurrentStep(3)} object3D={object3D} set3dObject={set3DFunction}/>
 }
 
