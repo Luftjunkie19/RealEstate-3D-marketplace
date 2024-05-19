@@ -537,6 +537,7 @@ const addNewWall= ()=>{
                         }}, 
                 ],
                 objects:gltfObjects,
+                additionalWalls
               })}>
                 <RiSave2Fill className="text-2xl"/>
               </button>

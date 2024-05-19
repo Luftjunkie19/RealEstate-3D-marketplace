@@ -52,13 +52,10 @@ function Page({}: Props) {
         return toast.error('Please fill all the required fields');
        }
   
+     
       // Fetch geocode data
       const fetchData = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${providedAddress}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`);
       const fetchResult = await fetchData.json();
-
-      if(!fetchResult){
-       return toast.error('Please provide a valid address');
-      }
 
       const address = fetchResult.results[0].formatted_address;
       const geometricPositions = fetchResult.results[0].geometry.location;
@@ -184,7 +181,7 @@ function Page({}: Props) {
 </ul>
       </div>
 
-{currentStep === 2 &&
+{currentStep === 1 &&
           <form action={formAction} className="mx-auto p-6 my-8 max-w-6xl bg-darkGray rounded-lg flex flex-col gap-3">
               <p className="text-2xl text-white font-bold">List your Real Estate</p>
 
@@ -248,7 +245,7 @@ function Page({}: Props) {
 }
 
 
-{currentStep === 1 && 
+{currentStep === 2 && 
 <DimensionalPlanner moveForward={()=>setCurrentStep(3)} object3D={object3D} set3dObject={set3DFunction}/>
 }
 

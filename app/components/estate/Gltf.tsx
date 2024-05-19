@@ -9,16 +9,17 @@ export type Gltf3dPresentationObject = {
     gltfObjectUrl:string,
     scale:{x:number, y:number, z:number},
     position:{x:number, y:number, z:number},
+    rotation:{_x:number, _y:number, _z:number}
 }
 
 
 
-function GltfObject({scale, gltfObjectUrl, position}: Gltf3dPresentationObject) {
+function GltfObject({scale, gltfObjectUrl, position, rotation}: Gltf3dPresentationObject) {
   return (
   
         <Gltf 
         src={gltfObjectUrl} 
-        scale-x={scale.x} scale-y={scale.y} scale-z={scale.z} position={[position.x, position.y, position.z]} castShadow receiveShadow/>
+        scale-x={scale.x} scale-y={scale.y} scale-z={scale.z} rotation-x={rotation._x} rotation-y={rotation._y} rotation-z={rotation._z} position-x={position.x} position-y={ position.y} position-z={ position.z} castShadow receiveShadow/>
   )
 }
 
