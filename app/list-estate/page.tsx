@@ -30,7 +30,7 @@ function Page({}: Props) {
   const [images, setImages] = useState<File[]>([]); // Set initial state to an array of Files
 
 
-  const set3DFunction=(object:Object | null)=>{
+  const set3DFunction=(object:any | null)=>{
     set3dObject(object);
     setCurrentStep(3);
   }

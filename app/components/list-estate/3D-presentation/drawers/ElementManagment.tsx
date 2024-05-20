@@ -75,7 +75,24 @@ function ElementManagment({objectToEdit, saveChanges, removeObject}: Props) {
                 }}  type="range" min={"-10"}  max="10" step={0.01}  className="range range-primary max-w-60" />
             </div>
 <div className="flex gap-4">
-            <button onClick={()=>saveChanges(objectToEdit.gltfObjectUrl ? {scale:objectToEdit.scale, rotation: objectToEdit.rotation, position: objectToEdit.position, matrix:objectToEdit.matrix, matrixWorld:objectToEdit.matrixWorld, up: objectToEdit.up, uuid:objectToEdit.uuid, modelPath:objectToEdit.gltfObjectUrl, id: objectToEdit.id ?  objectToEdit.id : null} : {mesh: {scale:objectToEdit.scale, rotation: objectToEdit.rotation, position: objectToEdit.position, matrix:objectToEdit.matrix, matrixWorld:objectToEdit.matrixWorld, up: objectToEdit.up, uuid:objectToEdit.uuid,}, geometry:objectToEdit.geometry , id: objectToEdit.id ?  objectToEdit.id : null}, objectToEdit.gltfObjectUrl ? true : false,)} className='bg-darkGray p-2 rounded-xl text-white w-40 max-w-[80%]'>Submit</button>
+            <button onClick={()=>saveChanges(objectToEdit.gltfObjectUrl ? {scale:objectToEdit.scale, 
+            rotation: objectToEdit.rotation, 
+            position: objectToEdit.position, 
+            matrix:objectToEdit.matrix, 
+            matrixWorld:objectToEdit.matrixWorld, up: objectToEdit.up, 
+            uuid:objectToEdit.uuid, modelPath:objectToEdit.gltfObjectUrl,
+             id: objectToEdit.id ?  objectToEdit.id : null} : 
+             {mesh:
+                 {scale:objectToEdit.scale, 
+                    rotation: objectToEdit.rotation,
+                     position: objectToEdit.position, 
+                     matrix:objectToEdit.matrix,
+                matrixWorld:objectToEdit.matrixWorld, 
+                up: objectToEdit.up,
+                 uuid:objectToEdit.uuid,}, 
+                 geometry:objectToEdit.geometry ,
+                  id: objectToEdit.id ?  objectToEdit.id : null}, 
+                  objectToEdit.gltfObjectUrl ? true : false)} className='bg-darkGray p-2 rounded-xl text-white w-40 max-w-[80%]'>Submit</button>
             <button onClick={()=>removeObject(objectToEdit.gltfObjectUrl ? objectToEdit.uuid : objectToEdit.id, objectToEdit.id, objectToEdit.gltfObjectUrl ? true : false)} className='bg-red-500 p-2 rounded-xl'>Remove</button>
 </div>
         </div>}
