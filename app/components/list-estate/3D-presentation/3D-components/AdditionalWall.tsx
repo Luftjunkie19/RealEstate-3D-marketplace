@@ -18,7 +18,7 @@ const wallGeomertyRef = useRef<THREE.PlaneGeometry>(null);
 
 
   return (
-   <mesh onClick={()=>selectWallToEdit({...wallMeshRef.current, id})} ref={wallMeshRef} scale={[scale.x, scale.y, scale.z]} position={[position.x, position.y, position.z]} rotation={[rotation.x, rotation.y, rotation.z]}>
+   <mesh onClick={()=>selectWallToEdit({...wallMeshRef.current, geometry:{...wallGeomertyRef.current?.parameters}, id})} ref={wallMeshRef} scale={[scale.x, scale.y, scale.z]} position={[position.x, position.y, position.z]} rotation={[rotation.x, rotation.y, rotation.z]}>
     <planeGeometry args={[width, height]} ref={wallGeomertyRef} />
     <meshBasicMaterial side={THREE.DoubleSide} color={wallColour}/>
    </mesh>

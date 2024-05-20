@@ -84,13 +84,15 @@ const selectModels=(paramObject:Gltf3dObject)=>{
   setModels([...(models as Gltf3dObject[]), paramObject]);
 }
 
-const deleteModel=(uuid:string, isGltf:boolean)=>{
+const deleteModel=(uuid:string, id:string , isGltf:boolean)=>{
+  console.log(uuid,id, isGltf);
   if(isGltf){
-    setModels((models as Gltf3dObject[]).filter(model=>model.id !== uuid));
-    setGltfObjects((gltfObjects as Gltf3dObject[]).filter((model)=>model.id!==uuid));
+    setModels((models as Gltf3dObject[]).filter(model=>model.id !== id));
+    setGltfObjects((gltfObjects as Gltf3dObject[]).filter((model)=>(model as any).uuid !== uuid));
   }else{
-    setAdditionalWalls((additionalWalls as Gltf3dObject[]).filter((model)=>model.id!==uuid));
+    setAdditionalWalls((additionalWalls as any[]).filter((model)=>model.id !== uuid));
   }
+  console.log(models, gltfObjects, additionalWalls);
   setObjectToEdit(null);
 }
 
@@ -103,7 +105,16 @@ const saveChanges=(obj:any, isGltf:boolean)=>{
       setGltfObjects([...gltfObjects, obj]);
     }
   }else{
-    setAdditionalWalls([...additionalWalls, {mesh:{...obj}, geometry:{ width: obj.scale.x, height: obj.scale.y}}]);
+    console.log(obj);
+
+    if(additionalWalls.find(item=>item.id === obj.id)){
+      const wallIndex= additionalWalls.findIndex((item)=>item.id === obj.id);
+      additionalWalls[wallIndex]=obj;
+    }else{
+      setAdditionalWalls([...additionalWalls, obj]);
+    }
+
+
   }
   console.log(gltfObjects)
   setObjectToEdit(null);
