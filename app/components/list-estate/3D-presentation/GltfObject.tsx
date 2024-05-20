@@ -19,14 +19,13 @@ function GltfObject({scale, gltfObjectUrl, position, setObjectToEdit, id}: Gltf3
   const gltfObjectRef=useRef<Object3D<Object3DEventMap>>(null);
 
   return (
-    <TransformControls  
-    object={gltfObjectRef.current as Object3D<Object3DEventMap>} mode="translate" showX showZ showY>
+    
         <Gltf 
        onClick={()=>setObjectToEdit({...gltfObjectRef.current, gltfObjectUrl, id})} 
         ref={gltfObjectRef} 
         src={gltfObjectUrl} 
         scale={scale} position={position} castShadow receiveShadow/>
-    </TransformControls>
+   
   )
 }
 
