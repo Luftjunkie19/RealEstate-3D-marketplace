@@ -17,9 +17,11 @@ addModel({
   gltfObjectUrl: passedObj.modelUrl,
   scale: passedObj.scale,
   position: passedObj.position,
-  setObjectToEdit: function (obj: any): void {
+  id: `${Math.random()}`,
+  setObjectToEdit: function (): void {
     throw new Error('Function not implemented.');
-  }
+  },
+  
 });
     close();
   }
