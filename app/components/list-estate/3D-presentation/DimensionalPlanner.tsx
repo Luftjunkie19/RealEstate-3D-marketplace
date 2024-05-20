@@ -84,6 +84,16 @@ const selectModels=(paramObject:Gltf3dObject)=>{
   setModels([...(models as Gltf3dObject[]), paramObject]);
 }
 
+const deleteModel=(uuid:string, isGltf:boolean)=>{
+  if(isGltf){
+    setModels((models as Gltf3dObject[]).filter(model=>model.id !== uuid));
+    setGltfObjects((gltfObjects as Gltf3dObject[]).filter((model)=>model.id!==uuid));
+  }else{
+    setAdditionalWalls((additionalWalls as Gltf3dObject[]).filter((model)=>model.id!==uuid));
+  }
+  setObjectToEdit(null);
+}
+
 const saveChanges=(obj:any, isGltf:boolean)=>{
   if(isGltf){
     if(gltfObjects.find((item)=>item.uuid === obj.uuid)){
@@ -93,7 +103,7 @@ const saveChanges=(obj:any, isGltf:boolean)=>{
       setGltfObjects([...gltfObjects, obj]);
     }
   }else{
-    setAdditionalWalls([{mesh:{...obj}, geometry:{ width: 1 * obj.scale.x, height: 1 * obj.scale.y}}]);
+    setAdditionalWalls([...additionalWalls, {mesh:{...obj}, geometry:{ width: obj.scale.x, height: obj.scale.y}}]);
   }
   console.log(gltfObjects)
   setObjectToEdit(null);
@@ -386,7 +396,9 @@ const fourthWallControls = useControls('Wall 4', {
 });
 
 const addNewWall= ()=>{
-  setAdditionalWalls([...additionalWalls,   {mesh:{
+  setAdditionalWalls([...additionalWalls,   {
+    id: `wall${Math.random()}index${additionalWalls.length}`,
+    mesh:{
     map: {
       texturePath: null,
     },
@@ -400,6 +412,8 @@ const addNewWall= ()=>{
       height: 1,
     }},])
 }
+
+
   return (
       <div className='w-full h-full flex'>
           <div className="flex h-screen max-w-16 rounded-r-xl w-full p-4 flex-col gap-6 items-center bg-purple text-white">
@@ -548,7 +562,7 @@ const addNewWall= ()=>{
 
 <FurnitureDrawer addModel={selectModels} isOpen={furnitureDrawer} close={()=>setFurnitureDrawer(false)}/>
 
-<ElementManagment saveChanges={saveChanges} objectToEdit={objectToEdit}/>
+<ElementManagment removeObject={deleteModel} saveChanges={saveChanges} objectToEdit={objectToEdit}/>
 
 
           <div className='w-full h-screen relative top-0 left-0'>        
@@ -561,7 +575,7 @@ const addNewWall= ()=>{
 
 <group ref={groupRef}>
     
-   {models!.length > 0 && models?.map((item, i)=>(<GltfObject setObjectToEdit={selectToEdit} position={item.position} key={i} gltfObjectUrl={item.gltfObjectUrl} scale={item.scale} />))}
+   {models!.length > 0 && models?.map((item, i)=>(<GltfObject id={item.id} setObjectToEdit={selectToEdit} position={item.position} key={i} gltfObjectUrl={item.gltfObjectUrl} scale={item.scale} />))}
     
 <Wall1 wallMaterialRef={wall1MaterialRef} wallRef={wall1Ref} wallPlaneRef={wall1PlaneRef} wallControls={firstWallControls} levaControls={levaControls}/>
 
@@ -570,7 +584,7 @@ const addNewWall= ()=>{
 <Wall3 wallMaterialRef={wall3MaterialRef} wallControls={thirdWallContols} levaControls={levaControls} wallRef={wall3Ref} wallPlaneRef={wall3PlaneRef}/>
     
 <Wall4 wallMaterialRef={wall4MaterialRef} levaControls={levaControls} wallControls={fourthWallControls} wallPlaneRef={wall4PlaneRef} wallRef={wall4Ref}/>
-{additionalWalls.length > 0 && additionalWalls.map((item, i)=>(<AdditionalWall selectWallToEdit={selectToEdit} width={item.geometry.width} height={item.geometry.height} rotation={item.mesh.rotation} scale={item.mesh.scale} position={item.mesh.position} wallColour={item.mesh.colour} key={i}/>))}
+{additionalWalls.length > 0 && additionalWalls.map((item, i)=>(<AdditionalWall id={item.id} selectWallToEdit={selectToEdit} width={item.geometry.width} height={item.geometry.height} rotation={item.mesh.rotation} scale={item.mesh.scale} position={item.mesh.position} wallColour={item.mesh.colour} key={i}/>))}
 
 <Floor floorMaterialRef={floorMaterialRef} levaControls={levaControls} floorRef={floorRef} floorPlaneRef={floorPlaneRef}/>
 </group>

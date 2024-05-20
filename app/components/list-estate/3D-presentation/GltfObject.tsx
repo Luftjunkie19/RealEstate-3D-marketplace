@@ -9,19 +9,19 @@ export type Gltf3dObject = {
     gltfObjectUrl:string,
     scale:number,
     position:[number, number, number],
-    setObjectToEdit:(obj:any) => void
+    setObjectToEdit:(obj:any) => void,
+    id:string,
 }
 
 
 
-function GltfObject({scale, gltfObjectUrl, position, setObjectToEdit}: Gltf3dObject) {
+function GltfObject({scale, gltfObjectUrl, position, setObjectToEdit, id}: Gltf3dObject) {
   const gltfObjectRef=useRef<Object3D<Object3DEventMap>>(null);
 
   return (
     <TransformControls  
     object={gltfObjectRef.current as Object3D<Object3DEventMap>} mode="translate" showX showZ showY>
         <Gltf 
-     
        onClick={()=>setObjectToEdit({...gltfObjectRef.current, gltfObjectUrl})} 
         ref={gltfObjectRef} 
         src={gltfObjectUrl} 
