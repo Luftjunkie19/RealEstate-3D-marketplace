@@ -19,7 +19,7 @@ addModel({
   position: passedObj.position,
   id: `${Math.random()}`,
   setObjectToEdit: function (): void {
-    throw new Error('Function not implemented.');
+    throw new Error('Function not working.');
   },
   
 });
