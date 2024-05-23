@@ -27,6 +27,7 @@
     "@types/three": "^0.163.0",
     "@videosdk.live/react-sdk": "^0.1.90",
     "ai": "^3.1.1",
+    "axios": "^1.7.2",
     "chart.js": "^4.4.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

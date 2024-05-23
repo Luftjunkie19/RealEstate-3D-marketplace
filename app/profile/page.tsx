@@ -47,11 +47,16 @@ if(data && data.length > 0){
 
 
   }
-}, [favourites, user])
+}, [favourites, user]);
+
 useEffect(()=>{
   getDataNeeded();
 
-}, [])
+}, []);
+
+const invokeAPICalls=()=>{
+  
+}
 
     return (
     <div className='w-screen min-h-screen'>
