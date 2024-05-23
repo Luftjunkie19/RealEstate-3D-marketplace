@@ -111,6 +111,8 @@ export default function Chat({openState}:Props) {
       if(data.success){
         setMessages(data.messages.sort((a:Message, b:Message)=> a.created_at - b.created_at).filter((msg:Message)=> msg.content[0].type === 'text' && msg.content[0].text.value.trim() !== '' ));
       }
+
+      chatRef.current?.lastElementChild?.scrollTo();
       
     } catch (error) {
       console.log(error);
@@ -141,6 +143,7 @@ export default function Chat({openState}:Props) {
     setMessages((prev)=>[...prev, message]);
 
    const runId = await startRun(userThread, process.env.NEXT_PUBLIC_OPENAI_ASSISTANTID as string);
+
 
    pollRunStatus(userThread, runId);
   };
