@@ -66,7 +66,6 @@ export default function Chat({openState}:Props) {
         const {run, success, error}= await runRetrieved.json();
     
         if(error){
-          toast.error(error);
           return;
         }
 
@@ -139,7 +138,6 @@ export default function Chat({openState}:Props) {
     const {message}= await messageFetch.json();
 
     if(!message) return;
-    toast.error('Failed to send the message. Try again.')
     setMessages((prev)=>[...prev, message]);
 
    const runId = await startRun(userThread, process.env.NEXT_PUBLIC_OPENAI_ASSISTANTID as string);
