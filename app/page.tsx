@@ -30,7 +30,7 @@ export default function Page() {
             const item = await fetch('/api/insert', {method:"POST", body:JSON.stringify({object:{
               created_at: userData.data.user.created_at,
               email: userData.data.user.email,
-              user_id:user!.id,
+              user_id: user?.id,
               profile_image: userData.data.user.user_metadata.avatar_url ? userData.data.user.user_metadata.avatar_url : null,
               user_name: userData.data.user.user_metadata.user_name ? userData.data.user.user_metadata.user_name : 'Default user'
             }, collection:'users'}), headers:{
