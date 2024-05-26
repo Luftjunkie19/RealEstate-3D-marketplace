@@ -227,7 +227,7 @@ export default function Chat({openState, user}:Props) {
         }
 
         if (!address || !state || !city || !zipCode || !success) {
-         
+          return;
         }
         
         

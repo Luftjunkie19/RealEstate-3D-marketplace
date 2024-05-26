@@ -31,8 +31,8 @@ function OfferPlans({}: Props) {
 
   return (
     <PaymentForm cardTokenizeResponseReceived={async (token)=>{
-        console.log(token, user.square_customer.customer.id);
-       if(token.details && user){
+        console.log(token, user.square_customer.customer);
+       if(token.details && user && user.square_customer.customer){
            const createdCardObj= await createCardItem(user.square_customer.customer.id, "John Doe", token.details.card.expYear, token.details.card.expMonth, token.token);
            if(!user.customer_card_details && createdCardObj.result.card){
             await supabase.from('users').update({customer_card_details:createdCardObj.result.card}).eq('user_id', userData?.id);
