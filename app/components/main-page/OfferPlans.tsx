@@ -6,6 +6,7 @@ import Checkout from './offers-section/Checkout';
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { supabase } from '@/utils/supabase/client';
 import { createCardItem, createOrder, createSubscription } from '@/utils/square/server';
+import toast from 'react-hot-toast';
 type Props = {}
 
 
@@ -45,7 +46,10 @@ function OfferPlans({}: Props) {
                if(!user.subscribtion_details && subscription.subscription){
                 await supabase.from('users').update({subscribtion_details:subscription.subscription}).eq('user_id', userData!.id);
                 await supabase.from('users').update({is_subscribed:true}).eq('user_id', userData!.id);
-               }
+                toast.success('Subscribed successfully');
+                setPlanOffer(null);
+                setVariationPlanId(null);
+            }
 
             }
            
