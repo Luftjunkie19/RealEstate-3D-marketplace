@@ -174,15 +174,13 @@ export default function Chat({openState, user}:Props) {
         const { ticker, success, errorMessage } = JSON.parse(
           toolCall.function.arguments
         );
+        console.log(ticker);
         if (!success || errorMessage) {
-          toast.error(
-            errorMessage ?? "Something went wrong fetching data for stocks",
-            { position: "bottom-center" }
-          );
+       
         }
 
         if (!ticker || !success) {
-          toast.error("No symbol found", { position: "bottom-center" });
+          
         }
         
         
