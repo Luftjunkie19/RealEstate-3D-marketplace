@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export async function POST (req:Request){
 
    const result = await supabase.auth.signInWithOAuth({provider:'github', options:{
-  redirectTo:'http://localhost:3000'
+  redirectTo:'https://real-estate-3-d-marketplace.vercel.app'
    }});
 
   
