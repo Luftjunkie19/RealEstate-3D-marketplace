@@ -6,7 +6,7 @@ export async function POST (req:Request){
 
 
    const result = await supabase.auth.signInWithOAuth({provider:'google', options:{
-      redirectTo: '/'
+        redirectTo:'http://localhost:3000'
    }});
 
    return Response.json(result);

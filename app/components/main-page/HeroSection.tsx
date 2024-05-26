@@ -12,7 +12,7 @@ function HeroSection({}: Props) {
           <div className="flex flex-col xl:self-center gap-6 py-8 3xl:pl-12">
           <div className="flex flex-col gap-2 max-w-xl ">
                  <p className='text-white font-bold text-3xl'>Discover Your Dream </p>
-            <p className="text-white">Your journey to finding the perfect property begins here. Explore our listings to find the home that matches your dreams.</p>
+            <p className="text-white">Your journey to finding the perfect property begins here. Explore our listings to find the home that matches your dreams, utilizing the power of AI.</p>
           </div>
               <div className="flex flex-wrap gap-5">
                     <button className='bg-purple w-72  text-white text-base font-bold p-3 rounded-lg'>Learn more</button>
