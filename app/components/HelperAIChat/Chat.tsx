@@ -196,7 +196,7 @@ export default function Chat({openState, user}:Props) {
 
           const { errorMessage, success, result } = await response.json();
           if (!success || errorMessage || !result) {
-            return;
+            
           }
 
 
