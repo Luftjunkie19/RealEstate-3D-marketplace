@@ -13,6 +13,7 @@
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-tabs": "^1.0.4",
     "@react-spring/web": "^9.7.3",
     "@react-three/a11y": "^3.0.0",
     "@react-three/drei": "^9.105.4",
@@ -26,6 +27,7 @@
     "@types/three": "^0.163.0",
     "@videosdk.live/react-sdk": "^0.1.90",
     "ai": "^3.1.1",
+    "axios": "^1.7.2",
     "chart.js": "^4.4.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -57,6 +59,7 @@
     "react-spinner": "^0.2.7",
     "react-spinners": "^0.13.8",
     "react-square-web-payments-sdk": "^3.2.1",
+    "recharts": "^2.12.7",
     "shadcn-ui": "^0.8.0",
     "sharp": "^0.33.3",
     "square": "^36.0.0",
@@ -65,6 +68,7 @@
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.163.0",
     "ts-node": "^10.9.2",
+    "twelvedata": "^3.0.1",
     "zod": "^3.23.6"
   },
   "devDependencies": {

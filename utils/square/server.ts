@@ -7,10 +7,11 @@ import { randomUUID } from "crypto";
   return this.toString();
 };
 
-const { paymentsApi } = new Client({
+const { paymentsApi, customersApi, cardsApi, subscriptionsApi, ordersApi} = new Client({
   accessToken: process.env.NEXT_PUBLIC_SQUARE_APP_ACCESS_TOKEN,
   environment:Environment.Sandbox
 });
+
 
 export async function submitPayment(sourceId:string, additionalPayment:number | null) {
   try {
@@ -28,4 +29,68 @@ export async function submitPayment(sourceId:string, additionalPayment:number | 
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function createCustomerAccount(email:string, nickname:string){
+
+  const response = await customersApi.createCustomer({
+      emailAddress: email,
+      nickname,
+      idempotencyKey: crypto.randomUUID(),
+    });
+  
+    return {customer:response.result.customer};
+}
+
+export async function createCardItem(customerId:string, cardHolderName:string, expYear:any, expMonth:any, sourceId:string){
+  const response = await cardsApi.createCard({
+    idempotencyKey: crypto.randomUUID(),
+    sourceId,
+    card: {
+      expMonth,
+      expYear,
+      cardholderName:cardHolderName,
+      customerId
+    }
+  });
+
+
+  return {result:response.result};
+
+
+}
+
+export async function createOrder(customerId:string,catalogObjectId:string){
+  const response = await ordersApi.createOrder({
+    idempotencyKey: crypto.randomUUID(),
+    order:{
+      locationId: process.env.NEXT_PUBLIC_SQUARE_APP_SEC as string,
+      customerId,
+      lineItems:[{
+        quantity:"1",
+        catalogObjectId
+      }],
+      state: "DRAFT",
+    },
+  });
+
+  return response.result.order;
+}
+
+export async function createSubscription(customerId:string, orderId:string, planId:string, cardId:string, ordinal:any){
+  const response = await subscriptionsApi.createSubscription({
+    idempotencyKey: crypto.randomUUID(),
+    locationId: process.env.NEXT_PUBLIC_SQUARE_APP_SEC as string,
+    customerId,
+    cardId,
+   phases:[
+    {orderTemplateId:orderId, ordinal}
+   ],
+    planVariationId:planId,
+  });
+
+  console.log(response);
+
+  return response.result;
+
 }

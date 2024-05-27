@@ -7,33 +7,26 @@ import React, {
 import {
   Gltf,
   OrbitControls,
+  Stage,
+  View,
 } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
+import {
+  Canvas,
+  useFrame,
+} from '@react-three/fiber';
+import RotatingObject from './RotatingObject';
 
-function FirstScene() {
-
-  const gltfReference=useRef<any>(null);
-
- 
-    
+function FirstScene() {    
   return (
-      <Canvas camera={{ fov: 50, near: 0.1, far: 1000, position: [0, 10, 50] }}>
-  <OrbitControls/>
-      <ambientLight />
-
+      <Canvas camera={{position:[-10, 5, 0.5]}}>
+<Stage intensity={0.35}>
         <Suspense>
- 
-        <Gltf src="/simple_real_estate.glb" ref={gltfReference}/>
+
+<RotatingObject/>
 
       </Suspense>
-
-        
-
+</Stage>
     
-
-   
-
-          
    </Canvas>
   )
 }

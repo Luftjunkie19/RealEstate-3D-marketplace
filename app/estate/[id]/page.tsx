@@ -19,29 +19,26 @@ import Link from 'next/link';
 import ContactBtn from '@/app/components/estate-components/ContactBtn';
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import LoveBtn from '@/app/components/estate-components/LoveBtn';
+import EstateCanvas from '@/app/components/estate/EstateCanvas';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ConditionalView from '@/app/components/estate-components/ConditionalView';
 
 async function DetailedPage({params}: Props) {
     const {id}=params;
-
     const {data}= await supabase.from('listings').select('*').eq('id', id).limit(1);
 
 
   return (
     <div className='min-h-screen w-screen'>
+      
         {data && data[0] && <>
-      <div className="mx-auto m-0 flex justify-center">
-      <Carousel className='max-w-4xl'>
-  <CarouselContent className='w-full h-80'>
-   {data && data[0].images && data[0].images.map((item:any)=>(
-   <CarouselItem key={item} className='w-full h-80'>
-    <Image width={256} height={256} alt='' className='w-full h-80 object-cover'  src={item}/>
-    </CarouselItem>))}
-  </CarouselContent>
-  <CarouselPrevious className='sm:hidden xl:block' />
-  <CarouselNext className='sm:hidden xl:block'/>
-</Carousel>
-      </div>
+
+<ConditionalView data={data}/>
+     
         
+ 
+
+
       <div className="flex px-2 py-4 items-center gap-2 flex-wrap">
 
 <p className="py-2 bg-darkGray px-4 rounded-xl items-center flex gap-2 border border-darkGray text-white">
