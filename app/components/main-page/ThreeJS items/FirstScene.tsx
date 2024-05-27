@@ -8,20 +8,13 @@ import {
   Gltf,
   OrbitControls,
 } from '@react-three/drei';
-import {
-  Canvas,
-  useFrame,
-} from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 
 function FirstScene() {
 
   const gltfReference=useRef<any>(null);
 
-  useFrame((alpha, passed)=>{
-    if(gltfReference.current){
-      gltfReference.current.rotation.x += passed;
-    }
-  })
+ 
     
   return (
       <Canvas camera={{ fov: 50, near: 0.1, far: 1000, position: [0, 10, 50] }}>
