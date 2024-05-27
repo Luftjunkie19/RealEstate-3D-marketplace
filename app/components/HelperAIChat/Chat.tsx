@@ -13,21 +13,16 @@ import { RiRobot3Line } from 'react-icons/ri';
 
 import { userThreadAtom } from '@/atoms';
 import { RunSubmitToolOutputsParams } from 'openai/resources/beta/threads/runs/runs.mjs';
-import { supabase } from '@/utils/supabase/client';
-
 
 type Props={
-  openState:boolean,
-  user:any
+  openState:boolean
 }
-export default function Chat({openState, user}:Props) {
+export default function Chat({openState}:Props) {
   const [messages, setMessages]=useState<Message[]>([]);
   const [messageContent, setMessageContent]=useState('');
     const [userThread]=useAtom(userThreadAtom);
   const chatRef=useRef<HTMLDivElement>(null);
   const [run, setRun]=useState<any>(null);
-  
-
 
 
   const startRun= async (thread:string, assistantId:string): Promise<string> =>{
@@ -128,16 +123,12 @@ export default function Chat({openState, user}:Props) {
   }, [userThread]);
 
   useEffect(()=>{
-    const fetchInterval= setInterval(fetchMessages, 1000);
+    const fetchInterval= setInterval(fetchMessages, 5000);
 
     return ()=>clearInterval(fetchInterval);
   },[fetchMessages]);
 
   const sendMessage = async (formData:FormData)=>{
-    if(!userThread && user && !user.is_subscribed){
-      toast.error('You are not subscribed. You are not allowed to use our AIssistant.');
-      return;
-    }
     const messageContent= formData.get('message');
     console.log(messageContent, userThread);
     if(!userThread || !messageContent ||  messageContent.toString().trim().length === 0) return;
@@ -160,11 +151,6 @@ export default function Chat({openState, user}:Props) {
   };
 
   const handleSubmitAction = useCallback( async ()=>{
-
-    if(!userThread){
-      return;
-    }
-
     let toolOutputs: RunSubmitToolOutputsParams.ToolOutput[] = [];
 
     for (const toolCall of run?.required_action?.submit_tool_outputs
@@ -174,13 +160,15 @@ export default function Chat({openState, user}:Props) {
         const { ticker, success, errorMessage } = JSON.parse(
           toolCall.function.arguments
         );
-        console.log(ticker);
         if (!success || errorMessage) {
-       
+          toast.error(
+            errorMessage ?? "Something went wrong fetching data for stocks",
+            { position: "bottom-center" }
+          );
         }
 
-        if (!ticker || !success) {
-          
+        if (!ticker) {
+          toast.error("No symbol found", { position: "bottom-center" });
         }
         
         
@@ -195,14 +183,8 @@ export default function Chat({openState, user}:Props) {
           });
 
           const { errorMessage, success, result } = await response.json();
-          if (!success || errorMessage || !result) {
-            
-          }
 
-
-          if(run.status === "failed" || run.status === 'cancelled' || run.status === 'expired'){
-            break;
-          }
+          console.log(errorMessage, success, result);
 
           toolOutputs.push({
             tool_call_id: toolCall.id,
@@ -225,7 +207,7 @@ export default function Chat({openState, user}:Props) {
         }
 
         if (!address || !state || !city || !zipCode || !success) {
-          return;
+         
         }
         
         
@@ -351,11 +333,6 @@ export default function Chat({openState, user}:Props) {
         }
       }
       
-      else {
-        throw new Error(
-          `Unknown tool call function: ${toolCall.function.name}`
-        );
-      }
     }
 
     console.log("toolOutputs", toolOutputs);
@@ -389,9 +366,8 @@ export default function Chat({openState, user}:Props) {
   },[handleSubmitAction])
 
 
-
   return (
-    <div className={`${openState && user && user.is_subscribed ? 'flex opacity-100 z-[99999999999]' : 'hidden opacity-0'}  transition-all  flex-col gap-6 fixed bottom-10 right-6 w-full max-h-96 h-full bg-purple rounded-lg max-w-xs`}>
+    <div className={`${openState ? 'flex opacity-100 z-[99999999999]' : 'hidden opacity-0'}  transition-all  flex-col gap-6 fixed bottom-10 right-6 w-full max-h-96 h-full bg-purple rounded-lg max-w-xs`}>
    <p className="text-white text-lg p-4 font-bold justify-around flex gap-4 items-center w-full border-b-2 border-darkGray"><RiRobot3Line size={24} className="text-bgColor"/> VirtuAIssistant</p>
    <div ref={chatRef} className="flex h-5/6 w-full p-1 flex-col gap-2 overflow-y-auto will-change-scroll modal-scroll cursor-all-scroll ">
     {messages.length === 0 && <p>No messages yet...</p>}
