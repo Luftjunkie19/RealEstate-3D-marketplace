@@ -31,7 +31,7 @@ function HelperChat() {
   return (
     <>
    <OpenBtn userData={user} open={open} toggleOpenState={toggleState}/>
-        <Chat user={user} openState={open}/>
+        <Chat openState={open}/>
     </>
   )
 }

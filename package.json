@@ -59,6 +59,7 @@
     "react-spinner": "^0.2.7",
     "react-spinners": "^0.13.8",
     "react-square-web-payments-sdk": "^3.2.1",
+    "recharts": "^2.12.7",
     "shadcn-ui": "^0.8.0",
     "sharp": "^0.33.3",
     "square": "^36.0.0",
