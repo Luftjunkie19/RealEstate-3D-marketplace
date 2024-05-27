@@ -7,7 +7,7 @@ type Props = {value:MicrophoneDeviceInfo | CameraDeviceInfo | PlaybackDeviceInfo
 
 function SelectListItem({value, label}: Props) {
   return (
-    <SelectItem className='text-white  hover:bg-purple selection:bg-purple' value={value ? value : 'all'}>{label}</SelectItem>
+    <SelectItem className='text-white  hover:bg-purple selection:bg-purple' value={'all'}>{label}</SelectItem>
   )
 }
 

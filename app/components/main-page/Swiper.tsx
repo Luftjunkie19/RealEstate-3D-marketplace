@@ -24,6 +24,7 @@ import image from '@/assets/images.jpeg';
 import Offer from './items/Offer';
 import { supabase } from '@/utils/supabase/client';
 import { setDate } from 'date-fns';
+import { useWindowSize } from '@/utils/hooks/useWindowsSizes';
 
 type Props = {}
 
@@ -31,7 +32,9 @@ type Props = {}
 
 
  function SwipeSlider({ }: Props) {
-  const numberOfSlides = document.body.offsetWidth < 768 ? 1 : document.body.offsetWidth > 768 && document.body.offsetWidth <= 1152 ? 2 : 3;
+  const windowsSizes=useWindowSize();
+
+  const numberOfSlides = (windowsSizes as any)?.width < 768 ? 1 : (windowsSizes as any)?.width > 768 && (windowsSizes as any)?.width <= 1152 ? 2 : 3;
   const [listings, setListings]=useState<any>([]);
   const getData = async ()=>{
    const {data}= await supabase.from('listings').select('*');

@@ -30,7 +30,7 @@ function Page({}: Props) {
   const [images, setImages] = useState<File[]>([]); // Set initial state to an array of Files
 
 
-  const set3DFunction=(object:Object | null)=>{
+  const set3DFunction=(object:any | null)=>{
     set3dObject(object);
     setCurrentStep(3);
   }
@@ -47,14 +47,33 @@ function Page({}: Props) {
       const bedroomsQty = formData.get('bedrooms');
       const providedAddress = formData.get('property-address');
       const isForRent = formData.get('isForRent');
+
+      if(!propertyName || !propertyPrice || !squareFootage || !propertyDescription || !bathroomsQty || !bedroomsQty || !providedAddress ){
+        return toast.error('Please fill all the required fields');
+       }
   
+     
       // Fetch geocode data
       const fetchData = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${providedAddress}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`);
       const fetchResult = await fetchData.json();
-  
+
       const address = fetchResult.results[0].formatted_address;
       const geometricPositions = fetchResult.results[0].geometry.location;
   
+      if(!address || !geometricPositions){
+        return toast.error('Please address accessed.');
+       }
+
+       if(images.length === 0){
+        return toast.error('Please provide at least one image of the property');
+       }
+
+
+       if(images.length > 6){
+        return toast.error('Only 6 images are possible to add.');
+       }
+
+
       // Upload images
       const uploadedImageUrls: string[] = [];
       for (const image of images) {
@@ -80,7 +99,8 @@ function Page({}: Props) {
           description: propertyDescription,
           price: Number(propertyPrice),
           property_name: propertyName,
-          images: uploadedImageUrls, // Associate uploaded image URLs with the property
+          images: uploadedImageUrls,
+          
         },
         collection: 'listings'
       });
@@ -137,14 +157,15 @@ function Page({}: Props) {
    const submitedPayment= await submitPayment(token.token, selectedOfferOption);
    if(!submitedPayment!.errors && submitedPayment!.payment!.status === "COMPLETED"){
     console.log(submitedPayment);
-    setObjectToInsert({object:{...(objectToInsert as any).object,  is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
+    console.log(object3D);
+    setObjectToInsert({object:{...(objectToInsert as any)!.object, presentation_object:object3D,  is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
       paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
       currency: submitedPayment?.payment?.amountMoney?.currency,
       receiptUrl:submitedPayment?.payment?.receiptUrl,
       orderId:submitedPayment?.payment?.orderId,
       paymentId: submitedPayment?.payment?.id,
     } : null}, collection: (objectToInsert as any).collection})
-    setCurrentStep(3);
+    setCurrentStep(4);
     toast.success('Successfully paid the fee for publishing');  
    }
   }
@@ -160,7 +181,7 @@ function Page({}: Props) {
 </ul>
       </div>
 
-{currentStep === 2 &&
+{currentStep === 1 &&
           <form action={formAction} className="mx-auto p-6 my-8 max-w-6xl bg-darkGray rounded-lg flex flex-col gap-3">
               <p className="text-2xl text-white font-bold">List your Real Estate</p>
 
@@ -224,8 +245,8 @@ function Page({}: Props) {
 }
 
 
-{currentStep === 1 && 
-<DimensionalPlanner object3D={object3D} set3dObject={set3DFunction}/>
+{currentStep === 2 && 
+<DimensionalPlanner moveForward={()=>setCurrentStep(3)} object3D={object3D} set3dObject={set3DFunction}/>
 }
 
 {currentStep === 3 && <div className='flex flex-col gap-6 p-4'>

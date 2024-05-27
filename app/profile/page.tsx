@@ -25,6 +25,8 @@ function CurrentUserPage({}: Props) {
   const [activeTab, setActiveTab]=useState<number>(0);
 const tabs:tabObject[]=[{id:1, content:'Properties', tabIcon:BsFillHousesFill}, {id:2, content:'Messages', tabIcon:FaMessage}, {id:3, content:'Favourited', tabIcon:FaStar}]
 
+
+
 const getDataNeeded= useCallback(async ()=>{
   if(user){
     const {data:yourListings, error:yourListingsError} = await supabase.from('listings').select('*').eq('listed_by', user.id);
@@ -47,11 +49,14 @@ if(data && data.length > 0){
 
 
   }
-}, [favourites, user])
+}, [favourites, user]);
+
 useEffect(()=>{
   getDataNeeded();
 
-}, [])
+}, []);
+
+
 
     return (
     <div className='w-screen min-h-screen'>
