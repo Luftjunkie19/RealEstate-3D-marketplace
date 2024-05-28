@@ -9,6 +9,7 @@ import { FaMicrophone } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
 import { HiMiniVideoCamera, HiMiniVideoCameraSlash } from 'react-icons/hi2';
 import ChatDrawer from '../ChatDrawer';
+import toast from 'react-hot-toast';
 
 type Props = {
   meetingID: string,
@@ -22,7 +23,7 @@ type Props = {
 
 export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, enabledCam, enabledMic, participantId, leaveMeeting}: Props) {
   const {localMicOn, localWebcamOn, toggleMic, toggleWebcam, participants, leave, end}=useMeeting({onParticipantJoined:(participant)=>{
-    console.log("participant joined",participant);
+    toast(`${participant.displayName} joined`);
   }});
 
   const [showChat, setShowChat]=useState(false);
