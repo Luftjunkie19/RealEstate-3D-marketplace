@@ -10,7 +10,7 @@ function ChatDrawer({shownChat, closeChat, }: Props) {
 
   const {publish, messages}=usePubSub('Chat', {
     onMessageReceived(message) {
-      toast(`${message.senderName} sent a message`);
+      toast(`${message.senderName} sent a message.`);
     },
 
   });
