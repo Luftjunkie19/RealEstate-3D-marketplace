@@ -37,7 +37,6 @@ export default function Page({ params }: { params: { channelId: string } }) {
     setCamOn(false);
     setJoinedMeeting(false);
     setLeftMeeting(true);
-    router.push('/');
   }
 
 

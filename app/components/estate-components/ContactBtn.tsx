@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { IoCall } from 'react-icons/io5';
 
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
+import { supabase } from '@/utils/supabase/client';
 
 type Props = {data:any[], id:string }
 
@@ -32,7 +33,10 @@ const {user:userData}=useAuthContext();
     body: JSON.stringify({}),
   });
   const { roomId }: { roomId: string } = await res.json();
+  
+  await supabase.from('users').update({notifications:[{directedTo:data![0].listed_by, message:'A Conference to your listing has been created. Join and talk with the customer.', callCreatedAt:new Date().getTime(), roomId, hasRead:false}]}).eq('user_id', data![0].listed_by);
 
+  await supabase.from('conferences').insert({allowed_to_join:[userData?.id, data[0].listed_by], room_id:roomId, listing_id:id});
 
 router.push(`/channel/${roomId}`);
     }

@@ -61,13 +61,13 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
 
 
   
- return  (<main className='min-h-screen w-full flex'>
-  <div className="max-w-4xl w-full">
-  <div className="max-w-3xl w-full p-4 flex gap-2 flex-wrap">
+ return  (<main className='h-screen overflow-y-hidden w-full grid grid-cols-12'>
+  <div className={`sm:col-span-full relative top-0 left-0 ${showChat && 'lg:col-span-8 xl:col-span-9 3xl:col-span-10'}`}>
+  <div className="w-full p-4 flex gap-2 flex-wrap xl:h-[75vh]">
 {[...participants.keys()].map((participantId)=>(<ParticipantView key={participantId} participantId={participantId}/>))}
   </div>
 
-<div className="bg-darkGray p-2 mx-auto m-0  rounded-full flex flex-wrap items-center gap-4 max-w-xs w-full justify-center">
+<div className="bg-darkGray sticky bottom-0 left-1/4 p-2 mx-auto m-0 rounded-full flex flex-wrap items-center gap-4 max-w-xs w-full justify-center">
   <button onClick={manageWebCam} className={`${!localWebcamOn ? 'bg-purple' : 'bg-red-500'} p-2 rounded-full`}>
    {!localWebcamOn ?  <HiMiniVideoCamera className='text-white text-lg'/> : <HiMiniVideoCameraSlash className='text-white text-lg'/>}
   </button>
