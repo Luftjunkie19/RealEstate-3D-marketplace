@@ -53,7 +53,7 @@ export default function Page({ params }: { params: { channelId: string } }) {
   customMicrophoneAudioTrack: customAudioStream,
   metaData: user?.user_metadata,
   debugMode: false,
-}} token={token as string} > 
+}} token={'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiJmYzYyMzRiYi0zYzA1LTQyNjAtOGRmYS01NTkxMDAxMGM4ZDgiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTcxNDY0MjU5MiwiZXhwIjoxODcyNDMwNTkyfQ.uWjFyMNr2MOKWg2nXMC-BdCw_Dv3LW97wzD_spBUAyU'} > 
       {joinedMeeting && (    
        
 <ConferenceScreen participantId={user?.id as string} leaveMeeting={leaveMeeting} meetingID={meetingId} setEnabledMic={()=>setMicOn(!micOn)} setEnabledCamera={()=>setCamOn(!camOn)} 
