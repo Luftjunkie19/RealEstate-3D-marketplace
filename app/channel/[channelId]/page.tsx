@@ -9,6 +9,9 @@ import { Provider } from 'react-redux';
 import {
   ConferenceScreen,
 } from '@/app/components/Conference/screens/ConferenceScreen';
+import LeftConferenceScreen
+  from '@/app/components/Conference/screens/LeftConferenceScreen';
+import PreSetupScreen from '@/app/components/Conference/screens/PreSetupScreen';
 import { store } from '@/utils/contexts/store';
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { MeetingProvider } from '@videosdk.live/react-sdk';
@@ -41,7 +44,9 @@ export default function Page({ params }: { params: { channelId: string } }) {
     debugMode: true
   }} token={token as string}>
       {joinedMeeting && <ConferenceScreen meetingID={meetingId}  setEnabledMic={()=>setMicOn(!micOn)} setEnabledCamera={()=>setCamOn(!camOn)} enabledMic={micOn} enabledCam={camOn}/>}
-    </MeetingProvider>
+        {leftMeeting && <LeftConferenceScreen />}
+        {!joinedMeeting && !leftMeeting && <PreSetupScreen/>}
+      </MeetingProvider>
     </Provider>
   );
 }
