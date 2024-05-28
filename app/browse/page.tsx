@@ -1,13 +1,18 @@
 'use client';
-import React, { useState } from 'react'
-import { FaMoneyBillWave, FaSearch } from "react-icons/fa";
-import { BiSolidBuildingHouse } from "react-icons/bi";
-import { IoLocationSharp } from "react-icons/io5";
-import { FaCube } from "react-icons/fa6";
+import React, { useState } from 'react';
+
+import { BiSolidBuildingHouse } from 'react-icons/bi';
+import {
+  FaMoneyBillWave,
+  FaSearch,
+} from 'react-icons/fa';
+import { FaCube } from 'react-icons/fa6';
+import { IoLocationSharp } from 'react-icons/io5';
+
+import { SelectItem } from '@/components/ui/select';
 
 import MainContent from '../components/browse/MainContent';
-import SelectionBar from '../components/CameraContent/items/SelectionBar';
-import { SelectItem } from '@/components/ui/select';
+import SelectionBar from '../components/Conference/items/SelectionBar';
 
 type Props = {}
 

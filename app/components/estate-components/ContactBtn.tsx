@@ -1,13 +1,15 @@
 'use client';
-import { useAuthContext } from '@/utils/hooks/useAuthContext';
-import React from 'react'
-import { FaMessage } from 'react-icons/fa6';
+import React from 'react';
+
+import { useRouter } from 'next/navigation';
 import { IoCall } from 'react-icons/io5';
+
+import { useAuthContext } from '@/utils/hooks/useAuthContext';
 
 type Props = {data:any[], id:string }
 
 function ContactBtn({data, id}: Props) {
-
+const router=useRouter();
 const {user:userData}=useAuthContext();
 
     const createTokenAndRedirect= async ()=>{
@@ -32,8 +34,7 @@ const {user:userData}=useAuthContext();
   const { roomId }: { roomId: string } = await res.json();
 
 
-
-       window.location.href=`/channel/${roomId}`;
+router.push(`/channel/${roomId}`);
     }
 
   return (

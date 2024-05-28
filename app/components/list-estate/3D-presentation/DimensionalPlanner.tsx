@@ -24,9 +24,10 @@ import * as THREE from 'three';
 import {
   CameraControls,
   Grid,CycleRaycast,
-  useTexture
+  useTexture,
+  CameraControlsProps
 } from '@react-three/drei';
-import { Canvas, useLoader } from '@react-three/fiber';
+import { Canvas, useLoader, useThree } from '@react-three/fiber';
 
 import FurnitureDrawer from './drawers/FurnitureDrawer';
 import GltfObject, { Gltf3dObject } from './GltfObject';
@@ -37,6 +38,7 @@ import Wall2 from './3D-components/Wall2';
 import Wall3 from './3D-components/Wall3';
 import Wall4 from './3D-components/Wall4';
 import AdditionalWall from "./3D-components/AdditionalWall";
+import { DEG2RAD } from "three/src/math/MathUtils.js";
 
 type Props = {
   set3dObject: (object: Object | null) => void,
@@ -48,7 +50,8 @@ function DimensionalPlanner({ set3dObject, object3D, moveForward}: Props) {
   const [gltfObjects, setGltfObjects]=useState<any[]>([]);
   const [additionalWalls, setAdditionalWalls]=useState<any[]>([]);
   const [furnitureDrawer, setFurnitureDrawer]=useState(false);
-  const groupRef= useRef<THREE.Group>(null);
+  const groupRef = useRef<THREE.Group>(null);
+  
   //
   const floorRef=useRef<THREE.Mesh>(null);
   const floorMaterialRef=useRef<THREE.MeshBasicMaterial>(null);
@@ -75,6 +78,31 @@ function DimensionalPlanner({ set3dObject, object3D, moveForward}: Props) {
 const [objectToEdit, setObjectToEdit]=useState<any>(null);
 const [models, setModels]=useState<Gltf3dObject[] | null>([]);
 
+  const cameraControlsRef = useRef<CameraControls>(null);
+
+const moveCameraForward= ()=>{
+cameraControlsRef.current?.dolly(0.25, true);
+
+}
+
+const moveCameraBack= ()=>{
+cameraControlsRef.current?.dolly(-0.25, true);
+}
+
+const moveCameraRight= ()=>{
+   cameraControlsRef.current?.rotate(20 * DEG2RAD, 0, true);
+}
+const moveCameraLeft= ()=>{
+      cameraControlsRef.current?.rotate(-20 * DEG2RAD, 0, true);
+}
+
+  
+const moveToBasePosition=()=>{
+  if(cameraControlsRef.current){
+    cameraControlsRef.current.zoom(1, true);
+       cameraControlsRef.current?.rotate(0, 0, true);
+  }
+}
 
 const selectToEdit= (obj:any)=>{
   setObjectToEdit(obj);
@@ -579,10 +607,10 @@ const addNewWall= ()=>{
           <div className='w-full h-screen relative top-0 left-0'>        
           <Canvas>
     
-   <CameraControls makeDefault/>
+    <CameraControls ref={cameraControlsRef} enabled={true}/>
               <ambientLight />
 
-<Grid cellSize={0.1} args={[20, 20]} sectionSize={1} scale={10} position-y={-0.5} />
+<Grid sectionColor={'#703BF7'} cellColor={'#703BF7'} cellSize={0.05} args={[20, 20]} sectionSize={0.5} scale={2} position-y={-0.5} />
 
 <group ref={groupRef}>
     
@@ -601,22 +629,22 @@ const addNewWall= ()=>{
 </group>
 
           </Canvas>
-          <div className="sticky bottom-0 left-0 m-12 flex gap-6 items-center">
-          <button className="bg-purple p-3 rounded-lg h-fit">
+          <div className="absolute bottom-0 left-0 m-12 flex gap-6 items-center">
+          <button onClick={moveToBasePosition} className="bg-purple p-3 rounded-lg h-fit">
           <FaHome size={20} className="text-white"/>
         </button>
         <div className="flex flex-col items-center gap-2">
-        <button className="bg-purple p-3 text-white rounded-lg w-fit">
+        <button onClick={moveCameraForward} className="bg-purple p-3 text-white rounded-lg w-fit">
           <FaArrowUp fontSize={14}/>
         </button>
         <div className="flex gap-2">
-        <button className="bg-purple p-3 text-white rounded-lg">
+        <button onClick={moveCameraLeft} className="bg-purple p-3 text-white rounded-lg">
           <FaArrowLeft fontSize={14}/>
         </button>
-        <button className="bg-purple p-3 text-white rounded-lg">
+        <button onClick={moveCameraBack} className="bg-purple p-3 text-white rounded-lg">
           <FaArrowDown fontSize={14}/>
         </button>
-        <button className="bg-purple p-3 text-white rounded-lg">
+        <button onClick={moveCameraRight} className="bg-purple p-3 text-white rounded-lg">
           <FaArrowRight fontSize={14}/>
         </button>
         </div>
