@@ -1,5 +1,6 @@
 import { useMeeting, useParticipant } from '@videosdk.live/react-sdk'
 import React, { useEffect, useMemo, useRef } from 'react'
+import ReactPlayer from 'react-player';
 
 type Props = {presenterId:string}
 
@@ -8,13 +9,13 @@ function PresentationView({presenterId}: Props) {
     const {localScreenShareOn, toggleScreenShare, enableScreenShare, disableScreenShare}=useMeeting();
     const {micOn, webcamOn, displayName, isActiveSpeaker, screenShareOn,  screenShareAudioStream, screenShareStream, isLocal}=useParticipant(presenterId);
 
-    const mediaStream=useMemo(()=>{
-        if(screenShareOn){
-            const stream=new MediaStream();
-            stream.addTrack(screenShareAudioStream.track);
-            return stream;
+    const mediaStream = useMemo(() => {
+        if (screenShareOn && screenShareStream) {
+          const mediaStream = new MediaStream();
+          mediaStream.addTrack(screenShareStream.track);
+          return mediaStream;
         }
-    },[screenShareAudioStream.track, screenShareOn]);
+      }, [screenShareStream, screenShareOn]);
 
     useEffect(()=>{
         if(!isLocal && screenShareOn && screenShareAudioStream){
@@ -34,7 +35,12 @@ function PresentationView({presenterId}: Props) {
     }, [isLocal, screenShareAudioStream, screenShareOn]);
     
   return (
-    <div>PresentationView</div>
+
+        <div className="max-w-2xl w-full max-h-[32rem]">
+            <ReactPlayer onError={(err)=>console.log(err)} height={'100%'} width={'100%'} pip={false} playsinline muted playing controls={false} url={mediaStream}/>
+            <audio autoPlay playsInline controls={false} ref={audioPlayerRef}/>
+        </div>
+
   )
 }
 

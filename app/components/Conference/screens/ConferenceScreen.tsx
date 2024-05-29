@@ -10,6 +10,8 @@ import { useRouter } from 'next/navigation';
 import { HiMiniVideoCamera, HiMiniVideoCameraSlash } from 'react-icons/hi2';
 import ChatDrawer from '../ChatDrawer';
 import toast from 'react-hot-toast';
+import PresentationView from '../ConferenceTiles/PresentationView';
+import SharedScreenParticipantView from '../ConferenceTiles/SharedScreenParticipantView';
 
 type Props = {
   meetingID: string,
@@ -61,13 +63,23 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
     
   }
 
+  const manageScreenSharing=()=>{
+    toggleScreenShare();
+  }
+
 
   
  return  (<main className='h-screen overflow-y-hidden w-full grid grid-cols-12'>
   <div className={`sm:col-span-full relative top-0 left-0 ${showChat && 'lg:col-span-8 xl:col-span-9 3xl:col-span-10'}`}>
-  <div className="w-full p-4 flex gap-2 flex-wrap xl:h-[75vh]">
+  {presenterId ? <div className={`w-full p-4 flex ${!showChat ? 'gap-6' : 'gap-1'} flex-wrap xl:h-[75vh]`}>
+    <PresentationView presenterId={presenterId}/>
+    <div className="flex flex-col gap-2">
+      {[...participants.keys()].slice(0, 3).map((participant)=>(<SharedScreenParticipantView participantId={participant} key={participant}/>))}
+    </div>
+    </div> :  <div className="w-full p-4 flex gap-2 flex-wrap xl:h-[75vh]">
 {[...participants.keys()].map((participantId)=>(<ParticipantView key={participantId} participantId={participantId}/>))}
-  </div>
+  </div>}
+ 
 
 <div className="bg-darkGray sticky bottom-0 left-1/4 p-2 mx-auto m-0 rounded-full flex flex-wrap items-center gap-4 max-w-xs w-full justify-center">
   <button onClick={manageWebCam} className={`${!localWebcamOn ? 'bg-purple' : 'bg-red-500'} p-2 rounded-full`}>
@@ -82,8 +94,7 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
   <button onClick={toggleChat} className={`${!showChat ? 'bg-purple' : 'bg-red-500'} p-2 rounded-full`}>
 <PiChatCircleFill className='text-white text-lg'/> 
   </button>
-<button className='bg-purple p-2 rounded-full'>
-  <p>{JSON.stringify(presenterId)}</p>
+<button onClick={manageScreenSharing} className='bg-purple sm:hidden xl:block text-white p-2 rounded-full'>
   <PiScreencast />
 </button>
 </div>
