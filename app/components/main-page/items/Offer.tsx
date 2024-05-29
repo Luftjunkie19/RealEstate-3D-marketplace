@@ -19,7 +19,7 @@ function Offer({name, imageUrl, description, barthRooms, bedRooms, isForRent, pr
       <div className='p-6 flex flex-col gap-2 lg:max-w-sm w-full border-2 border-darkGray rounded-xl shadow-lg overflow-hidden'>
        
 
-        {/* {imageUrl && <Image src={imageUrl}  width={256} height={256} className='w-full object-cover p-2 h-64 rounded-lg'  alt=""/>} */}
+        {imageUrl && <Image src={imageUrl}  width={256} height={256} className='w-full object-cover p-2 h-64 rounded-lg'  alt=""/>}
           
           <div className="flex flex-col gap-3">
               <p className="text-2xl font-bold text-white">{name}</p>

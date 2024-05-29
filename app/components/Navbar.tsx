@@ -11,12 +11,14 @@ import Drawer from './Drawer';
 import { User } from '@supabase/supabase-js';
 import { useAtom } from 'jotai';
 import { userThreadAtom } from '@/atoms';
+import { supabase } from '@/utils/supabase/client';
 type Props = {}
 
 function Navbar({}: Props) {
 
   const [show, setShown]=useState(false);
   const [userThread, setUserThread]=useAtom(userThreadAtom);
+  const [notifications, setNotifications]=useState([]);
   const openDrawer=()=>{
     setShown(true);
   }
@@ -52,7 +54,22 @@ function Navbar({}: Props) {
     fetchCreateThreadId();
 
 
-  },[fetchCreateThreadId])
+  },[fetchCreateThreadId]);
+
+  const getNotifications=useCallback(async ()=>{
+    if(user){
+   const {data}= await supabase.from('users').select('*').eq('user_id', user?.id).limit(1);
+
+   if(data && data.length > 0){
+    setNotifications(data[0].notifications);
+   }
+  }
+  }, [user]);
+
+  useEffect(()=>{
+    getNotifications();
+  },[getNotifications])
+
 
   const handleSignOut= async()=>{
     await fetch('/api/signOut');
@@ -86,9 +103,12 @@ function Navbar({}: Props) {
             <Link href={'/list-estate'}>
                   Add Estate
         </Link>
-         <Link className='flex items-center gap-2' href={'/profile'}>
+         <Link className='flex items-center relative top-0 left-0 gap-2' href={'/profile'}>
           <FaUser/>
           Profile
+        {notifications.length > 0 && <div className=' px-1 h-fit bg-red-500 rounded-full absolute bottom-0 right-0 text-white text-xs'>
+          <p>{notifications.length}</p>
+          </div>}
         </Link>
          </>
         }

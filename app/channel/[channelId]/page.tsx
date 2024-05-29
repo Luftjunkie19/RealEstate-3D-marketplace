@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Provider } from 'react-redux';
 
@@ -14,6 +14,7 @@ import { store } from '@/utils/contexts/store';
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { MeetingProvider } from '@videosdk.live/react-sdk';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/utils/supabase/client';
 
 export default function Page({ params }: { params: { channelId: string } }) {
    
@@ -32,12 +33,30 @@ export default function Page({ params }: { params: { channelId: string } }) {
     setJoinedMeeting(true);
   }
 
+
+  const redirectUnentitiledUser= useCallback(async ()=>{
+    const {data}= await supabase.from('conferences').select('*').eq('room_id', meetingId).limit(1);
+
+    if(data && data.length > 0){
+      if(!data[0].allowed_to_join.find((id:string)=>id === user?.id)){
+        router.push('/');
+    }
+  }
+  }, [meetingId, router, user?.id]);
+
+  useEffect(()=>{
+    redirectUnentitiledUser();
+  },[redirectUnentitiledUser]);
+
   const leaveMeeting=()=>{
     setMicOn(false);
     setCamOn(false);
     setJoinedMeeting(false);
     setLeftMeeting(true);
-    router.push('/');
+  }
+
+  const comeBack=()=>{
+    joinMeeting();
   }
 
 
@@ -53,13 +72,13 @@ export default function Page({ params }: { params: { channelId: string } }) {
   customMicrophoneAudioTrack: customAudioStream,
   metaData: user?.user_metadata,
   debugMode: false,
-}} token={token as string} > 
+}} token={'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiJmYzYyMzRiYi0zYzA1LTQyNjAtOGRmYS01NTkxMDAxMGM4ZDgiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTcxNDY0MjU5MiwiZXhwIjoxODcyNDMwNTkyfQ.uWjFyMNr2MOKWg2nXMC-BdCw_Dv3LW97wzD_spBUAyU'} > 
       {joinedMeeting && (    
        
 <ConferenceScreen participantId={user?.id as string} leaveMeeting={leaveMeeting} meetingID={meetingId} setEnabledMic={()=>setMicOn(!micOn)} setEnabledCamera={()=>setCamOn(!camOn)} 
   enabledMic={micOn} enabledCam={camOn}/>
 )}
-        {leftMeeting && <LeftConferenceScreen />}
+        {leftMeeting && <LeftConferenceScreen backToConference={comeBack} />}
         {!joinedMeeting && !leftMeeting && <PreSetupScreen joinMeeting={joinMeeting} meetingId={meetingId} micOn={micOn} camOn={camOn} setCustomVideoStream={(value)=>setCustomVideoStream(value)} setCustomAudioStream={(value)=>setCustomAudioStream(value)} setCamOn={function (value: boolean): void {
           setCamOn(value);
         }} setMicOn={function (value: boolean): void {
