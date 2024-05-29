@@ -91,8 +91,8 @@ useEffect(()=>{
   {object.map((item:any)=>(<Offer listedBy={item.listed_by} key={item.id} photoURL={item.images[0]} offerTitle={item.property_name} bathRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} squareMetrage={item.square_footage} id={item.id}/>))}
   </div>}
   {activeTab === 2 && userObject && userObject.notifications.length > 0 && <div>
-    {userObject.notifications.map((item)=>(<Link className='bg-purple max-w-sm flex gap-2 items-center w-full rounded-xl p-2 text-white' href={`/channel/${item.room_id}`} key={item.room_id}>
-      <IoIosNotifications className='text-yellow-400 text-2xl'/>
+    {userObject.notifications.map((item)=>(<Link className='bg-purple max-w-lg flex gap-2 self-center my-2 items-center w-full rounded-xl p-2 text-white' href={`/channel/${item.room_id}`} key={item.room_id}>
+      <IoIosNotifications className='text-yellow-400 text-3xl'/>
       <p>{item.message}</p>
     </Link>))}
     </div>}
