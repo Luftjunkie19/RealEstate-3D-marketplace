@@ -4,7 +4,7 @@ import { useMeeting, useParticipant, usePubSub } from '@videosdk.live/react-sdk'
 import React, { useState } from 'react';
 import ParticipantView from '../ConferenceTiles/ParticipantView';
 import { FaCamera, FaMicrophoneAltSlash } from 'react-icons/fa';
-import { PiChatCircleDotsBold, PiChatCircleFill, PiPhoneDisconnectLight } from "react-icons/pi";
+import { PiChatCircleDotsBold, PiChatCircleFill, PiPhoneDisconnectLight, PiScreencast } from "react-icons/pi";
 import { FaMicrophone } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
 import { HiMiniVideoCamera, HiMiniVideoCameraSlash } from 'react-icons/hi2';
@@ -22,9 +22,10 @@ type Props = {
 }
 
 export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, enabledCam, enabledMic, participantId, leaveMeeting}: Props) {
-  const {localMicOn, localWebcamOn, toggleMic, toggleWebcam, participants, leave, end}=useMeeting({onParticipantJoined:(participant)=>{
+  const {localMicOn, localWebcamOn, toggleMic, toggleWebcam, participants, leave, end, presenterId, toggleScreenShare, localScreenShareOn}=useMeeting({onParticipantJoined:(participant)=>{
     toast(`${participant.displayName} joined`);
   }});
+
 
   const [showChat, setShowChat]=useState(false);
 
@@ -81,7 +82,12 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
   <button onClick={toggleChat} className={`${!showChat ? 'bg-purple' : 'bg-red-500'} p-2 rounded-full`}>
 <PiChatCircleFill className='text-white text-lg'/> 
   </button>
+<button className='bg-purple p-2 rounded-full'>
+  <p>{JSON.stringify(presenterId)}</p>
+  <PiScreencast />
+</button>
 </div>
+
   </div>
 <ChatDrawer shownChat={showChat} closeChat={closeChat} />
  </main>
