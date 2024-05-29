@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 
 export async function POST (req:Request){
 
-
     const {collection, object}= await req.json();
 
       const supabaseDatabase= createClient(cookies());

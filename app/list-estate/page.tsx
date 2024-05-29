@@ -14,9 +14,10 @@ import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { submitPayment } from '@/utils/square/server';
 import { supabase } from '@/utils/supabase/client';
 
+import DimensionalPlanner
+  from '../components/list-estate/3D-presentation/DimensionalPlanner';
 import PayableOffers from '../components/list-estate/PayableOffers';
 import PayForm from '../components/list-estate/PayForm';
-import DimensionalPlanner from '../components/list-estate/3D-presentation/DimensionalPlanner';
 
 type Props = {}
 
@@ -108,8 +109,7 @@ function Page({}: Props) {
       toast.success('Property object Successfully created !');
       setCurrentStep(2);
 
-   
-     
+  
     } catch (error) {
       console.error(error);
       toast.error('An error occurred while adding the property');
@@ -156,22 +156,39 @@ function Page({}: Props) {
   if(token.token){
    const submitedPayment= await submitPayment(token.token, selectedOfferOption);
    if(!submitedPayment!.errors && submitedPayment!.payment!.status === "COMPLETED"){
-    console.log(submitedPayment);
-    console.log(object3D);
-    setObjectToInsert({object:{...(objectToInsert as any)!.object, presentation_object:object3D,  is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
-      paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
-      currency: submitedPayment?.payment?.amountMoney?.currency,
-      receiptUrl:submitedPayment?.payment?.receiptUrl,
-      orderId:submitedPayment?.payment?.orderId,
-      paymentId: submitedPayment?.payment?.id,
-    } : null}, collection: (objectToInsert as any).collection})
+     setObjectToInsert({
+       object: {
+         ...(objectToInsert as any)!.object, presentation_object: object3D, is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
+           paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
+           currency: submitedPayment?.payment?.amountMoney?.currency,
+           receiptUrl: submitedPayment?.payment?.receiptUrl,
+           orderId: submitedPayment?.payment?.orderId,
+           paymentId: submitedPayment?.payment?.id,
+         } : null
+       }, collection: (objectToInsert as any).collection
+     });
+  await fetch('/api/insert', {method:'POST', 
+     body:JSON.stringify({
+       object: {
+         ...(objectToInsert as any)!.object, presentation_object: object3D, is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
+           paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
+           currency: submitedPayment?.payment?.amountMoney?.currency,
+           receiptUrl: submitedPayment?.payment?.receiptUrl,
+           orderId: submitedPayment?.payment?.orderId,
+           paymentId: submitedPayment?.payment?.id,
+         } : null
+       }, collection: (objectToInsert as any).collection
+     }), 
+     headers:{
+      'Content-Type':'application/json'
+    }}).then((res)=>res.json()).then((data)=>console.log(data));
     setCurrentStep(4);
     toast.success('Successfully paid the fee for publishing');  
    }
   }
         console.log(token);
       }}  locationId={process.env.NEXT_PUBLIC_SQUARE_APP_SEC} applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}>
-<div className="min-h-screen w-screen ">
+<div className="min-h-screen w-screen overflow-x-hidden">
       <div className="mx-auto m-0 flex justify-center p-4">
       <ul className="steps">
   <li data-content='📝' className={`step ${currentStep > 0 && 'step-primary'} `}></li>
@@ -262,12 +279,6 @@ function Page({}: Props) {
   <p className='text-white text-xl font-bold'>Your property has been listed !</p>
   <p className=' text-xs text-white'>In a second you will be redirected to the main page.</p>
   <button className='bg-purple p-2 rounded-lg text-white font-semibold' onClick={async()=>{
-  console.log(objectToInsert);
-     await fetch('/api/insert', {method:'POST', 
-     body:JSON.stringify(objectToInsert), 
-     headers:{
-      'Content-Type':'application/json'
-    }});
     router.push('/');
 
 }}>Go back to main page.</button>
