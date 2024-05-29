@@ -44,6 +44,7 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
 
   const manageMic=()=>{
    toggleMic();
+   setEnabledMic(!enabledMic);
   }
 
   const manageWebCam=()=>{
