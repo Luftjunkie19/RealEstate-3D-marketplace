@@ -42,7 +42,7 @@ router.push(`/channel/${roomId}`);
     }
 
   return (
-    <button onClick={createTokenAndRedirect} className='flex gap-2 items-center w-fit bg-purple p-2 rounded-lg'>
+    <button onClick={createTokenAndRedirect} className={`${data[0].listed_by !== userData?.id ? 'flex' : 'hidden'} gap-2 items-center w-fit bg-purple p-2 rounded-lg`}>
     <IoCall className='text-white'/>
     <p className='text-white font-semibold'>Contact</p>
   </button>

@@ -12,6 +12,7 @@ import ChatDrawer from '../ChatDrawer';
 import toast from 'react-hot-toast';
 import PresentationView from '../ConferenceTiles/PresentationView';
 import SharedScreenParticipantView from '../ConferenceTiles/SharedScreenParticipantView';
+import { supabase } from '@/utils/supabase/client';
 
 type Props = {
   meetingID: string,
@@ -53,6 +54,8 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
 
   const leaveM=()=>{
     if([...participants.keys()].length === 1){
+       supabase.from('conferences').update({finished_at:new Date()}).eq('room_id', meetingID).then((res)=>console.log(res));
+
       end();
     }
   

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Provider } from 'react-redux';
 
@@ -14,6 +14,7 @@ import { store } from '@/utils/contexts/store';
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { MeetingProvider } from '@videosdk.live/react-sdk';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/utils/supabase/client';
 
 export default function Page({ params }: { params: { channelId: string } }) {
    
@@ -31,6 +32,21 @@ export default function Page({ params }: { params: { channelId: string } }) {
   const joinMeeting=()=>{
     setJoinedMeeting(true);
   }
+
+
+  const redirectUnentitiledUser= useCallback(async ()=>{
+    const {data}= await supabase.from('conferences').select('*').eq('room_id', meetingId).limit(1);
+
+    if(data && data.length > 0){
+      if(!data[0].allowed_to_join.find((id:string)=>id === user?.id)){
+        router.push('/');
+    }
+  }
+  }, [meetingId, router, user?.id]);
+
+  useEffect(()=>{
+    redirectUnentitiledUser();
+  },[redirectUnentitiledUser]);
 
   const leaveMeeting=()=>{
     setMicOn(false);
