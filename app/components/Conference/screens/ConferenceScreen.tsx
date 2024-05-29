@@ -55,10 +55,9 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
     if([...participants.keys()].length === 1){
       end();
     }
-    
+  
     leave();
     leaveMeeting();
-    router.push('/');
 
     
   }
@@ -71,7 +70,7 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
   
  return  (<main className='h-screen overflow-y-hidden w-full grid grid-cols-12'>
   <div className={`sm:col-span-full relative top-0 left-0 ${showChat && 'lg:col-span-8 xl:col-span-9 3xl:col-span-10'}`}>
-  {presenterId ? <div className={`w-full p-4 flex ${!showChat ? 'gap-6' : 'gap-1'} flex-wrap xl:h-[75vh]`}>
+  {presenterId ? <div className={`w-full p-4 flex ${!showChat ? 'gap-6 ' : 'gap-1'} flex-wrap xl:h-[75vh]`}>
     <PresentationView presenterId={presenterId}/>
     <div className="flex flex-col gap-2">
       {[...participants.keys()].slice(0, 3).map((participant)=>(<SharedScreenParticipantView participantId={participant} key={participant}/>))}
