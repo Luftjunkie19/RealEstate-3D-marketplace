@@ -6,7 +6,7 @@ import { FaMicrophoneSlash } from "react-icons/fa";
 type Props = {participantId:any}
 
 function ParticipantView({participantId}: Props) {
-const {participant, isLocal, isActiveSpeaker, isMainParticipant, webcamStream, micStream, micOn, webcamOn, displayName }=useParticipant(participantId);
+const {participant, isLocal, isActiveSpeaker, isMainParticipant, screenShareStream, screenShareOn, screenShareAudioStream,  webcamStream, micStream, micOn, webcamOn, displayName }=useParticipant(participantId);
 const micRef=useRef<HTMLAudioElement>(null);
 const webcamRef=useRef<HTMLVideoElement>(null);
 
