@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from 'react'
 type Props = {participantId:string}
 
 function SharedScreenParticipantView({participantId}: Props) {
-    const {participant, isLocal, isActiveSpeaker, isMainParticipant, screenShareStream, screenShareOn, screenShareAudioStream,  webcamStream, micStream, micOn, webcamOn, displayName }=useParticipant(participantId);
+    const {participant, isLocal, isActiveSpeaker, webcamStream, micStream, micOn, webcamOn, displayName }=useParticipant(participantId);
     const micRef=useRef<HTMLAudioElement>(null);
     const webcamRef=useRef<HTMLVideoElement>(null);
     

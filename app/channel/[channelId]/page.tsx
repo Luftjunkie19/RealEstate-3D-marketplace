@@ -39,6 +39,10 @@ export default function Page({ params }: { params: { channelId: string } }) {
     setLeftMeeting(true);
   }
 
+  const comeBack=()=>{
+    joinMeeting();
+  }
+
 
   return (
     <Provider store={store}>
@@ -58,7 +62,7 @@ export default function Page({ params }: { params: { channelId: string } }) {
 <ConferenceScreen participantId={user?.id as string} leaveMeeting={leaveMeeting} meetingID={meetingId} setEnabledMic={()=>setMicOn(!micOn)} setEnabledCamera={()=>setCamOn(!camOn)} 
   enabledMic={micOn} enabledCam={camOn}/>
 )}
-        {leftMeeting && <LeftConferenceScreen />}
+        {leftMeeting && <LeftConferenceScreen backToConference={comeBack} />}
         {!joinedMeeting && !leftMeeting && <PreSetupScreen joinMeeting={joinMeeting} meetingId={meetingId} micOn={micOn} camOn={camOn} setCustomVideoStream={(value)=>setCustomVideoStream(value)} setCustomAudioStream={(value)=>setCustomAudioStream(value)} setCamOn={function (value: boolean): void {
           setCamOn(value);
         }} setMicOn={function (value: boolean): void {

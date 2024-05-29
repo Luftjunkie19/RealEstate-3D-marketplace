@@ -8,6 +8,8 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/bundle';
 
+import propertyImage from '@/assets/images.jpeg'
+
 import React, { useEffect, useState } from 'react';
 
 import {
@@ -56,10 +58,10 @@ useEffect(()=>{
    <p className="text-4xl pl-6 font-bold text-white">Featured Properties</p>
    <p className="text-lg pl-6 font-medium text-white">Explore our handpicked selection of featured properties. Each listing offers a glimpse into exceptional homes and investments available through VirtuEstate. Click View Details for more information.</p> 
     <div  className="w-screen mx-auto m-0">
-        <Swiper  className="mySwiper w-screen"    spaceBetween={24}  slidesPerView={numberOfSlides} modules={[Navigation, Pagination]}>
+        <Swiper className="mySwiper w-screen" spaceBetween={24}  slidesPerView={numberOfSlides} modules={[Navigation, Pagination]}>
          {listings.map((item:any)=>(
              <SwiperSlide key={item.id}>
-             <Offer id={item.id} squareMetrage={item.square_footage} imageUrl={`${item.images[0]}`} name={item.property_name} description={item.description} barthRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} />
+             <Offer id={item.id} squareMetrage={item.square_footage} imageUrl={item.images[0] ? item.images[0] : propertyImage} name={item.property_name} description={item.description} barthRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} />
            </SwiperSlide>
          ))}
          
