@@ -13,6 +13,7 @@ import { RiRobot3Line } from 'react-icons/ri';
 
 import { userThreadAtom } from '@/atoms';
 import { RunSubmitToolOutputsParams } from 'openai/resources/beta/threads/runs/runs.mjs';
+import { usePathname } from 'next/navigation';
 
 type Props={
   openState:boolean
@@ -365,9 +366,10 @@ export default function Chat({openState}:Props) {
 
   },[handleSubmitAction])
 
+  const pathname = usePathname();
 
   return (
-    <div className={`${openState ? 'flex opacity-100 z-[99999999999]' : 'hidden opacity-0'}  transition-all  flex-col gap-6 fixed bottom-10 right-6 w-full max-h-96 h-full bg-purple rounded-lg max-w-xs`}>
+    <div className={`${openState && !pathname.includes('channel')  ? 'flex opacity-100 z-[99999999999]' : 'hidden opacity-0'}  transition-all  flex-col gap-6 fixed bottom-10 right-6 w-full max-h-96 h-full bg-purple rounded-lg max-w-xs`}>
    <p className="text-white text-lg p-4 font-bold justify-around flex gap-4 items-center w-full border-b-2 border-darkGray"><RiRobot3Line size={24} className="text-bgColor"/> VirtuAIssistant</p>
    <div ref={chatRef} className="flex h-5/6 w-full p-1 flex-col gap-2 overflow-y-auto will-change-scroll modal-scroll cursor-all-scroll ">
     {messages.length === 0 && <p>No messages yet...</p>}
