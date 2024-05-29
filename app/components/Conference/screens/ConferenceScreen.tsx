@@ -4,11 +4,15 @@ import { useMeeting, useParticipant, usePubSub } from '@videosdk.live/react-sdk'
 import React, { useState } from 'react';
 import ParticipantView from '../ConferenceTiles/ParticipantView';
 import { FaCamera, FaMicrophoneAltSlash } from 'react-icons/fa';
-import { PiChatCircleDotsBold, PiChatCircleFill, PiPhoneDisconnectLight } from "react-icons/pi";
+import { PiChatCircleDotsBold, PiChatCircleFill, PiPhoneDisconnectLight, PiScreencast } from "react-icons/pi";
 import { FaMicrophone } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
 import { HiMiniVideoCamera, HiMiniVideoCameraSlash } from 'react-icons/hi2';
 import ChatDrawer from '../ChatDrawer';
+import toast from 'react-hot-toast';
+import PresentationView from '../ConferenceTiles/PresentationView';
+import SharedScreenParticipantView from '../ConferenceTiles/SharedScreenParticipantView';
+import { supabase } from '@/utils/supabase/client';
 
 type Props = {
   meetingID: string,
@@ -21,9 +25,10 @@ type Props = {
 }
 
 export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, enabledCam, enabledMic, participantId, leaveMeeting}: Props) {
-  const {localMicOn, localWebcamOn, toggleMic, toggleWebcam, participants, leave, end}=useMeeting({onParticipantJoined:(participant)=>{
-    console.log("participant joined",participant);
+  const {localMicOn, localWebcamOn, toggleMic, toggleWebcam, participants, leave, end, presenterId, toggleScreenShare, localScreenShareOn}=useMeeting({onParticipantJoined:(participant)=>{
+    toast(`${participant.displayName} joined`);
   }});
+
 
   const [showChat, setShowChat]=useState(false);
 
@@ -38,8 +43,8 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
   const router = useRouter();
 
   const manageMic=()=>{
-    toggleMic();
-    setEnabledMic(!enabledMic);
+   toggleMic();
+   setEnabledMic(!enabledMic);
   }
 
   const manageWebCam=()=>{
@@ -49,25 +54,36 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
 
   const leaveM=()=>{
     if([...participants.keys()].length === 1){
+       supabase.from('conferences').update({finished_at:new Date()}).eq('room_id', meetingID).then((res)=>console.log(res));
+
       end();
     }
-    
+  
     leave();
     leaveMeeting();
-    router.push('/');
 
     
   }
 
+  const manageScreenSharing=()=>{
+    toggleScreenShare();
+  }
+
 
   
- return  (<main className='min-h-screen w-full flex'>
-  <div className="max-w-4xl w-full">
-  <div className="max-w-3xl w-full p-4 flex">
+ return  (<main className='h-screen overflow-y-hidden w-full grid grid-cols-12'>
+  <div className={`sm:col-span-full relative top-0 left-0 ${showChat && 'lg:col-span-8 xl:col-span-9 3xl:col-span-10'}`}>
+  {presenterId ? <div className={`w-full p-4 flex ${!showChat ? 'gap-6 ' : 'gap-1'} flex-wrap xl:h-[75vh]`}>
+    <PresentationView presenterId={presenterId}/>
+    <div className="flex flex-col gap-2">
+      {[...participants.keys()].slice(0, 3).map((participant)=>(<SharedScreenParticipantView participantId={participant} key={participant}/>))}
+    </div>
+    </div> :  <div className="w-full p-4 flex gap-2 flex-wrap xl:h-[75vh]">
 {[...participants.keys()].map((participantId)=>(<ParticipantView key={participantId} participantId={participantId}/>))}
-  </div>
+  </div>}
+ 
 
-<div className="bg-darkGray p-2 mx-auto m-0 rounded-full flex flex-wrap items-center gap-4 max-w-xs w-full justify-center">
+<div className="bg-darkGray sticky bottom-0 left-1/4 p-2 mx-auto m-0 rounded-full flex flex-wrap items-center gap-4 max-w-xs w-full justify-center">
   <button onClick={manageWebCam} className={`${!localWebcamOn ? 'bg-purple' : 'bg-red-500'} p-2 rounded-full`}>
    {!localWebcamOn ?  <HiMiniVideoCamera className='text-white text-lg'/> : <HiMiniVideoCameraSlash className='text-white text-lg'/>}
   </button>
@@ -80,7 +96,11 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
   <button onClick={toggleChat} className={`${!showChat ? 'bg-purple' : 'bg-red-500'} p-2 rounded-full`}>
 <PiChatCircleFill className='text-white text-lg'/> 
   </button>
+<button onClick={manageScreenSharing} className='bg-purple sm:hidden xl:block text-white p-2 rounded-full'>
+  <PiScreencast />
+</button>
 </div>
+
   </div>
 <ChatDrawer shownChat={showChat} closeChat={closeChat} />
  </main>

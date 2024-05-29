@@ -11,10 +11,13 @@ import { FaMessage, FaPencil, FaStar } from 'react-icons/fa6';
 import { supabase } from '@/utils/supabase/client';
 import Offer from '../components/profile/items/Offer';
 import { useRouter } from 'next/navigation';
+import { IoIosNotifications } from 'react-icons/io';
+import Link from 'next/link';
 
 function CurrentUserPage({}: Props) {
   const [object, setObject]=useState<any[]>([]);
   const [favourites, setFavourites]=useState<any[]>([]);
+  const [userObject, setUserObject]=useState<any>(null);
   const router= useRouter();
   const {user}=useAuthContext();
   interface tabObject{
@@ -23,7 +26,7 @@ function CurrentUserPage({}: Props) {
     tabIcon:IconType
   }
   const [activeTab, setActiveTab]=useState<number>(0);
-const tabs:tabObject[]=[{id:1, content:'Properties', tabIcon:BsFillHousesFill}, {id:2, content:'Messages', tabIcon:FaMessage}, {id:3, content:'Favourited', tabIcon:FaStar}]
+const tabs:tabObject[]=[{id:1, content:'Properties', tabIcon:BsFillHousesFill}, {id:2, content:'Notifications', tabIcon:IoIosNotifications}, {id:3, content:'Favourited', tabIcon:FaStar}]
 
 
 
@@ -35,6 +38,11 @@ const getDataNeeded= useCallback(async ()=>{
       setObject(yourListings);
     }
   
+    const {data:userDatas}= await supabase.from('users').select('*').eq('user_id', user.id).limit(1);
+   
+    if(userDatas && userDatas.length > 0){
+      setUserObject(userDatas[0]);
+    }
 
     const {data, error}= await supabase.from('users').select('favourite_properties').eq('email', user.email).limit(1);
 
@@ -75,13 +83,19 @@ useEffect(()=>{
     <div role="tablist" className="tabs tabs-bordered border-purple max-w-xl mx-auto m-0">
         {tabs.map((tabItem)=>(<a onClick={()=>setActiveTab(tabItem.id)} key={tabItem.id} role='tab' className={`tab ${activeTab === tabItem.id && 'tab-active text-purple'} font-bold flex items-center gap-2`}>
             <p className='sm:hidden lg:block'>{tabItem.content}</p>
-            <tabItem.tabIcon className={`${activeTab === tabItem.id ? 'text-purple' : 'text-white'}`}/>
+            <tabItem.tabIcon className={`${activeTab === tabItem.id ? 'text-purple' : 'text-white'} text-lg`}/>
             </a>))}
 </div>
 
 {activeTab === 1 && object.length > 0 && <div className='flex flex-col mx-auto m-0 items-center my-2 gap-2 max-h-96 overflow-y-scroll'>
   {object.map((item:any)=>(<Offer listedBy={item.listed_by} key={item.id} photoURL={item.images[0]} offerTitle={item.property_name} bathRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} squareMetrage={item.square_footage} id={item.id}/>))}
   </div>}
+  {activeTab === 2 && userObject && userObject.notifications.length > 0 && <div>
+    {userObject.notifications.map((item)=>(<Link className='bg-purple max-w-lg flex gap-2 self-center my-2 items-center w-full rounded-xl p-2 text-white' href={`/channel/${item.roomId}`} key={item.roomId}>
+      <IoIosNotifications className='text-yellow-400 text-3xl'/>
+      <p>{item.message}</p>
+    </Link>))}
+    </div>}
   {activeTab === 3 && <>  
 <div className={`flex mx-auto m-0 justify-center items-center flex-wrap gap-4 max-w-5xl p-4`}>
 {favourites.length === 0 && <p className='text-white text-lg'>No favourite properties yet.</p>}
