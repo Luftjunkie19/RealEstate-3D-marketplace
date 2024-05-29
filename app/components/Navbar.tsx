@@ -106,7 +106,7 @@ function Navbar({}: Props) {
          <Link className='flex items-center relative top-0 left-0 gap-2' href={'/profile'}>
           <FaUser/>
           Profile
-        {notifications.length > 0 && <div className=' px-2 h-fit bg-red-500 rounded-full absolute bottom-0 right-0 text-white text-xs'>
+        {notifications.length > 0 && <div className=' px-1 h-fit bg-red-500 rounded-full absolute bottom-0 right-0 text-white text-xs'>
           <p>{notifications.length}</p>
           </div>}
         </Link>
