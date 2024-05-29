@@ -3,6 +3,7 @@ import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { supabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast';
 
 type Props = {}
 
@@ -28,8 +29,18 @@ const readNotification=async (notification:any)=>{
 }
 
 const goToChannel= async (notification:any)=>{
-    router.push(`/channel/${notification.roomId}`);
-    await readNotification(notification);
+
+    const {data}= await supabase.from('conferences').select('*').eq('room_id', notification.roomId).limit(1);
+
+    if(data && data.length > 0){
+        if(data[0].finished_at){
+         toast.error('No redirection possible, Conference finished.');   
+         return;
+        }else{
+                router.push(`/channel/${notification.roomId}`);
+                await readNotification(notification);
+        }
+    }
 }
 
   return (
