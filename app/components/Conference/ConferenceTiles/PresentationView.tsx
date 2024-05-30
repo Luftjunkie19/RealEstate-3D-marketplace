@@ -36,7 +36,7 @@ function PresentationView({presenterId}: Props) {
     
   return (
 
-        <div className="max-w-2xl w-full max-h-[32rem]">
+        <div className=" max-w-7xl w-full max-h-80 self-center">
             <ReactPlayer onError={(err)=>console.log(err)} height={'100%'} width={'100%'} pip={false} playsinline muted playing controls={false} url={mediaStream}/>
             <audio autoPlay playsInline controls={false} ref={audioPlayerRef}/>
         </div>

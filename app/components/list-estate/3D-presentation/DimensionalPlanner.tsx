@@ -157,19 +157,19 @@ value:'#fff'
     value:'',
     options:{
     null:'',
-     texture1: './textures/brick.jpg',
-     texture2:'./textures/brick2.jpg',
-     texture3:'./textures/brick3.jpg',
-     texture4:'./textures/brick4.jpg',
-     texture5:'./textures/brick5.png',
-     texture6:'./textures/brick6.png',
-     texture7:'./textures/brick7.png',
-     texture8:'./textures/brick8.png',
-     texture9:'./textures/brick9.jpg',
-     texture10:'./textures/brick10.jpg',
-     texture11: './textures/desk1.jpg',
-     texture12: './textures/desk2.jpg',
-     texture13:'./textures/desk3.jpg'
+     texture1: '/brick.jpg',
+     texture2:'/brick2.jpg',
+     texture3:'/brick3.jpg',
+     texture4:'/brick4.jpg',
+     texture5:'/brick5.png',
+     texture6:'/brick6.png',
+     texture7:'/brick7.png',
+     texture8:'/brick8.png',
+     texture9:'/brick9.jpg',
+     texture10:'/brick10.jpg',
+     texture11: '/desk1.jpg',
+     texture12: '/desk2.jpg',
+     texture13:'/desk3.jpg'
     }
   },
         floorPosition: {
@@ -208,19 +208,19 @@ const firstWallControls= useControls('Wall 1', {
       material:{
         value:null,
         options:[
-          './textures/brick.jpg',
-        './textures/brick2.jpg',
-         './textures/brick3.jpg',
-         './textures/brick4.jpg',
-       './textures/brick5.png',
-         './textures/brick6.png',
-          './textures/brick7.png',
-          './textures/brick8.png',
-         './textures/brick9.jpg',
-         './textures/brick10.jpg',
-          './textures/desk1.jpg',
-          './textures/desk2.jpg',
-          './textures/desk3.jpg'
+          '/brick.jpg',
+        '/brick2.jpg',
+         '/brick3.jpg',
+         '/brick4.jpg',
+       '/brick5.png',
+         '/brick6.png',
+          '/brick7.png',
+          '/brick8.png',
+         '/brick9.jpg',
+         '/brick10.jpg',
+          '/desk1.jpg',
+          '/desk2.jpg',
+          '/desk3.jpg'
         ]
       },
     wall1Position:{
@@ -266,19 +266,19 @@ const secondWallControls= useControls('Wall 2', {
       material:{
         value:null,
         options:[
-          './textures/brick.jpg',
-        './textures/brick2.jpg',
-         './textures/brick3.jpg',
-         './textures/brick4.jpg',
-       './textures/brick5.png',
-         './textures/brick6.png',
-          './textures/brick7.png',
-          './textures/brick8.png',
-         './textures/brick9.jpg',
-         './textures/brick10.jpg',
-          './textures/desk1.jpg',
-          './textures/desk2.jpg',
-          './textures/desk3.jpg'
+          '/brick.jpg',
+        '/brick2.jpg',
+         '/brick3.jpg',
+         '/brick4.jpg',
+       '/brick5.png',
+         '/brick6.png',
+          '/brick7.png',
+          '/brick8.png',
+         '/brick9.jpg',
+         '/brick10.jpg',
+          '/desk1.jpg',
+          '/desk2.jpg',
+          '/desk3.jpg'
         ]
       },
     wallPosition:{
@@ -324,19 +324,19 @@ const thirdWallContols= useControls('Wall 3', {
       material:{
         value:null,
         options:[
-          './textures/brick.jpg',
-        './textures/brick2.jpg',
-         './textures/brick3.jpg',
-         './textures/brick4.jpg',
-       './textures/brick5.png',
-         './textures/brick6.png',
-          './textures/brick7.png',
-          './textures/brick8.png',
-         './textures/brick9.jpg',
-         './textures/brick10.jpg',
-          './textures/desk1.jpg',
-          './textures/desk2.jpg',
-          './textures/desk3.jpg'
+          '/brick.jpg',
+        '/brick2.jpg',
+         '/brick3.jpg',
+         '/brick4.jpg',
+       '/brick5.png',
+         '/brick6.png',
+          '/brick7.png',
+          '/brick8.png',
+         '/brick9.jpg',
+         '/brick10.jpg',
+          '/desk1.jpg',
+          '/desk2.jpg',
+          '/desk3.jpg'
         ],
        
       },
@@ -383,19 +383,19 @@ const fourthWallControls = useControls('Wall 4', {
       material:{
         value:null,
         options:[
-          './textures/brick.jpg',
-        './textures/brick2.jpg',
-         './textures/brick3.jpg',
-         './textures/brick4.jpg',
-       './textures/brick5.png',
-         './textures/brick6.png',
-          './textures/brick7.png',
-          './textures/brick8.png',
-         './textures/brick9.jpg',
-         './textures/brick10.jpg',
-          './textures/desk1.jpg',
-          './textures/desk2.jpg',
-          './textures/desk3.jpg'
+          '/brick.jpg',
+        '/brick2.jpg',
+         '/brick3.jpg',
+         '/brick4.jpg',
+       '/brick5.png',
+         '/brick6.png',
+          '/brick7.png',
+          '/brick8.png',
+         '/brick9.jpg',
+         '/brick10.jpg',
+          '/desk1.jpg',
+          '/desk2.jpg',
+          '/desk3.jpg'
         ]
       },
     wallPosition:{

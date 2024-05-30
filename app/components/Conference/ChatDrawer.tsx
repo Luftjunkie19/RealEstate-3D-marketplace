@@ -44,7 +44,7 @@ function ChatDrawer({shownChat, closeChat}: Props) {
   </div>))}
 </div>
 <form action={sendMessage} className="h-16 p-2 w-full z-[99999999] bg-bgColor/80 rounded-b-lg flex gap-2 items-center">
-<input ref={inputRef} type="text" name='message' className=' rounded-lg bg-darkGray text-white p-2 outline-none border-none' />
+<input ref={inputRef} type="text" name='message' className=' rounded-lg bg-darkGray max-w-48 w-full text-white p-2 outline-none border-none' />
 <button className='h-fit px-4 py-2 rounded-lg bg-purple text-white'>Send</button>
 </form>
     </div>
