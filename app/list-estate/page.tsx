@@ -156,17 +156,6 @@ function Page({}: Props) {
   if(token.token){
    const submitedPayment= await submitPayment(token.token, selectedOfferOption);
    if(!submitedPayment!.errors && submitedPayment!.payment!.status === "COMPLETED"){
-     setObjectToInsert({
-       object: {
-         ...(objectToInsert as any)!.object, presentation_object: object3D, is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
-           paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
-           currency: submitedPayment?.payment?.amountMoney?.currency,
-           receiptUrl: submitedPayment?.payment?.receiptUrl,
-           orderId: submitedPayment?.payment?.orderId,
-           paymentId: submitedPayment?.payment?.id,
-         } : null
-       }, collection: (objectToInsert as any).collection
-     });
   await fetch('/api/insert', {method:'POST', 
      body:JSON.stringify({
        object: {

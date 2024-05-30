@@ -5,6 +5,7 @@ import { Canvas } from '@react-three/fiber'
 import React from 'react'
 import GltfObject from './Gltf';
 import AdditionalWall from './AdditionalWall';
+import Wall from './Wall';
 
 type Props = {object3D:any}
 
@@ -19,10 +20,7 @@ function EstateCanvas({object3D}: Props) {
   <meshStandardMaterial side={object3D.floor.mesh.material.side === 2 ? THREE.DoubleSide : THREE.FrontSide } color={object3D.floor.color} />
 </mesh>
 
-{object3D.walls.map((wall:any)=>(<mesh scale-y={wall.mesh.scale.y} scale-z={wall.mesh.scale.z} scale-x={wall.mesh.scale.x} rotation-z={wall.mesh.rotation._z} rotation-y={wall.mesh.rotation._y} rotation-x={wall.mesh.rotation._x} position-z={wall.mesh.position.z} position-y={wall.mesh.position.y} position-x={wall.mesh.position.x} key={wall.uuid}>
-  <planeGeometry args={[wall.geometry.width, wall.geometry.height, 1, 1]} />
-  <meshStandardMaterial side={2} color={wall.mesh.material.color} />
-</mesh>))}
+{object3D.walls.map((wall:any, i)=>(<Wall key={i} wall={wall}/>))}
 
 {object3D.objects && object3D.objects.length > 0 && object3D.objects.map((item, i)=>(<GltfObject rotation={item.rotation} scale={item.scale} position={item.position} gltfObjectUrl={item.modelPath} key={i} />))}
 {object3D.additionalWalls && object3D.additionalWalls.length > 0 && object3D.additionalWalls.map((item, i)=>(<AdditionalWall width={item.geometry.width} height={item.geometry.height} rotation={item.mesh.rotation} position={item.mesh.position} key={i} scale={item.mesh.scale}/>))}

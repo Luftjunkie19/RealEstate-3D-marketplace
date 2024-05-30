@@ -44,7 +44,7 @@ const goToChannel= async (notification:any)=>{
 }
 
   return (
-    <div className={`${notifications.filter((item:any)=>!item.hasRead).length > 0 ? 'fixed bottom-0 left-0 overflow-y-auto max-h-80 flex flex-col gap-2 max-w-sm w-full p-2' : 'hidden'}`}>
+    <div className={`${notifications.filter((item:any)=>!item.hasRead).length > 0 ? 'fixed bottom-0 left-0 overflow-y-auto max-h-80 flex flex-col gap-2 max-w-sm w-full p-2 z-[999999]' : 'hidden'}`}>
         {notifications.filter((item:any)=>item.hasRead !== true).map((notification:any)=>(<div className='bg-purple text-white p-2 rounded-xl flex gap-2 items-center' key={notification.roomId}>
             <p>{notification.message.length > 60 ? `${notification.message.slice(0, 40)}...` :  notification.message}</p>
 

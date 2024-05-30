@@ -78,7 +78,7 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
     <div className="flex flex-col gap-2">
       {[...participants.keys()].slice(0, 3).map((participant)=>(<SharedScreenParticipantView participantId={participant} key={participant}/>))}
     </div>
-    </div> :  <div className="w-full p-4 flex gap-2 flex-wrap xl:h-[75vh]">
+    </div> :  <div className="w-full p-4 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-2 xl:h-[75vh]">
 {[...participants.keys()].map((participantId)=>(<ParticipantView key={participantId} participantId={participantId}/>))}
   </div>}
  
