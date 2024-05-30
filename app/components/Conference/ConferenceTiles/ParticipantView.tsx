@@ -42,7 +42,7 @@ useEffect(()=>{
 
 return (<>
 <div className="h-fit w-full max-w-xs max-h-64 overflow-hidden  relative top-0 left-0">
-  {webcamOn ? <video width={'100%'} height={'100%'} autoPlay playsInline muted ref={webcamRef} controls={false} className={`w-full h-full rounded-lg border ${isActiveSpeaker ? 'border-green-400' : 'border-purple' }`}/> : 
+  {webcamOn ? <video width={'100%'} height={'100%'} autoPlay playsInline muted ref={webcamRef} controls={false} className={`w-full h-full rounded-lg ${isActiveSpeaker ? 'border-green-400 border-4' : 'border-purple border-2' }`}/> : 
   <Image src={(participant.metaData as any).picture ?? DefaultImage} className="w-full h-48 object-cover rounded-lg" width={64} height={64} alt=""/>}
   {!micOn && <div className=" bg-bgColor/50 flex absolute top-0 left-0 w-full h-full justify-center items-center">
     <FaMicrophoneSlash className="text-red-500 text-3xl"/>
