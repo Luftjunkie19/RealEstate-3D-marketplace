@@ -75,15 +75,15 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
   <div className={`sm:col-span-full relative top-0 left-0 ${showChat && 'lg:col-span-8 xl:col-span-9 3xl:col-span-10'}`}>
   {presenterId ? <div className={`w-full p-4 flex ${!showChat ? 'gap-6 ' : 'gap-1'} flex-wrap xl:h-[75vh]`}>
     <PresentationView presenterId={presenterId}/>
-    <div className="flex flex-col gap-2">
+    <div className="sm:grid sm:grid-cols-2 sm:max-h-[40vh] lg:grid lg:grid-cols-1 lg:max-h-screen h-full gap-2">
       {[...participants.keys()].slice(0, 3).map((participant)=>(<SharedScreenParticipantView participantId={participant} key={participant}/>))}
     </div>
-    </div> :  <div className="w-full p-4 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-2 xl:h-[75vh]">
+    </div> :  <div className="w-full p-4 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 xl:h-[75vh]">
 {[...participants.keys()].map((participantId)=>(<ParticipantView key={participantId} participantId={participantId}/>))}
   </div>}
  
 
-<div className="bg-darkGray sticky bottom-0 left-1/4 p-2 mx-auto m-0 rounded-full flex flex-wrap items-center gap-4 max-w-xs w-full justify-center">
+<div className="bg-darkGray xl:sticky xl:bottom-0 xl:left-1/4 p-2 mx-auto m-0 rounded-full flex items-center gap-4 max-w-xs w-full justify-center">
   <button onClick={manageWebCam} className={`${!localWebcamOn ? 'bg-purple' : 'bg-red-500'} p-2 rounded-full`}>
    {!localWebcamOn ?  <HiMiniVideoCamera className='text-white text-lg'/> : <HiMiniVideoCameraSlash className='text-white text-lg'/>}
   </button>
