@@ -72,18 +72,18 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
 
   
  return  (<main className='h-screen overflow-y-hidden w-full grid grid-cols-12 gap-4'>
-  <div className={`sm:col-span-full relative top-0 left-0 ${showChat && 'lg:col-span-8 xl:col-span-9 3xl:col-span-10'}`}>
-  {presenterId ? <div className={`w-full p-4 flex ${!showChat ? 'gap-6 ' : 'gap-1'} flex-wrap xl:h-[75vh]`}>
+  <div className={`sm:col-span-full relative top-0 left-0 h-full ${showChat && 'lg:col-span-8 xl:col-span-9 3xl:col-span-10'}`}>
+  {presenterId ? <div className={`w-full p-4 flex gap-6 flex-col h-[80vh]`}>
     <PresentationView presenterId={presenterId}/>
-    <div className="sm:grid sm:grid-cols-2 sm:max-h-[40vh] lg:flex lg:flex-wrap h-full gap-2">
-      {[...participants.keys()].slice(0, 3).map((participant)=>(<SharedScreenParticipantView participantId={participant} key={participant}/>))}
+    <div className="flex max-w-5xl mx-auto m-0 w-full flex-wrap max-h-[28rem] h-full gap-2">
+      {[...participants.keys()].map((participant)=>(<SharedScreenParticipantView participantId={participant} key={participant}/>))}
     </div>
-    </div> :  <div className="w-full p-4 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 xl:h-[75vh]">
-{[...participants.keys()].map((participantId)=>(<ParticipantView key={participantId} participantId={participantId}/>))}
+    </div> : <div className="w-full p-4 flex flex-wrap gap-2 h-[80vh]">
+{[...participants.keys()].map((participantId)=>(<ParticipantView openedChat={showChat} key={participantId} participantId={participantId}/>))}
   </div>}
  
 
-<div className="bg-darkGray xl:sticky xl:bottom-0 xl:left-1/4 p-2 mx-auto m-0 rounded-full flex items-center gap-4 max-w-xs w-full justify-center">
+<div className="bg-darkGray z-50 sticky bottom-0 left-1/2 -translate-x-1/2 mb-2 p-2 mx-auto m-0 rounded-full flex items-center gap-4 max-w-xs w-full justify-center">
   <button onClick={manageWebCam} className={`${!localWebcamOn ? 'bg-purple' : 'bg-red-500'} p-2 rounded-full`}>
    {!localWebcamOn ?  <HiMiniVideoCamera className='text-white text-lg'/> : <HiMiniVideoCameraSlash className='text-white text-lg'/>}
   </button>
@@ -96,12 +96,12 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
   <button onClick={toggleChat} className={`${!showChat ? 'bg-purple' : 'bg-red-500'} p-2 rounded-full`}>
 <PiChatCircleFill className='text-white text-lg'/> 
   </button>
-<button onClick={manageScreenSharing} className='bg-purple sm:hidden xl:block text-white p-2 rounded-full'>
+<button onClick={manageScreenSharing} className={`${!localScreenShareOn ? 'bg-purple' : 'bg-red-500'} sm:hidden xl:block text-white p-2 rounded-full`}>
   <PiScreencast />
 </button>
 </div>
-
   </div>
+
 <ChatDrawer shownChat={showChat} closeChat={closeChat} />
  </main>
   )
