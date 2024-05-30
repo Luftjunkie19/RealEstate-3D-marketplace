@@ -41,7 +41,7 @@ useEffect(()=>{
 },[ webcamOn, webcamStream]);
 
 return (<>
-<div className="sm:max-w-28 sm:max-h-40 md:max-w-36 md:max-h-36 lg:max-w-60 lg:max-h-60 xl:max-w-xs xl:max-h-80 3xl:max-w-sm 3xl:max-h-96 h-fit w-fit overflow-hidden  relative top-0 left-0">
+<div className="h-fit w-full max-h-36 overflow-hidden  relative top-0 left-0">
   {webcamOn ? <video width={'100%'} height={'100%'} autoPlay playsInline muted ref={webcamRef} controls={false} className={`w-full h-full rounded-lg border ${isActiveSpeaker ? 'border-green-400' : 'border-purple' }`}/> : 
   <Image src={(participant.metaData as any).picture ?? DefaultImage} className="w-full h-48 object-cover rounded-lg" width={64} height={64} alt=""/>}
   {!micOn && <div className=" bg-bgColor/50 flex absolute top-0 left-0 w-full h-full justify-center items-center">
