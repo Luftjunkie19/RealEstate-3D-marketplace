@@ -135,11 +135,16 @@ const {join}=useMeeting();
             currentVideoTrack.stop();
           }
 
+          const cameraObjects= await getCameras();
+          const camera= cameraObjects.find((camera)=>camera.deviceId===deviceId);
+
           const stream= await getVideoTrack({webcamId:deviceId});
           setCustomVideoStream(stream as MediaStream);
           const videoTracks= stream?.getAudioTracks();
           const videoTrack= (videoTracks as MediaStreamTrack[])?.length > 0 ? (videoTracks as MediaStreamTrack[])[0] : null;
           setVideoTrack(videoTrack);
+          dispatch(conferenceActions.selectCamera({label:camera?.label, id:camera?.deviceId}));
+
 
         }
       }
@@ -150,12 +155,16 @@ const {join}=useMeeting();
           if(currentAudioTrack){
             currentAudioTrack.stop();
           }
+          const microphones= await getMicrophones();
+          const mic= microphones.find((mic)=>mic.deviceId===deviceId);
           const stream= await getAudioTrack({micId:deviceId});
           setCustomAudioStream(stream as MediaStream);
           const audioTracks= stream?.getAudioTracks();
           const audioTrack= (audioTracks as MediaStreamTrack[])?.length > 0 ? (audioTracks as MediaStreamTrack[])[0] : null;
           setVideoTrack(audioTrack);
 
+
+          dispatch(conferenceActions.selectCamera({label:mic?.label, id:mic?.deviceId}));
         }
       }
 
