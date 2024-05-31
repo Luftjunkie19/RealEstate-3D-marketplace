@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { supabase } from '@/utils/supabase/client';
 import Image from 'next/image';
 import { MdSell } from "react-icons/md";
-import React from 'react'
+import React, { useState } from 'react'
 import { FaBath, FaBed, FaCube, FaMessage } from 'react-icons/fa6';
 import { FaLocationDot } from "react-icons/fa6";
 type Props = {
@@ -27,6 +27,7 @@ async function DetailedPage({params}: Props) {
     const {id}=params;
     const {data}= await supabase.from('listings').select('*').eq('id', id).limit(1);
 
+    const {data:sellerData}= await supabase.from('users').select('*').eq('user_id', (data as any).listed_by).limit(1);
 
   return (
     <div className='min-h-screen w-screen'>
@@ -90,8 +91,9 @@ async function DetailedPage({params}: Props) {
           </div>
 
 <div className="flex gap-4 px-2 cursor-pointer items-center w-full">
-  {<Link href={`/profile/${data[0].listed_by}`}>
-<FaUserCircle className=' text-5xl text-white'/>
+  {sellerData && sellerData.length > 0 && <Link className='flex gap-2 items-center' href={`/profile/${data[0].listed_by}`}>
+<Image src={sellerData[0].profile_image} alt='' width={32} height={32} className='rounded-full w-8 h-8'/>
+<p className='text-white text-sm'>{sellerData[0].user_name}</p>
   </Link>}
          <ContactBtn data={data} id={id}/>
 </div>
