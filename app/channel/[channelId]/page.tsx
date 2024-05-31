@@ -35,7 +35,7 @@ export default function Page({ params }: { params: { channelId: string } }) {
   }
 
   const getUserObject=useCallback(async ()=>{
-    const {data}= await supabase.from('users').select('*').eq('user_id', user!.id).limit(1);
+    const {data}= await supabase.from('users').select('*').eq('user_id', user?.id).limit(1);
     if(data && data[0]){
       setUserObject(data[0]);
     }
@@ -75,7 +75,7 @@ export default function Page({ params }: { params: { channelId: string } }) {
        <MeetingProvider config={{
   meetingId,
   participantId: user?.id,
-  name: user?.user_metadata.user_name ?? userObject.user_name,
+  name: user?.user_metadata.user_name ? user?.user_metadata.user_name : userObject ? userObject.user_name: 'Anonymous User',
   micEnabled: micOn,
   webcamEnabled: camOn,
   customCameraVideoTrack: customVideoStream,
