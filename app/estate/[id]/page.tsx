@@ -27,7 +27,7 @@ async function DetailedPage({params}: Props) {
     const {id}=params;
     const {data}= await supabase.from('listings').select('*').eq('id', id).limit(1);
 
-    const {data:sellerData}= await supabase.from('users').select('*').eq('user_id', (data as any).listed_by).limit(1);
+    const {data:sellerData}= await supabase.from('users').select('*').eq('user_id', (data as any)[0].listed_by).limit(1);
 
   return (
     <div className='min-h-screen w-screen'>
