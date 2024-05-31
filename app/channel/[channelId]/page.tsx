@@ -35,8 +35,10 @@ export default function Page({ params }: { params: { channelId: string } }) {
   }
 
   const getUserObject=useCallback(async ()=>{
-    const object= await supabase.from('users').select('*').eq('user_id', user?.id).limit(1);
-    setUserObject(object);
+    const {data}= await supabase.from('users').select('*').eq('user_id', user!.id).limit(1);
+    if(data && data[0]){
+      setUserObject(data[0]);
+    }
   },[user]
   );
 
