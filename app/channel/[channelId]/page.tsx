@@ -29,20 +29,28 @@ export default function Page({ params }: { params: { channelId: string } }) {
   const router= useRouter();
   const [customAudioStream, setCustomAudioStream] = useState<MediaStream | undefined >(undefined);
   const [customVideoStream, setCustomVideoStream] = useState<MediaStream | undefined >(undefined);
+  const [userObject, setUserObject]=useState<any | null>(null);
   const joinMeeting=()=>{
     setJoinedMeeting(true);
   }
 
+  const getUserObject=useCallback(async ()=>{
+    const object= await supabase.from('users').select('*').eq('user_id', user?.id).limit(1);
+    setUserObject(object);
+  },[user]
+  );
+
+  useEffect(()=>{getUserObject()},[getUserObject])
 
   const redirectUnentitiledUser= useCallback(async ()=>{
     const {data}= await supabase.from('conferences').select('*').eq('room_id', meetingId).limit(1);
 
     if(data && data.length > 0){
-      if(!data[0].allowed_to_join.find((id:string)=>id === user?.id)){
+      if(!data[0].allowed_to_join.find((id:string)=>id === user!.id)){
         router.push('/');
     }
   }
-  }, [meetingId, router, user?.id]);
+  }, [meetingId, router, user]);
 
   useEffect(()=>{
     redirectUnentitiledUser();
@@ -65,7 +73,7 @@ export default function Page({ params }: { params: { channelId: string } }) {
        <MeetingProvider config={{
   meetingId,
   participantId: user?.id,
-  name: user?.user_metadata.user_name,
+  name: user?.user_metadata.user_name ?? userObject.user_name,
   micEnabled: micOn,
   webcamEnabled: camOn,
   customCameraVideoTrack: customVideoStream,
