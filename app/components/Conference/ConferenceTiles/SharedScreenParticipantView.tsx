@@ -2,6 +2,7 @@ import { useParticipant } from '@videosdk.live/react-sdk';
 import Image from 'next/image';
 import DefaultImage from '@/assets/defaultAvatar.jpg'
 import React, { useEffect, useRef } from 'react'
+import { FaMicrophoneSlash } from 'react-icons/fa6';
 
 type Props = {participantId:string}
 
@@ -43,6 +44,9 @@ function SharedScreenParticipantView({participantId}: Props) {
   return (
     <>
       <div className=" sm:max-w-40 3xl:max-w-60 w-full relative top-0 left-0 sm:max-h-32 h-fit">
+        {!micOn && <div className="absolute top-0 left-0 w-full h-full bg-darkGray/60 flex flex-col justify-center items-center">
+          <FaMicrophoneSlash className='text-xl text-red-500'/>
+          </div>}
       {webcamOn ? <video width={'100%'} height={'100%'} autoPlay playsInline muted ref={webcamRef} controls={false} className={`w-full h-full rounded-lg border ${isActiveSpeaker ? 'border-green-400' : 'border-purple' }`}/> : 
   <Image src={(participant.metaData as any).picture ?? DefaultImage} className="h-fit w-full object-cover rounded-lg" width={64} height={64} alt=""/>}
       <div className="absolute bottom-0 left-0 text-xs text-white font-semibold w-full h-6 rounded-b-lg bg-purple/40">
