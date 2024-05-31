@@ -30,7 +30,7 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
   }});
 
 
-  const [showChat, setShowChat]=useState(false);
+  const [showChat, setShowChat]=useState(true);
 
   const closeChat=()=>{
     setShowChat(false);
@@ -75,7 +75,7 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
   <div className={`sm:col-span-full relative top-0 left-0 h-full ${showChat && 'lg:col-span-8 xl:col-span-9 3xl:col-span-10'}`}>
   {presenterId ? <div className={`w-full p-4 flex gap-6 flex-col h-[80vh]`}>
     <PresentationView presenterId={presenterId}/>
-    <div className="flex max-w-5xl mx-auto m-0 w-full flex-wrap max-h-[28rem] h-full gap-2">
+    <div className="flex sm:max-w-5xl 3xl:max-w-7xl mx-auto m-0 w-full flex-wrap max-h-[28rem] h-full gap-2">
       {[...participants.keys()].map((participant)=>(<SharedScreenParticipantView participantId={participant} key={participant}/>))}
     </div>
     </div> : <div className="w-full p-4 flex flex-wrap gap-2 h-[80vh]">
@@ -83,7 +83,7 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
   </div>}
  
 
-<div className="bg-darkGray z-50 sticky bottom-0 left-1/2 -translate-x-1/2 mb-2 p-2 mx-auto m-0 rounded-full flex items-center gap-4 max-w-xs w-full justify-center">
+<div className="bg-darkGray lg:z-50 lg:sticky lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 mb-2 p-2 mx-auto m-0 rounded-full flex items-center gap-4 max-w-xs w-full justify-center">
   <button onClick={manageWebCam} className={`${!localWebcamOn ? 'bg-purple' : 'bg-red-500'} p-2 rounded-full`}>
    {!localWebcamOn ?  <HiMiniVideoCamera className='text-white text-lg'/> : <HiMiniVideoCameraSlash className='text-white text-lg'/>}
   </button>

@@ -2,6 +2,7 @@
 
 import { Client, Environment } from "square";
 import { randomUUID } from "crypto";
+import { supabase } from "../supabase/client";
 
 (BigInt.prototype as any).toJSON = function () {
   return this.toString();
@@ -93,4 +94,9 @@ export async function createSubscription(customerId:string, orderId:string, plan
 
   return response.result;
 
+}
+
+export async function cancelSubscription(subsriptionId:string, userId:string){
+await subscriptionsApi.cancelSubscription(subsriptionId);
+await supabase.from('users').update({is_subscribed:false, subscribtion_details:null}).eq('user_id', userId);
 }

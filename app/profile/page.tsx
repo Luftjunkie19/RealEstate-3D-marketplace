@@ -1,5 +1,5 @@
 'use client';
-
+import { MdCancel } from "react-icons/md";
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react'
@@ -13,6 +13,8 @@ import Offer from '../components/profile/items/Offer';
 import { useRouter } from 'next/navigation';
 import { IoIosNotifications } from 'react-icons/io';
 import Link from 'next/link';
+import { cancelSubscription } from '@/utils/square/server';
+import toast from "react-hot-toast";
 
 function CurrentUserPage({}: Props) {
   const [object, setObject]=useState<any[]>([]);
@@ -64,19 +66,31 @@ useEffect(()=>{
 
 }, []);
 
+const unsubscribe=async ()=>{
+  await cancelSubscription(userObject.subscribtion_details.id, userObject.user_id);
+toast.success(`Subscription's Cancellation successfully done !`, {
+  position:'bottom-right'
+})
+}
+
 
 
     return (
     <div className='w-screen min-h-screen'>
     {user && user.user_metadata && 
 <>
-    <div className='flex m-0 mx-auto justify-around flex-wrap max-w-6xl p-6 gap-6 items-center'>
+    <div className='flex m-0 mx-auto lg:justify-around lg:items-center flex-wrap max-w-6xl p-6 gap-6 '>
         <Image src={user.user_metadata.picture} width={256} height={256} alt='' className='w-64 h-64 object-cover rounded-full'/>
-    <div className="flex flex-col gap-4">       
+    <div className="flex flex-col gap-4 max-w-md w-full">       
     <p className='text-4xl font-bold text-white'>{user.user_metadata.full_name}</p>
     <p className='text-white text-sm'>{user.user_metadata.email}</p>
     <p className=' text-green-400 font-semibold'>Last time signed in: {formatDistanceToNow(user.last_sign_in_at as string)}</p>
-    <button onClick={()=>router.push('/update-profile')} className='bg-purple p-2 rounded-xl text-white flex gap-2 items-center justify-center max-w-52 w-full'>Edit profile <FaPencil/> </button>
+    <div className="flex gap-2 flex-wrap">
+    <button onClick={()=>router.push('/update-profile')} className='bg-purple p-2 rounded-xl text-white flex gap-2 items-center justify-center max-w-48 w-full'>Edit profile <FaPencil/> </button>
+    {userObject && userObject.is_subscribed && 
+    <button onClick={unsubscribe} className='bg-red-500 flex max-w-48 w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Cancel Subscription <MdCancel/> </button>
+    }
+    </div>
     </div>
     </div>
 
