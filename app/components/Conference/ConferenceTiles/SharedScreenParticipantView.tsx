@@ -44,7 +44,7 @@ function SharedScreenParticipantView({participantId}: Props) {
     <>
       <div className=" sm:max-w-40 3xl:max-w-60 w-full relative top-0 left-0 sm:max-h-32 h-fit">
       {webcamOn ? <video width={'100%'} height={'100%'} autoPlay playsInline muted ref={webcamRef} controls={false} className={`w-full h-full rounded-lg border ${isActiveSpeaker ? 'border-green-400' : 'border-purple' }`}/> : 
-  <Image src={(participant.metaData as any).picture ?? DefaultImage} className="h-full w-full object-cover rounded-lg" width={64} height={64} alt=""/>}
+  <Image src={(participant.metaData as any).picture ?? DefaultImage} className="h-fit w-full object-cover rounded-lg" width={64} height={64} alt=""/>}
       <div className="absolute bottom-0 left-0 text-xs text-white font-semibold w-full h-6 rounded-b-lg bg-purple/40">
   <p className="p-1">{displayName}</p>
   </div>
