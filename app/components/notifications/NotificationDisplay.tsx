@@ -28,7 +28,7 @@ useEffect(()=>{
 
   return (
     <div className={`${notificationsOwner.notifications.filter((item:any)=>!item.hasRead).length > 0 ? 'fixed bottom-0 left-0 overflow-y-auto max-h-80 flex flex-col gap-2 max-w-sm w-full p-2 z-[999999]' : 'hidden'}`}>
-        <NotificationsList userId={user?.id as string} setCurrentData={setNotificationsOwner} filter={`user_id=eq.${user?.id}`} currentData={notificationsOwner}/>
+{notificationsOwner && <NotificationsList userId={user?.id as string} setCurrentData={setNotificationsOwner} filter={`user_id=eq.${user?.id}`} currentData={notificationsOwner}/>}
     </div>
   )
 }
