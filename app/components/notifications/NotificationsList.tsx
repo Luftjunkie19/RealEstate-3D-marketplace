@@ -8,16 +8,17 @@ type Props = {currentData:any, filter?:string, setCurrentData:(data:any)=>void, 
 
 function NotificationsList({currentData, filter, setCurrentData, userId}: Props) {
 const router= useRouter();
+const [listerObj, setListerObj]=useState(currentData);
 const loadNotifications=useCallback(()=>{
-    getCurrentObject('notifications', filter as string, setCurrentData);
-}, [filter, setCurrentData]);
+    getCurrentObject('notifications', filter as string, setListerObj);
+}, [filter]);
 
 useEffect(()=>{
     loadNotifications();
 },[loadNotifications]);
 
 const readNotification=async (notification:any)=>{
-    await supabase.from('users').update({notifications: [...currentData.notifications.filter((item:any)=>item.roomId !== notification.roomId)]}).eq('user_id', userId);
+    await supabase.from('users').update({notifications: [...listerObj.notifications.filter((item:any)=>item.roomId !== notification.roomId)]}).eq('user_id', userId);
 }
 
 const goToChannel= async (notification:any)=>{
@@ -39,7 +40,7 @@ const goToChannel= async (notification:any)=>{
 
   return (
     <>
-        {currentData.notifications.map((notification,i)=>(<div className='bg-purple text-white p-2 rounded-xl flex gap-2 items-center' key={notification.roomId}>
+        {listerObj.notifications.map((notification,i)=>(<div className='bg-purple text-white p-2 rounded-xl flex gap-2 items-center' key={notification.roomId}>
             <p>{notification.message.length > 60 ? `${notification.message.slice(0, 40)}...` :  notification.message}</p>
 
             <div className="flex gap-2 items-center">
