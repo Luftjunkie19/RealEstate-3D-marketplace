@@ -5,7 +5,12 @@ import { cookies } from "next/headers";
 
 export async function POST (){
  
-    const result = await supabase.auth.signOut();
+    const result = await supabase.auth.signOut({
+        scope:'local'
+    });
+
+
+
 
     return Response.json(result);
 }

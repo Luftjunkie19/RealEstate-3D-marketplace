@@ -1,14 +1,14 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import React, { useState } from 'react'
 
-type Props = {buttonTitle:React.ReactNode,  dialogTitle:string, dialogDescription:string, dialogContent:React.ReactNode}
+type Props = {buttonTitle:React.ReactNode,  dialogTitle:string, dialogDescription:string, dialogContent:React.ReactNode, footerContent:React.ReactNode}
 
-function ModalDialog({buttonTitle, dialogTitle, dialogDescription, dialogContent}: Props) {
+function ModalDialog({buttonTitle, dialogTitle, dialogDescription, dialogContent, footerContent}: Props) {
 
   const [open, setOpen]=useState<boolean>(false);
 
   return (
-    <Dialog onOpenChange={()=>!open} open={open} defaultOpen={false}>
+    <Dialog open={open} defaultOpen={false}>
     <DialogTrigger onClick={()=>setOpen(true)}>{buttonTitle}</DialogTrigger>
     <DialogContent className='bg-darkGray z-[90]'>
       <DialogHeader>
@@ -18,6 +18,9 @@ function ModalDialog({buttonTitle, dialogTitle, dialogDescription, dialogContent
         </DialogDescription>
       </DialogHeader>
     {open && dialogContent}
+    <DialogFooter>
+{footerContent}
+    </DialogFooter>
     </DialogContent>
   </Dialog>
   )

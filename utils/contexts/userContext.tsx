@@ -8,10 +8,10 @@ type Props = {
     user: User | null,
     session: Session | null,
     isUserReady: boolean,
-    dispatch: React.Dispatch<{ type: any; payload: any; }> | null,
+    dispatch: React.Dispatch<{ type: any; payload?: any; }> | null,
 }
 
-export const authReducer=(state: any, action: { type: any; payload: any; })=>{
+export const authReducer=(state: any, action: { type: any; payload?: any; })=>{
 switch(action.type){
 
     case 'LOGIN':
@@ -22,7 +22,6 @@ switch(action.type){
         return {user:action.payload.user, session:action.payload.session, isUserReady:true}
 
     case 'LOGOUT':
-
         return {...state, user: null, session:null};
 
     default: return state;
@@ -37,27 +36,20 @@ export default function AuthProvider({children}:{children:React.ReactNode}) {
 
     useEffect(()=>{
 
-        supabase.auth.getUser().then((userData:UserResponse)=>{
-            if(userData.data.user){
-                dispatch({type:'LOGIN', payload:{user:userData.data.user, session:null}});
-                dispatch({type:'IS_USER_READY', payload:{user:userData.data.user, session:null}})
-            }
-    })
-
      const subscription = supabase.auth.onAuthStateChange(async (e, session)=>{
+
            if(e === 'SIGNED_IN'){
             dispatch({type:'LOGIN', payload:{session:session, user:session?.user }});
-           }
-           if(e === 'SIGNED_OUT'){
+        }
+        if(e === 'SIGNED_OUT'){
             dispatch({
                 type: 'LOGOUT',
-                payload: null
             });
            }
+        dispatch({type:'IS_USER_READY', payload:{session:session, user:session?.user }});
 
-           dispatch({type:'IS_USER_READY', payload:{session:session, user:session?.user }});
         });
-        subscription.data.subscription.unsubscribe();
+       ()=>  subscription.data.subscription.unsubscribe();
     }, []);
 
     return (<UserContext.Provider value={{ ...state, dispatch }}>

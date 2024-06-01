@@ -2,7 +2,8 @@
 
 import { supabase } from '@/utils/supabase/client';
 import React, { useCallback, useEffect, useState } from 'react'
-import Offer from '../profile/items/Offer';
+import Offer from '../profile/Offer';
+import { getCurrentData } from '@/utils/supabase/getCurrentObjects';
 
 type Props={
   filters?:any[]
@@ -13,7 +14,10 @@ function MainContent({filters}:Props) {
     const [listings, setListings]=useState<any>([]);
     const getData = useCallback(async ()=>{
      const {data}= await supabase.from('listings').select('*');
-     setListings(data);
+    setListings(data);
+  
+    getCurrentData('listings', setListings, data as any[]);
+
       }, []);
 
     

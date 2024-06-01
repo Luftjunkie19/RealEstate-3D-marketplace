@@ -56,8 +56,14 @@ function OfferPlans({}: Props) {
 
         }
     }} locationId={process.env.NEXT_PUBLIC_SQUARE_APP_SEC} applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}>
-    {planOffer ? <Checkout selectedPlanId={planOffer}/> : <div className='max-w-7xl mx-auto m-0 flex gap-4 items-center justify-around p-4'>
-        <div className="p-4 flex flex-col w-full gap-4 bg-darkGray max-w-xs border border-purple rounded-lg">
+    {planOffer ? <Checkout selectedPlanId={planOffer}/> : 
+    <div className="flex flex-col gap-4">
+<div className="text-white max-w-4xl w-full flex flex-col gap-2 px-2 py-4">
+    <p className='text-4xl font-bold'>Subscription Plans</p>
+    <p className="text-lg">If you are not satisfied with our free offer, perhaps you should try out one of our subscription plans ? Join us now and enjoy the premium features and utilize the power of AI.</p>
+</div>
+<div className='max-w-7xl mx-auto m-0 flex sm:flex-col lg:flex-row gap-4 items-center justify-around p-4'>
+        <div className="p-4 flex flex-col w-full gap-4 bg-darkGray max-w-sm border border-purple rounded-lg">
             <p className='text-2xl text-white font-semibold'>VirtuEstate Weekly Plan</p>
             <ul className="flex flex-col gap-3 ">
                 <li className='text-white font-bold'>* Access to our AI Chat</li>
@@ -73,7 +79,7 @@ function OfferPlans({}: Props) {
 </div>
         </div>
 
-        <div className="p-4 flex flex-col gap-4 w-full bg-darkGray max-w-xs border border-purple rounded-lg">
+        <div className="p-4 flex flex-col gap-4 w-full bg-darkGray max-w-sm border border-purple rounded-lg">
             <p className='text-2xl text-white font-semibold'>VirtuEstate Monthly Plan</p>
             <ul className="flex flex-col gap-3 ">
                 <li className='text-white font-bold'>* Access to our AI Chat</li>
@@ -89,7 +95,7 @@ function OfferPlans({}: Props) {
 </div>
         </div>
         
-        <div className="p-4 bg-darkGray w-full flex flex-col gap-4 max-w-xs border border-purple rounded-lg">
+        <div className="p-4 bg-darkGray w-full flex flex-col gap-4 max-w-sm border border-purple rounded-lg">
             <p className='text-2xl text-white font-semibold'>VirtuEstate Yearly Plan</p>
             <ul className="flex flex-col gap-3 ">
                 <li className='text-white font-bold'>* Access to our AI Chat</li>
@@ -105,7 +111,9 @@ function OfferPlans({}: Props) {
 </div>
         </div>
 
-    </div>}
+    </div>
+    </div>
+  }
   
     </PaymentForm>
   )

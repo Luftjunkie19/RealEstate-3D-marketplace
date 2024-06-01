@@ -74,7 +74,10 @@ function Navbar({}: Props) {
   const handleSignOut= async()=>{
     await fetch('/api/signOut');
 
-    dispatch!({type:'LOGOUT', payload:null});
+    if(dispatch){
+      dispatch({type:'LOGOUT', payload:null});
+    }
+
 
   }
 
