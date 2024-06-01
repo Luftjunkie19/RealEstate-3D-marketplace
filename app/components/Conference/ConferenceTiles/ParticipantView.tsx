@@ -41,7 +41,7 @@ useEffect(()=>{
 },[ webcamOn, webcamStream]);
 
 return (<>
-<div className={`h-fit w-full ${openedChat ? 'lg:max-w-44 xl:max-w-52 3xl:max-w-60 3xl:max-h-40 max-h-32' : 'lg:max-w-52 lg:max-h-64 xl:max-w-xs '} sm:max-w-36 sm:max-h-36 overflow-hidden relative top-0 left-0`}>
+<div className={`h-fit w-full ${openedChat ? 'lg:max-w-44 xl:max-w-52 3xl:max-w-60 3xl:max-h-40 max-h-32' : 'lg:max-w-52 lg:max-h-64 xl:max-w-xs '} sm:max-w-36 sm:max-h-24 overflow-hidden relative top-0 left-0`}>
   {webcamOn ? <video autoPlay playsInline muted ref={webcamRef} controls={false} className={`w-full h-full rounded-lg ${isActiveSpeaker ? 'border-green-400 border-2' : 'border-purple border-2' }`}/> : 
   <Image src={(participant.metaData as any).picture ? (participant.metaData as any).picture : DefaultImage} className="w-full h-48 object-cover rounded-lg" width={64} height={64} alt=""/>}
   {!micOn && <div className=" bg-bgColor/50 flex absolute top-0 left-0 w-full h-full justify-center items-center">

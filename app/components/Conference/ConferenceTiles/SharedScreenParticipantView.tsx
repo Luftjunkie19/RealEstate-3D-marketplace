@@ -43,7 +43,7 @@ function SharedScreenParticipantView({participantId}: Props) {
 
   return (
     <>
-      <div className=" sm:max-w-40 3xl:max-w-60 w-full relative top-0 left-0 sm:max-h-32 ">
+      <div className=" sm:max-w-40 3xl:max-w-60 w-full relative top-0 left-0 sm:max-h-28 ">
         {!micOn && <div className="absolute top-0 left-0 w-full h-full bg-darkGray/60 flex flex-col justify-center items-center">
           <FaMicrophoneSlash className='text-xl text-red-500'/>
           </div>}
