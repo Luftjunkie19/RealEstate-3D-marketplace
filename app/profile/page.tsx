@@ -9,12 +9,14 @@ type Props = {}
 import { BsFillHousesFill } from "react-icons/bs";
 import { FaMessage, FaPencil, FaStar } from 'react-icons/fa6';
 import { supabase } from '@/utils/supabase/client';
-import Offer from '../components/profile/items/Offer';
+import Offer from "../components/profile/Offer";
 import { useRouter } from 'next/navigation';
 import { IoIosNotifications } from 'react-icons/io';
 import Link from 'next/link';
 import { cancelSubscription } from '@/utils/square/server';
 import toast from "react-hot-toast";
+import { getCurrentData } from "@/utils/supabase/getCurrentObjects";
+import UsersListings from "../components/profile/UsersListings";
 
 function CurrentUserPage({}: Props) {
   const [object, setObject]=useState<any[]>([]);
@@ -34,12 +36,7 @@ const tabs:tabObject[]=[{id:1, content:'Properties', tabIcon:BsFillHousesFill}, 
 
 const getDataNeeded= useCallback(async ()=>{
   if(user){
-    const {data:yourListings, error:yourListingsError} = await supabase.from('listings').select('*').eq('listed_by', user.id);
-
-    if(!yourListingsError){
-      setObject(yourListings);
-    }
-  
+ 
     const {data:userDatas}= await supabase.from('users').select('*').eq('user_id', user.id).limit(1);
    
     if(userDatas && userDatas.length > 0){
@@ -60,6 +57,21 @@ if(data && data.length > 0){
 
   }
 }, [favourites, user]);
+
+const loadUsersProperties=useCallback(async ()=>{
+  const {data:yourListings, error:yourListingsError} = await supabase.from('listings').select('*').eq('listed_by', user?.id);
+
+  if(!yourListingsError){
+    setObject(yourListings);
+  }
+
+
+},[user?.id]);
+
+useEffect(()=>{
+  loadUsersProperties();
+},[loadUsersProperties])
+
 
 useEffect(()=>{
   getDataNeeded();
@@ -101,9 +113,7 @@ toast.success(`Subscription's Cancellation successfully done !`, {
             </a>))}
 </div>
 
-{activeTab === 1 && object.length > 0 && <div className='flex flex-col mx-auto m-0 items-center my-2 gap-2 max-h-96 overflow-y-scroll'>
-  {object.map((item:any)=>(<Offer listedBy={item.listed_by} key={item.id} photoURL={item.images[0]} offerTitle={item.property_name} bathRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} squareMetrage={item.square_footage} id={item.id}/>))}
-  </div>}
+{activeTab === 1 && object.length > 0 && <UsersListings usersListings={object} listerId={user?.id}/>}
   {activeTab === 2 && userObject && userObject.notifications.length > 0 && <div>
     {userObject.notifications.map((item)=>(<Link className='bg-purple max-w-lg flex gap-2 self-center my-2 items-center w-full rounded-xl p-2 text-white' href={`/channel/${item.roomId}`} key={item.roomId}>
       <IoIosNotifications className='text-yellow-400 text-3xl'/>

@@ -1,4 +1,4 @@
-import Offer from '@/app/components/main-page/items/Offer';
+import UsersListings from '@/app/components/profile/UsersListings';
 import { supabase } from '@/utils/supabase/client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
@@ -20,7 +20,7 @@ async function ProfilePage({params}: Props) {
   }
   const {data:user}= await supabase.from('users').select('*').eq('user_id', id).limit(1); 
 const tabs:tabObject[]=[{id:1, content:'Properties', tabIcon:BsFillHousesFill}]
-const {data}=await supabase.from('listings').select('*');
+const {data}=await supabase.from('listings').select('*').filter('listed_by', 'eq', id);
 
   return (
     <div className='w-screen min-h-screen'>
@@ -39,12 +39,11 @@ const {data}=await supabase.from('listings').select('*');
             {tabItem.content}
             <tabItem.tabIcon className={`text-purple`}/>
             </a>))}
+<UsersListings usersListings={data} listerId={id}/>
 </div>
 
-<div className={`flex flex-wrap ${data && data.filter((item)=>item.listed_by===id).length === 0 && 'justify-center items-center'} gap-4 mx-auto m-0 p-4 max-w-screen-2xl`}>
-  {data && data.filter((item)=>item.listed_by===id).length === 0 && <p className='text-white text-xl font-bold'>No Properties Added Yet.</p>}
-{ data && data.filter((item)=>item.listed_by===id).length > 0 && data.filter((item)=>item.listed_by===id).map((item:any)=><><Offer imageUrl={item.images[0]} name={item.property_name} description={item.description} barthRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} squareMetrage={item.square_footage} id={item.id}/></>)}
-</div>
+
+
 </>
     
     }
