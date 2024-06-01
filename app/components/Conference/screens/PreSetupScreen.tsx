@@ -268,7 +268,7 @@ useEffect(()=>{
 
     return (
     <div className='w-full h-screen overflow-hidden'>
-      <div className="flex items-center justify-around max-w-screen-3xl mx-auto m-0 gap-4 p-4">
+      <div className="flex sm:flex-col lg:flex-row items-center justify-around max-w-screen-3xl mx-auto m-0 gap-4 p-4">
         <div className="flex flex-col gap-4">
       <div className="sm:max-w-sm self-center overflow-hidden relative top-0 left-0 2xl:max-w-md w-full sm:max-h-[25rem] 2xl:max-h-[32rem]">
        {camOn ? <video autoPlay playsInline muted ref={videoPlayerRef} controls={false} className='w-full h-full rounded-lg border-2 border-purple'/> : <div className='w-full h-full rounded-lg flex items-center justify-center border-4 border-purple'>
