@@ -40,9 +40,9 @@ useEffect(()=>{
   }
 },[ webcamOn, webcamStream]);
 
-return (<>
-<div className={`h-fit w-full ${openedChat ? 'lg:max-w-44 xl:max-w-52 3xl:max-w-60 3xl:max-h-40 sm:max-w-32 sm:max-h-24 lg:max-h-40 ' : 'sm:max-w-32 lg:max-w-52 lg:max-h-64 xl:max-w-xs sm:max-h-32'} overflow-hidden relative top-0 left-0`}>
-  {webcamOn ? <video autoPlay playsInline muted ref={webcamRef} controls={false} className={` w-full h-full rounded-lg ${isActiveSpeaker ? 'border-green-400 border-2' : 'border-purple border-2' }`}/> : 
+return (<>sm:max-w-32
+<div className={`h-fit w-full ${openedChat ? 'lg:max-w-44 xl:max-w-52 3xl:max-w-60 3xl:max-h-40 sm:max-w-32 sm:max-h-24 lg:max-h-40 ' : ' lg:max-w-52 lg:max-h-64 xl:max-w-xs sm:max-h-32'} overflow-hidden relative top-0 left-0`}>
+  {webcamOn ? <video autoPlay playsInline muted ref={webcamRef} controls={false} className={`${openedChat ? 'lg:max-w-44 xl:max-w-52 3xl:max-w-60 3xl:max-h-40 sm:max-w-32 sm:max-h-24 lg:max-h-40 ' : ' lg:max-w-52 lg:max-h-64 xl:max-w-xs sm:max-h-32'} w-full h-full rounded-lg ${isActiveSpeaker ? 'border-green-400 border-2' : 'border-purple border-2' }`}/> : 
   <Image src={(participant.metaData as any).picture ? (participant.metaData as any).picture : DefaultImage} className={`w-full ${openedChat ? 'sm:max-h-24 lg:max-h-40' : 'sm:max-h-32 lg:max-h-52'} h-full object-cover rounded-lg`} width={64} height={64} alt=""/>}
   {!micOn && <div className=" bg-bgColor/50 flex absolute top-0 left-0 w-full h-full justify-center items-center">
     <FaMicrophoneSlash className="text-red-500 text-3xl"/>
