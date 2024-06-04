@@ -46,10 +46,6 @@ console.log(error);
   router.push('/');
 
 }
-
-
-
-
   return (
     <div className='min-h-screen w-screen'>
    <form action={formSubmission} className="mx-auto p-6 my-8 max-w-6xl bg-darkGray rounded-lg flex flex-col gap-3">
@@ -94,11 +90,7 @@ console.log(error);
               <textarea onChange={(e) => setProperty({ ...property as any, description: e.target.value })} value={(property as any).description} className="border-2 outline-none text-white h-36 border-purple p-1 rounded-lg resize-none" name="description"></textarea>
             </div></>
 }
-         
-
-
-              
-
+  
 <button type="submit" className='self-end max-w-60 w-full text-white text-lg font-semibold bg-purple p-2 rounded-xl'>Update property</button>
           </form>
 
