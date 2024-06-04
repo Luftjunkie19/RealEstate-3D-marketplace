@@ -1,3 +1,4 @@
+import RequestBtn from '@/app/components/profile/RequestBtn';
 import UsersListings from '@/app/components/profile/UsersListings';
 import { supabase } from '@/utils/supabase/client';
 import Image from 'next/image';
@@ -10,7 +11,6 @@ type Props = {
 }
 
 async function ProfilePage({params}: Props) {
-
     const {id}=params;
 
   interface tabObject{
@@ -26,11 +26,14 @@ const {data}=await supabase.from('listings').select('*').filter('listed_by', 'eq
     <div className='w-screen min-h-screen'>
     {user && user[0] && 
 <>
-    <div className='flex m-0 mx-auto justify-around flex-wrap max-w-6xl p-6 gap-6 items-center'>
+    <div className='flex m-0 w-full mx-auto justify-around flex-wrap max-w-6xl p-6 gap-6 items-center'>
         <Image src={user[0].profile_image} width={256} height={256} alt='' className='w-64 h-64 object-cover rounded-full'/>
     <div className="flex flex-col gap-4">       
     <p className='text-4xl font-bold text-white'>{user[0].user_name}</p>
     <p className='text-white text-sm'>{user[0].email}</p>
+    <div className="flex items-center gap-2">
+      <RequestBtn invitedId={user[0].user_id}/>
+    </div>
     </div>
     </div>
 

@@ -22,6 +22,7 @@ import LoveBtn from '@/app/components/estate-components/LoveBtn';
 import EstateCanvas from '@/app/components/estate/EstateCanvas';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ConditionalView from '@/app/components/estate-components/ConditionalView';
+import OwnerLink from '@/app/components/estate-components/OwnerLink';
 
 async function DetailedPage({params}: Props) {
     const {id}=params;
@@ -57,9 +58,9 @@ async function DetailedPage({params}: Props) {
   <span>{data[0].bedrooms}</span>
 </p>
 
-{data[0].renf_offer ? <p className="py-2 bg-darkGray px-4 rounded-xl items-center flex gap-6 border border-darkGray text-white">
+{data[0].rent_offer ? <p className="py-2 bg-darkGray px-4 rounded-xl items-center flex gap-6 border border-darkGray text-white">
   <GiHouseKeys/>
-  <span>{data[0].bathrooms}</span>
+  <span>Rent</span>
 </p> : <p className="py-2 bg-darkGray px-4 rounded-xl items-center flex gap-6 border border-darkGray text-white">
   <MdSell />
   <span>Sale</span>
@@ -91,10 +92,7 @@ async function DetailedPage({params}: Props) {
           </div>
 
 <div className="flex gap-4 px-2 cursor-pointer items-center w-full">
-  {sellerData && sellerData.length > 0 && <Link className='flex gap-2 items-center' href={`/profile/${data[0].listed_by}`}>
-<Image src={sellerData[0].profile_image} alt='' width={32} height={32} className='rounded-full w-8 h-8'/>
-<p className='text-white text-sm'>{sellerData[0].user_name}</p>
-  </Link>}
+  {sellerData && sellerData.length > 0 && <OwnerLink data={data} sellerData={sellerData}/>}
          <ContactBtn data={data} id={id}/>
 </div>
         </div>
