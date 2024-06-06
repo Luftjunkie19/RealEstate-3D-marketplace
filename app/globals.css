@@ -9,6 +9,10 @@
     font-family: 'Urbanist', sans-serif;
     overflow-x: hidden;
   }
+
+  div::-webkit-scrollbar{
+    display:none;
+  }
   
   
   @font-face {
