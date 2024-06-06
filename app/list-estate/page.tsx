@@ -18,6 +18,7 @@ import DimensionalPlanner
   from '../components/list-estate/3D-presentation/DimensionalPlanner';
 import PayableOffers from '../components/list-estate/PayableOffers';
 import PayForm from '../components/list-estate/PayForm';
+import { DataTexture } from 'three';
 
 type Props = {}
 
@@ -74,19 +75,8 @@ function Page({}: Props) {
         return toast.error('Only 6 images are possible to add.');
        }
 
+       console.log(images);
 
-      // Upload images
-      const uploadedImageUrls: string[] = [];
-      for (const image of images) {
-        const { data:propertyImage, error } = await supabase.storage.from('property_images').upload(`${user?.id}/${propertyName}/${image.name}`, image);
-      
-        if (error) {
-          console.error('Error uploading image:', error);
-        } else {
-          const {data}= supabase.storage.from('property_images').getPublicUrl(`${user?.id}/${propertyName}/${image.name}`);
-          uploadedImageUrls.push(data.publicUrl || ''); // Assuming Key contains the URL or identifier of the uploaded image
-        }
-      }
   
       setObjectToInsert({
         object: {
@@ -100,7 +90,7 @@ function Page({}: Props) {
           description: propertyDescription,
           price: Number(propertyPrice),
           property_name: propertyName,
-          images: uploadedImageUrls,
+          images,
           
         },
         collection: 'listings'
@@ -156,11 +146,28 @@ function Page({}: Props) {
   if(token.token){
    const submitedPayment= await submitPayment(token.token, selectedOfferOption);
    if(!submitedPayment!.errors && submitedPayment!.payment!.status === "COMPLETED"){
+
+    // Upload images
+      const uploadedImageUrls: string[] = [];
+      console.log(objectToInsert);
+      for (const image of (objectToInsert as any).object.images) {
+        const { data:propertyImage, error } = await supabase.storage.from('property_images').upload(`${user?.id}/${(objectToInsert as any).property_name}/${image.name}`, image);
+      
+        if (error) {
+          console.error('Error uploading image:', error);
+        } else {
+          const {data}= supabase.storage.from('property_images').getPublicUrl(`${user?.id}/${(objectToInsert as any).property_name}/${image.name}`);
+          uploadedImageUrls.push(data.publicUrl || ''); // Assuming Key contains the URL or identifier of the uploaded image
+        }
+      }
+
+
   await fetch('/api/insert', {method:'POST', 
      body:JSON.stringify({
        object: {
-         ...(objectToInsert as any)!.object, presentation_object: object3D, is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
+         ...(objectToInsert as any)!.object, images: uploadedImageUrls, presentation_object: object3D, is_promoted: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? true : false, promotion_details: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000 > 0 ? {
            paidAmount: Number(submitedPayment?.payment?.amountMoney?.amount) - 2000,
+           promotionEnd: selectedOfferOption === 2.99 ? new Date(new Date().setDate(new Date().getDate() + 1)) : selectedOfferOption === 4.99 ? new Date(new Date().setDate(new Date().getDate() + 7)) : new Date(new Date().setDate(new Date().getDate() + 30)),
            currency: submitedPayment?.payment?.amountMoney?.currency,
            receiptUrl: submitedPayment?.payment?.receiptUrl,
            orderId: submitedPayment?.payment?.orderId,

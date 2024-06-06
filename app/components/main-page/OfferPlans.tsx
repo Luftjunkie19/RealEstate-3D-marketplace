@@ -63,7 +63,7 @@ function OfferPlans({}: Props) {
     <p className="text-lg">If you are not satisfied with our free offer, perhaps you should try out one of our subscription plans ? Join us now and enjoy the premium features and utilize the power of AI.</p>
 </div>
 <div className='max-w-7xl mx-auto m-0 flex sm:flex-col lg:flex-row gap-4 items-center justify-around p-4'>
-        <div className="p-4 flex flex-col w-full gap-4 bg-darkGray max-w-sm border border-purple rounded-lg">
+        <div className="p-4 flex flex-col w-full gap-4 bg-darkGray max-w-xs border border-purple rounded-lg">
             <p className='text-2xl text-white font-semibold'>VirtuEstate Weekly Plan</p>
             <ul className="flex flex-col gap-3 ">
                 <li className='text-white font-bold'>* Access to our AI Chat</li>
@@ -72,14 +72,18 @@ function OfferPlans({}: Props) {
             <div className="flex gap-4 items-center justify-around">
     <p className='text-white font-bold'>9.99$ / week</p>
     <button onClick={()=>{
-        console.log(process.env.NEXT_PUBLIC_WEEKLY_PRICE, process.env.NEXT_PUBLIC_VARIATION_WEEK_ITEM);
-        setPlanOffer(process.env.NEXT_PUBLIC_WEEKLY_PRICE as string);
-        setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_WEEK_ITEM as string);
+        if(userData){
+            console.log(process.env.NEXT_PUBLIC_WEEKLY_PRICE, process.env.NEXT_PUBLIC_VARIATION_WEEK_ITEM);
+            setPlanOffer(process.env.NEXT_PUBLIC_WEEKLY_PRICE as string);
+            setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_WEEK_ITEM as string);
+        }else{
+            toast.error('You are not logged in, you cannot purchase a subscription.')
+        }
         }} className='bg-purple p-[0.375rem] rounded-lg text-white'>Purchase</button>
 </div>
         </div>
 
-        <div className="p-4 flex flex-col gap-4 w-full bg-darkGray max-w-sm border border-purple rounded-lg">
+        <div className="p-4 flex flex-col gap-4 w-full bg-darkGray max-w-xs border border-purple rounded-lg">
             <p className='text-2xl text-white font-semibold'>VirtuEstate Monthly Plan</p>
             <ul className="flex flex-col gap-3 ">
                 <li className='text-white font-bold'>* Access to our AI Chat</li>
@@ -88,14 +92,18 @@ function OfferPlans({}: Props) {
             <div className="flex gap-4 items-center justify-around">
     <p className='text-white font-bold'>20.99$ / month</p>
     <button onClick={()=>{
-        console.log(process.env.NEXT_PUBLIC_MONTHLY_PRICE, process.env.NEXT_PUBLIC_VARIATION_MONTH_ITEM);
-        setPlanOffer(process.env.NEXT_PUBLIC_MONTHLY_PRICE as string);
-        setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_MONTH_ITEM as string);
+        if(userData){
+            console.log(process.env.NEXT_PUBLIC_MONTHLY_PRICE, process.env.NEXT_PUBLIC_VARIATION_MONTH_ITEM);
+            setPlanOffer(process.env.NEXT_PUBLIC_MONTHLY_PRICE as string);
+            setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_MONTH_ITEM as string);
+        }else{
+            toast.error('You are not logged in, you cannot purchase a subscription.')
+        }
     }} className='bg-purple p-[0.375rem] rounded-lg text-white'>Purchase</button>
 </div>
         </div>
         
-        <div className="p-4 bg-darkGray w-full flex flex-col gap-4 max-w-sm border border-purple rounded-lg">
+        <div className="p-4 bg-darkGray w-full flex flex-col gap-4 max-w-xs border border-purple rounded-lg">
             <p className='text-2xl text-white font-semibold'>VirtuEstate Yearly Plan</p>
             <ul className="flex flex-col gap-3 ">
                 <li className='text-white font-bold'>* Access to our AI Chat</li>
@@ -104,9 +112,13 @@ function OfferPlans({}: Props) {
 <div className="flex gap-4 items-center justify-around">
     <p className='text-white font-bold'>249.99$ / year</p>
     <button onClick={()=>{
-        console.log(process.env.NEXT_PUBLIC_ANNUAL_PRICE, process.env.NEXT_PUBLIC_VARIATION_ANNUAL_ITEM);
-        setPlanOffer(process.env.NEXT_PUBLIC_ANNUAL_PRICE as string);
-        setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_ANNUAL_ITEM as string);
+        if(userData){
+            console.log(process.env.NEXT_PUBLIC_ANNUAL_PRICE, process.env.NEXT_PUBLIC_VARIATION_ANNUAL_ITEM);
+            setPlanOffer(process.env.NEXT_PUBLIC_ANNUAL_PRICE as string);
+            setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_ANNUAL_ITEM as string);
+        }else{
+            toast.error('You are not logged in, you cannot purchase a subscription.')
+        }
     }} className='bg-purple p-[0.375rem] rounded-lg text-white'>Purchase</button>
 </div>
         </div>

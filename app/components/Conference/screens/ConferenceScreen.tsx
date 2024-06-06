@@ -1,6 +1,7 @@
 
 'use client';
 import { useMeeting, useParticipant, usePubSub } from '@videosdk.live/react-sdk';
+import {FcInvite} from 'react-icons/fc';
 import React, { useState } from 'react';
 import ParticipantView from '../ConferenceTiles/ParticipantView';
 import { FaCamera, FaMicrophoneAltSlash } from 'react-icons/fa';
@@ -13,6 +14,9 @@ import toast from 'react-hot-toast';
 import PresentationView from '../ConferenceTiles/PresentationView';
 import SharedScreenParticipantView from '../ConferenceTiles/SharedScreenParticipantView';
 import { supabase } from '@/utils/supabase/client';
+import ModalDialog from '../../profile/ModalDialog';
+import { DialogClose } from '@/components/ui/dialog';
+import ContactsList from '../contacts/ContactsList';
 
 type Props = {
   meetingID: string,
@@ -40,7 +44,7 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
     setShowChat(!showChat);
   }
 
-  const router = useRouter();
+  
 
   const manageMic=()=>{
    toggleMic();
@@ -99,6 +103,11 @@ export function ConferenceScreen({meetingID, setEnabledCamera, setEnabledMic, en
 <button onClick={manageScreenSharing} className={`${!localScreenShareOn ? 'bg-purple' : 'bg-red-500'} sm:hidden xl:block text-white p-2 rounded-full`}>
   <PiScreencast />
 </button>
+<ModalDialog buttonTitle={<div className="bg-purple p-2 rounded-full">
+<FcInvite />
+</div>} dialogTitle={'Invite your friend to join the conference !'} dialogDescription={''} dialogContent={<ContactsList roomId={meetingID}/>} footerContent={<>
+<DialogClose className='text-white bg-red-500 p-2 rounded-lg'>Close </DialogClose>
+</>} />
 </div>
   </div>
 

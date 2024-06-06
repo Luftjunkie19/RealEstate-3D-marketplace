@@ -1,5 +1,5 @@
 'use client';
-import { MdCancel } from "react-icons/md";
+import { MdCancel, MdDashboard } from "react-icons/md";
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react'
@@ -17,6 +17,7 @@ import { cancelSubscription } from '@/utils/square/server';
 import toast from "react-hot-toast";
 import { getCurrentData } from "@/utils/supabase/getCurrentObjects";
 import UsersListings from "../components/profile/UsersListings";
+import { TbDashboard } from "react-icons/tb";
 
 function CurrentUserPage({}: Props) {
   const [object, setObject]=useState<any[]>([]);
@@ -78,12 +79,7 @@ useEffect(()=>{
 
 }, []);
 
-const unsubscribe=async ()=>{
-  await cancelSubscription(userObject.subscribtion_details.id, userObject.user_id);
-toast.success(`Subscription's Cancellation successfully done !`, {
-  position:'bottom-right'
-})
-}
+
 
 
 
@@ -97,11 +93,9 @@ toast.success(`Subscription's Cancellation successfully done !`, {
     <p className='text-4xl font-bold text-white'>{user.user_metadata.full_name}</p>
     <p className='text-white text-sm'>{user.user_metadata.email}</p>
     <p className=' text-green-400 font-semibold'>Last time signed in: {formatDistanceToNow(user.last_sign_in_at as string)}</p>
-    <div className="flex gap-2 flex-wrap">
-    <button onClick={()=>router.push('/update-profile')} className='bg-purple p-2 rounded-xl text-white flex gap-2 items-center justify-center max-w-48 w-full'>Edit profile <FaPencil/> </button>
-    {userObject && userObject.is_subscribed && 
-    <button onClick={unsubscribe} className='bg-red-500 flex max-w-48 w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Cancel Subscription <MdCancel/> </button>
-    }
+    <div className="flex gap-2 flex-wrap items-center">
+    <Link href={'/profile/dashboard'} className="text-white flex items-center gap-2">Dashboard <MdDashboard/></Link>
+    <button onClick={()=>router.push('/update-profile')} className='bg-purple p-1 rounded-xl text-white flex gap-1 items-center justify-center max-w-28 w-full'>Edit profile <FaPencil/> </button>
     </div>
     </div>
     </div>

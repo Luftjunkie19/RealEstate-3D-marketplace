@@ -15,7 +15,7 @@ type Props = {data:any[], numberOfSlides:number, setCurrentListings:(data:any)=>
 
 function SwiperComponent({numberOfSlides, data, setCurrentListings}: Props) {
 const getData=useCallback(()=>{
-    getCurrentData('listings',setCurrentListings, data);
+    getCurrentData('listings',setCurrentListings, data.filter((property)=>property.promotion_details && property.is_promoted));
 },[data, setCurrentListings]);
 
 useEffect(()=>{
@@ -28,7 +28,7 @@ useEffect(()=>{
     <Swiper className="mySwiper w-screen" spaceBetween={24}  slidesPerView={numberOfSlides} modules={[Navigation, Pagination]}>
     {data.map((item:any)=>(
         <SwiperSlide key={item.id}>
-        <Offer id={item.id} squareMetrage={item.square_footage} imageUrl={item.images[0] ? item.images[0] : propertyImage} name={item.property_name} description={item.description} barthRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} />
+        <Offer isPromotionActive={item.promotion_details && item.promotion_details.promotionEnd && new Date(item.promotion_details.promotionEnd).getTime() >= new Date().getTime()} id={item.id} squareMetrage={item.square_footage} imageUrl={item.images[0] ? item.images[0] : propertyImage} name={item.property_name} description={item.description} barthRooms={item.bathrooms} bedRooms={item.bedrooms} isForRent={item.rent_offer} price={item.price} />
       </SwiperSlide>
     ))}
     

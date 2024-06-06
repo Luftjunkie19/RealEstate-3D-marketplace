@@ -61,7 +61,7 @@ function Navbar({}: Props) {
    const {data}= await supabase.from('users').select('*').eq('user_id', user?.id).limit(1);
 
    if(data && data.length > 0){
-    setNotifications(data[0].notifications);
+    setNotifications(data[0].notifications.filter((notification)=>!notification.hasRead));
    }
   }
   }, [user]);
@@ -90,7 +90,7 @@ function Navbar({}: Props) {
 <button onClick={openDrawer} className="sm:block lg:hidden mr-4">
   <IoMenu size={24} className='text-white'/>
 </button>
-          <div className="gap-6 mr-8 items-center sm:hidden lg:flex">
+          <div className="gap-6 mr-8 items-center sm:hidden lg:flex text-white">
               <Link href={'/browse'}>
                   Browse
               </Link>

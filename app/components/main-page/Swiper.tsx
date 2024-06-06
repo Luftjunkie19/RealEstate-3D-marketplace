@@ -55,14 +55,12 @@ useEffect(()=>{
 
   
   return (
-    <div className="flex flex-col gap-4 py-4">
+    <div className={`flex-col gap-4 py-4 ${listings.filter((item)=>item.promotion_details && item.promotion_details.promotionEnd && new Date(item.promotion_details.promotionEnd).getTime() >= new Date().getTime()).length > 0 ? 'flex' : 'hidden'}`}>
 
-   <p className="text-4xl pl-6 font-bold text-white">Featured Properties</p>
-   <p className="text-lg pl-6 font-medium text-white">Explore our handpicked selection of featured properties. Each listing offers a glimpse into exceptional homes and investments available through VirtuEstate. Click View Details for more information.</p> 
-    <div  className="w-screen mx-auto m-0">
-       <SwiperComponent numberOfSlides={numberOfSlides} data={listings} setCurrentListings={setListings}/>
-
-             
+   <p className="text-4xl pl-6 font-bold text-white">Promoted Properties</p>
+   <p className="text-lg pl-6 font-medium text-white">Explore our handpicked selection of promoted properties. Each listing offers a glimpse into exceptional homes and investments available through VirtuEstate. Click View Details for more information.</p> 
+    <div className="w-screen mx-auto m-0">
+       <SwiperComponent numberOfSlides={numberOfSlides} data={listings.filter((item)=>item.promotion_details && item.promotion_details.promotionEnd && new Date(item.promotion_details.promotionEnd).getTime() >= new Date().getTime())} setCurrentListings={setListings}/>
  </div>
 
     </div>

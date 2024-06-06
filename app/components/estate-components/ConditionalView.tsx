@@ -2,9 +2,10 @@
  
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import EstateCanvas from '../estate/EstateCanvas'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import Loader from './Loader';
  
  type Props = { data:any}
  
@@ -14,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
     
    return (
      <>
+     <Suspense fallback={<Loader/>}>
      { selectedOption === 1 &&  <div className="mx-auto m-0 flex justify-center">
       <Carousel className='max-w-4xl'>
   <CarouselContent className='w-full h-80'>
@@ -26,10 +28,11 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
   <CarouselNext className='sm:hidden xl:block'/>
 </Carousel>
       </div>}
-
       {selectedOption === 2 && data[0].presentation_object && <div className=' max-w-7xl w-full mx-auto m-0 h-96'>
   <EstateCanvas object3D={data[0].presentation_object}/>
   </div>}
+     </Suspense>
+
      <div className="flex justify-center items-center m-6">
   <Tabs defaultValue="account">
   <TabsList className="w-fit p-4 rounded-full bg-darkGray border-purple border">

@@ -42,7 +42,7 @@ const goToChannel= async (notification:any)=>{
 
   return (
     <>
-        {listerObj.notifications.map((notification,i)=>(notification.roomId ? <JoinConferenceRequest goToChannel={goToChannel} notification={notification} key={i} readNotification={readNotification}/> : <ContactRequest userId={userId} notification={notification} userData={listerObj} key={i}/>))}
+        {listerObj.notifications.filter((notification)=>!notification.hasRead).map((notification,i)=>(notification.roomId ? <JoinConferenceRequest goToChannel={goToChannel} notification={notification} key={i} readNotification={readNotification}/> : <ContactRequest userId={userId} notification={notification} userData={listerObj} key={i}/>))}
         
      
     </>

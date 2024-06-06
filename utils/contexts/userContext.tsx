@@ -37,23 +37,12 @@ export default function AuthProvider({children}:{children:React.ReactNode}) {
     useEffect(()=>{
 
      const subscription = supabase.auth.onAuthStateChange(async (e, session)=>{
-         
-         if(e === 'SIGNED_OUT'){
-            console.log(e, session);
-            dispatch({
-                type: 'LOGOUT',
-            });
-           }
-
-           if(e === 'SIGNED_IN'){
-            console.log(e, session);
-            dispatch({type:'LOGIN', payload:{session:session, user:session?.user }});
+        
             dispatch({type:'IS_USER_READY', payload:{session:session, user:session?.user }});
-        }
-
+        
 
         });
-       ()=>  subscription.data.subscription.unsubscribe();
+      return ()=>  subscription.data.subscription.unsubscribe();
     }, []);
 
     return (<UserContext.Provider value={{ ...state, dispatch }}>

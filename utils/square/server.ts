@@ -96,6 +96,18 @@ export async function createSubscription(customerId:string, orderId:string, plan
 
 }
 
+export async function getSubscriptionDetails(id:string){
+  const response = await subscriptionsApi.retrieveSubscription(id);
+
+  return response.result;
+}
+
+export async function getOrder(id:string){
+  const response = await ordersApi.retrieveOrder(id);
+
+  return response.result;
+}
+
 export async function cancelSubscription(subsriptionId:string, userId:string){
 await subscriptionsApi.cancelSubscription(subsriptionId);
 await supabase.from('users').update({is_subscribed:false, subscribtion_details:null}).eq('user_id', userId);

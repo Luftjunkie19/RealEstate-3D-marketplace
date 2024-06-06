@@ -449,7 +449,7 @@ const addNewWall= ()=>{
   }, geometry:{
       width: 1,
       height: 1,
-    }},])
+    }}])
 }
 
 
@@ -623,7 +623,7 @@ const addNewWall= ()=>{
 <Wall3 wallMaterialRef={wall3MaterialRef} wallControls={thirdWallContols} levaControls={levaControls} wallRef={wall3Ref} wallPlaneRef={wall3PlaneRef}/>
     
 <Wall4 wallMaterialRef={wall4MaterialRef} levaControls={levaControls} wallControls={fourthWallControls} wallPlaneRef={wall4PlaneRef} wallRef={wall4Ref}/>
-{additionalWalls.length > 0 && additionalWalls.map((item, i)=>(<AdditionalWall id={item.id} selectWallToEdit={selectToEdit} width={item.geometry.width} height={item.geometry.height} rotation={item.mesh.rotation} scale={item.mesh.scale} position={item.mesh.position} wallColour={item.mesh.colour} key={i}/>))}
+{additionalWalls.length > 0 && additionalWalls.map((item, i)=>(<AdditionalWall wallMap={item.mesh.map} id={item.id} selectWallToEdit={selectToEdit} width={item.geometry.width} height={item.geometry.height} rotation={item.mesh.rotation} scale={item.mesh.scale} position={item.mesh.position} wallColour={item.mesh.colour} key={i}/>))}
 
 <Floor floorMaterialRef={floorMaterialRef} levaControls={levaControls} floorRef={floorRef} floorPlaneRef={floorPlaneRef}/>
 </group>
