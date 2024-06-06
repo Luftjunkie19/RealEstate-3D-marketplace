@@ -8,23 +8,27 @@ import { MdSell } from 'react-icons/md';
 import { RxRulerSquare } from 'react-icons/rx';
 import Link from 'next/link';
 import ImageDefault from '@/assets/images.jpeg'
+import { BsStars } from 'react-icons/bs';
 
-type Props = {imageUrl: string, name:string, description: string, barthRooms:number, bedRooms:number, isForRent: boolean, price:number, squareMetrage:number, id:number}
+type Props = {imageUrl: string, name:string, isPromotionActive:boolean, description: string, barthRooms:number, bedRooms:number, isForRent: boolean, price:number, squareMetrage:number, id:number}
 
-function Offer({name, imageUrl, description, barthRooms, bedRooms, isForRent, price, squareMetrage, id}: Props) {
+function Offer({name, imageUrl, description, barthRooms, bedRooms,isPromotionActive, isForRent, price, squareMetrage, id}: Props) {
   
-
-
     return (
       <div className='p-6 flex flex-col gap-2 lg:max-w-sm w-full border-2 border-darkGray rounded-xl shadow-lg overflow-hidden'>
        
 
         {imageUrl && <Image src={imageUrl}  width={256} height={256} className='w-full object-cover p-2 h-64 rounded-lg'  alt=""/>}
-          
-          <div className="flex flex-col gap-3">
+          <div className="flex gap-2 items-center flex-col">
+              <div className="flex w-full items-center justify-between p-1">
               <p className="text-2xl font-bold text-white">{name}</p>
+              {isPromotionActive && <p className='bg-darkGray border border-purple p-2 text-xs rounded-full flex items-center gap-1 text-white'>Promoted <BsStars className='text-yellow-400'/></p>}
+              </div>
+          <div className="flex flex-col gap-3">
               <p>{description.slice(0, 60)}...</p>
               <p className="flex gap-2 items-center"><RxRulerSquare size={12} /> {squareMetrage}^2 m</p>
+          </div>
+          
           </div>
           <div className="flex gap-2">
               <div className="p-2 flex gap-1 items-center rounded-full border border-darkGray">

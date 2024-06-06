@@ -73,7 +73,7 @@ setFilters(array.flat());
               </div>
                 <div className="flex gap-4 items-center p-4 rounded-lg">
                   <BiSolidBuildingHouse size={18} className='text-white'/>
-                  <SelectionBar classes='max-w-xs min-w-36 w-full' placeholder={'Property type'} selectedOption={selectedOption as unknown as string} setChange={function (value: any): void {
+                  <SelectionBar classes='max-w-xs text-white min-w-36 w-full' placeholder={'Property type'} selectedOption={selectedOption as unknown as string} setChange={function (value: any): void {
              setSelectedOption(value);
             } }>
           <SelectItem value={'for_rent'}>For Rent</SelectItem>

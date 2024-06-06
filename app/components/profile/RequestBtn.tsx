@@ -14,7 +14,7 @@ function RequestBtn({invitedId}: Props) {
     const sendFriendshipRequest= async ()=>{
         const {data:invitedUsersData}= await supabase.from('users').select('*').eq('user_id', invitedId);
 if(invitedUsersData && !invitedUsersData[0].notifications.find((notification:any)=>notification.sentBy === user?.id && notification.sentTo === invitedId && !notification.hasRead)){
-    await supabase.from('users').update({notifications:[...invitedUsersData[0].notifications, {content:`You've got a contact request.`, sentBy:user?.id, sentTo:invitedId,hasRead:false }]}).eq('user_id', invitedId);
+    await supabase.from('users').update({notifications:[...invitedUsersData[0].notifications, {content:`You've got a contact request.`, sentBy:user?.id, sentTo:invitedId, hasRead:false, createdAt:new Date().getTime() }]}).eq('user_id', invitedId);
     toast.success('Successfully sent request')
 }else{
     toast.error(`You cannot send request if that person hasn't read your previous request yet.`)

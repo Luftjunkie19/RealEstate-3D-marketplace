@@ -36,11 +36,7 @@ async function DetailedPage({params}: Props) {
         {data && data[0] && <>
 
 <ConditionalView data={data}/>
-     
-        
- 
-
-
+    
       <div className="flex px-2 py-4 items-center gap-2 flex-wrap">
 
 <p className="py-2 bg-darkGray px-4 rounded-xl items-center flex gap-2 border border-darkGray text-white">

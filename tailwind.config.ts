@@ -1,3 +1,4 @@
+import {nextui} from '@nextui-org/theme';
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -20,10 +21,11 @@ const config: Config = {
         purple: "#703BF7",
         darkGray: "#212121",
         bgColor: "#141414",
-        
     }
     },
   },
+  darkMode: "class",
   plugins: [require('daisyui')],
+
 };
 export default config;

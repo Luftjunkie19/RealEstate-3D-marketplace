@@ -18,9 +18,10 @@ type Props = {lat:number, lng:number, address:number}
 function PointWithMap({lat, lng, address}: Props) {
   return (
     <MapContainer 
+    dragging={false}
     center={[lat, lng]}
     zoom={13}
-    scrollWheelZoom={true}
+    scrollWheelZoom={false}
     className='max-w-5xl h-80 mx-auto lg:my-2 z-[20]'
   >
     <TileLayer

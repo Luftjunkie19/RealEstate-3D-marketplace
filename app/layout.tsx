@@ -6,8 +6,7 @@ import Footer from "./components/Footer";
 import AuthProvider from "@/utils/contexts/userContext";
 import HelperChat from "./components/HelperAIChat/HelperChat";
 import NotificationDisplay from "./components/notifications/NotificationDisplay";
-import { Suspense } from "react";
-import Loading from "./loading";
+
 
 
 export const metadata: Metadata = {
@@ -32,10 +31,10 @@ export default function RootLayout({
       <body className=' bg-bgColor overflow-x-hidden'>
         <Navbar />
       <Toaster/>
-      <Suspense fallback={<Loading/>}>
+
 
         {children}
-      </Suspense>
+ 
         <NotificationDisplay/>
         <HelperChat/>
         <Footer/>

@@ -22,15 +22,15 @@ function HeroSection({}: Props) {
               <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-4 ">
                   <div className="flex max-w-xs w-full gap-1 bg-darkGray flex-col p-4 rounded-lg">
                       <p className="text-white font-bold text-2xl">+{10}k</p>
-                      <p>Properties</p>
+                      <p className='text-white'>Properties</p>
                   </div>
                       <div className="flex max-w-xs w-full gap-1 bg-darkGray flex-col p-4 rounded-lg">
                       <p className="text-white font-bold text-2xl">10</p>
-                      <p>Years on the market</p>
+                      <p className='text-white'>Years on the market</p>
                   </div>
                       <div className="flex sm:col-span-1 lg:col-span-full gap-1 bg-darkGray flex-col p-4 rounded-lg">
                       <p className="text-white font-bold text-2xl">+200k</p>
-                      <p>Satisfied Customers</p>
+                      <p className='text-white'>Satisfied Customers</p>
                   </div>
               </div>
           </div>

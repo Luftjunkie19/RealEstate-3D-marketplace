@@ -48,7 +48,7 @@ export default function Page({ params }: { params: { channelId: string } }) {
     const {data}= await supabase.from('conferences').select('*').eq('room_id', meetingId).limit(1);
 
     if(data && data.length > 0){
-      if(!data[0].allowed_to_join.find((id:string)=>id === user!.id)){
+      if(!data[0].allowed_to_join.find((id:string)=>id === user?.id)){
         router.push('/');
     }
   }
