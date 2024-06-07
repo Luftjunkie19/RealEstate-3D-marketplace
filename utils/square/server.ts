@@ -130,3 +130,12 @@ export async function resumeSubscription(subscriptionId:string){
 
   return response.result;
 }
+
+
+export async function swapSubscription(subscriptionId:string, swapPlan:string){
+  const response = await subscriptionsApi.swapPlan(subscriptionId, {
+  newPlanVariationId:swapPlan,
+  });
+
+  return response.result;
+}
