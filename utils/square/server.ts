@@ -109,6 +109,24 @@ export async function getOrder(id:string){
 }
 
 export async function cancelSubscription(subsriptionId:string, userId:string){
-await subscriptionsApi.cancelSubscription(subsriptionId);
+const res= await subscriptionsApi.cancelSubscription(subsriptionId);
 await supabase.from('users').update({is_subscribed:false, subscribtion_details:null}).eq('user_id', userId);
+return res.result;
+}
+
+export async function pauseSubscription(subscriptionId:string){
+  const response= await subscriptionsApi.pauseSubscription(subscriptionId, {
+
+  });
+  console.log(response.result);
+
+  return response.result;
+}
+
+export async function resumeSubscription(subscriptionId:string){
+  const response = await subscriptionsApi.resumeSubscription(subscriptionId,{
+   
+  });
+
+  return response.result;
 }

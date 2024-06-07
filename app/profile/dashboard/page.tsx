@@ -4,7 +4,7 @@ import TypePieChart from '@/app/components/profile/dashboard/PieChart'
 import PromotedList from '@/app/components/profile/dashboard/promotedListings/PromotedList';
 import SucceededList from '@/app/components/profile/dashboard/successProperties/SucceededList';
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
-import { cancelSubscription, getOrder, getSubscriptionDetails } from '@/utils/square/server';
+import { cancelSubscription, getOrder, getSubscriptionDetails, pauseSubscription, resumeSubscription } from '@/utils/square/server';
 import { supabase } from '@/utils/supabase/client';
 import React, { use, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
@@ -57,10 +57,56 @@ useEffect(()=>{
 },[loadSubscriptionDetails]);
 
 const unsubscribe=async ()=>{
-  await cancelSubscription(userData.subscribtion_details.id, userData.user_id);
-toast.success(`Subscription's Cancellation successfully done !`, {
+ const res= await cancelSubscription(userData.subscribtion_details.id, userData.user_id);
+ if(res.errors ){
+  toast.error(`${res.errors.map(item=> item.detail)}`, {
+    position:'bottom-right',
+  });
+  return;
+}
+
+ toast.success(`Subscription's Cancellation successfully done !`, {
   position:'bottom-right',
 })
+}
+
+const pauseSub=async ()=>{
+ 
+    const res= await pauseSubscription(userData.subscribtion_details.id);
+
+    if(res.errors){
+      toast.error(`${res.errors.map(item=> item.detail)}`, {
+        position:'bottom-right',
+      });
+      return;
+    }
+
+    toast.success('Successfully paused subscription. See ya !');
+    console.log(res);
+    await supabase.from('users').update({subscription_paused:res.subscription});
+    setSubscriptionDetails({...subscriptionDetails, status:'PAUSED' });
+  
+};
+
+const resumeSub= async ()=>{
+
+    const res= await resumeSubscription(userData.subscribtion_details.id);
+    if(res.errors){
+      toast.error(`${res.errors.map(item=> item.detail)}`, {
+        position:'bottom-right',
+      });
+      return;
+    }
+    toast.success('Successfully resumed subscription. Welcome Back !');
+    console.log(res);
+    await supabase.from('users').update({subscription_paused:null});
+    setSubscriptionDetails({...subscriptionDetails, status:'ACTIVE' });
+  
+
+}
+
+const swapSub=()=>{
+  toast.error('This feature will be build on Friday morning.');
 }
 
 
@@ -79,13 +125,18 @@ toast.success(`Subscription's Cancellation successfully done !`, {
      </div>
      
     }
-    {userData && userData.is_subscribed && <div className='flex gap-2 max-w-xs w-full overflow-x-auto items-center self-end'>
+
+    <div className="flex flex-col gap-2 text-white">
+      <p className='text-xl font-semibold'>Subscription Management</p>
+      <p className='max-w-md w-full'>Down below are located buttons you can manage your subscription with. In case any of buttons will not work, contact with support immediately.</p>
+    {userData && userData.is_subscribed && <div className='flex gap-2 max-w-xs w-full overflow-x-auto items-center '>
       <button onClick={unsubscribe} className='bg-red-500 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Cancel <MdCancel/> </button>
-      <button className='bg-yellow-500 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Pause <FaPauseCircle/></button>
-      <button className='bg-green-400 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Resume <GrResume/></button>
-      <button className='bg-blue-400 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Swap <IoIosSwap/></button>
+      {subscriptionDetails && subscriptionDetails.status === 'ACTIVE' ? <button onClick={pauseSub} className='bg-yellow-500 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Pause <FaPauseCircle/></button> : 
+      <button onClick={resumeSub} className='bg-green-400 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Resume <GrResume/></button>}  
+      <button onClick={swapSub} className='bg-blue-400 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Swap <IoIosSwap/></button>
       </div>
       }
+    </div>
     </div>
 
 </div>
