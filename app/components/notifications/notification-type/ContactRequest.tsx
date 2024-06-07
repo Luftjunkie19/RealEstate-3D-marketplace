@@ -25,7 +25,9 @@ console.log(acceptedUserData, userData);
         if(acceptedUserData && !userData.friends.find((item)=> item.id === notification.sentBy)){
             await supabase.from('users').update({friends:[...userData.friends, {username:acceptedUserData[0].user_name, id:notification.sentBy, profileImage:acceptedUserData[0].profile_image}]}).eq('user_id', userId)
         }else{
-            toast.error('This user is already in your contacts. Please click ignore button.')
+            toast.error('This user is already in your contacts. Please click ignore button.', {
+                position:'bottom-right'
+            })
         }
     }
 

@@ -46,7 +46,9 @@ function OfferPlans({}: Props) {
                if(!user.subscribtion_details && subscription.subscription){
                 await supabase.from('users').update({subscribtion_details:subscription.subscription}).eq('user_id', userData!.id);
                 await supabase.from('users').update({is_subscribed:true}).eq('user_id', userData!.id);
-                toast.success('Subscribed successfully');
+                toast.success('Subscribed successfully', {
+                    position:'bottom-right'
+                });
                 setPlanOffer(null);
                 setVariationPlanId(null);
             }
@@ -77,7 +79,9 @@ function OfferPlans({}: Props) {
             setPlanOffer(process.env.NEXT_PUBLIC_WEEKLY_PRICE as string);
             setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_WEEK_ITEM as string);
         }else{
-            toast.error('You are not logged in, you cannot purchase a subscription.')
+            toast.error('You are not logged in, you cannot purchase a subscription.', {
+                position:'bottom-right'
+            })
         }
         }} className='bg-purple p-[0.375rem] rounded-lg text-white'>Purchase</button>
 </div>
@@ -97,7 +101,9 @@ function OfferPlans({}: Props) {
             setPlanOffer(process.env.NEXT_PUBLIC_MONTHLY_PRICE as string);
             setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_MONTH_ITEM as string);
         }else{
-            toast.error('You are not logged in, you cannot purchase a subscription.')
+            toast.error('You are not logged in, you cannot purchase a subscription.', {
+                position:'bottom-right'
+            })
         }
     }} className='bg-purple p-[0.375rem] rounded-lg text-white'>Purchase</button>
 </div>
@@ -117,7 +123,9 @@ function OfferPlans({}: Props) {
             setPlanOffer(process.env.NEXT_PUBLIC_ANNUAL_PRICE as string);
             setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_ANNUAL_ITEM as string);
         }else{
-            toast.error('You are not logged in, you cannot purchase a subscription.')
+            toast.error('You are not logged in, you cannot purchase a subscription.', {
+                position:'bottom-right'
+            })
         }
     }} className='bg-purple p-[0.375rem] rounded-lg text-white'>Purchase</button>
 </div>

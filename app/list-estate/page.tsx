@@ -51,7 +51,9 @@ function Page({}: Props) {
       const isForRent = formData.get('isForRent');
 
       if(!propertyName || !propertyPrice || !squareFootage || !propertyDescription || !bathroomsQty || !bedroomsQty || !providedAddress ){
-        return toast.error('Please fill all the required fields');
+        return toast.error('Please fill all the required fields', {
+          position:'bottom-right',
+        });
        }
   
      
@@ -63,16 +65,31 @@ function Page({}: Props) {
       const geometricPositions = fetchResult.results[0].geometry.location;
   
       if(!address || !geometricPositions){
-        return toast.error('Please address accessed.');
+        return toast.error('Please address accessed.', {
+          position:'bottom-right',
+        
+        });
        }
 
        if(images.length === 0){
-        return toast.error('Please provide at least one image of the property');
+        return toast.error('Please provide at least one image of the property', {
+          position:'bottom-right',
+          style:{
+            backgroundColor:"#212121",
+            color:"white"
+           }
+        });
        }
 
 
        if(images.length > 6){
-        return toast.error('Only 6 images are possible to add.');
+        return toast.error('Only 6 images are possible to add.', {
+          position:'bottom-right',
+          style:{
+            backgroundColor:"#212121",
+            color:"white"
+           }
+        });
        }
 
        console.log(images);
@@ -96,13 +113,19 @@ function Page({}: Props) {
         collection: 'listings'
       });
 
-      toast.success('Property object Successfully created !');
+      toast.success('Property object Successfully created !', {
+        position:'bottom-right',
+       
+      });
       setCurrentStep(2);
 
   
     } catch (error) {
       console.error(error);
-      toast.error('An error occurred while adding the property');
+      toast.error('An error occurred while adding the property', {
+        position:'bottom-right',
+       
+      });
     }
   };
 
@@ -112,12 +135,18 @@ function Page({}: Props) {
   
   const handleImages = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
-      toast.error('No image uploaded');
+      toast.error('No image uploaded', {
+        position:'bottom-right',
+       
+      });
       return;
     }
   
     if (e.target.files.length > 6) {
-      toast.error('Too many images uploaded. Maximum 6 images.');
+      toast.error('Too many images uploaded. Maximum 6 images.', {
+        position:'bottom-right',
+       
+      });
       return;
     }
   
@@ -179,7 +208,9 @@ function Page({}: Props) {
       'Content-Type':'application/json'
     }}).then((res)=>res.json()).then((data)=>console.log(data));
     setCurrentStep(4);
-    toast.success('Successfully paid the fee for publishing');  
+    toast.success('Successfully paid the fee for publishing', {
+      position:'bottom-right',
+    });  
    }
   }
         console.log(token);

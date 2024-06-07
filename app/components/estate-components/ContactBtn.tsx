@@ -41,7 +41,7 @@ const {user:userData}=useAuthContext();
   
   await supabase.from('users').update({notifications:[{directedTo:data[0].listed_by, message:'A Conference to your listing has been created. Join and talk with the customer.', callCreatedAt:new Date().getTime(), roomId, hasRead:false}]}).eq('user_id', data![0].listed_by);
 
-  await supabase.from('conferences').insert({allowed_to_join:[userData?.id, data[0].listed_by], room_id:roomId, listing_id:id});
+  await supabase.from('conferences').insert({allowed_to_join:[userData?.id, data[0].listed_by], room_id:roomId, listing_id:id, listing_name:data[0].property_name, listing_img:data[0].images[0]});
 
 router.push(`/channel/${roomId}`);
     }
@@ -49,15 +49,16 @@ router.push(`/channel/${roomId}`);
     const createAChat= async ()=>{
       console.log(userData);
       if(userData){
-const existingChatObject= await supabase.from('chats').select('*').in('users_allowed', [userData.id, data[0].listed_by]).eq('listing_id', id).limit(1);
-if(!existingChatObject.data || existingChatObject.data.length > 0){
- const createdObj= await supabase.from('chats').insert({from_user_id:userData.id, to_user_id:data[0].listed_by, users_allowed:[userData.id, data[0].listed_by], messages:[], listing_id:id });
-toast.success('Successfully created chat !');
-console.log(createdObj);
+const existingChatObject= await supabase.from('chats').select('*').contains('users_allowed', [userData.id, data[0].listed_by]).eq('listing_id', id).limit(1);
+if(!existingChatObject.data || existingChatObject.data.length === 0){
+await supabase.from('chats').insert({from_user_id:userData.id, to_user_id:data[0].listed_by, users_allowed:[userData.id, data[0].listed_by], messages:[], listing_id:id });
+toast.success('Successfully created chat !', {
+  position:'bottom-right',
+});
+const createdChat= await supabase.from('chats').select('*').contains('users_allowed', [userData.id, data[0].listed_by]).eq('listing_id', id).limit(1);
+if(createdChat.data) router.push(`/chat/${createdChat.data[0].id}`);
 }else{
-  if(existingChatObject){
-   console.log(existingChatObject);
-  }
+router.push(`/chat/${existingChatObject.data[0].id}`)
 }
 }
     }

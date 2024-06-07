@@ -59,7 +59,7 @@ useEffect(()=>{
 const unsubscribe=async ()=>{
   await cancelSubscription(userData.subscribtion_details.id, userData.user_id);
 toast.success(`Subscription's Cancellation successfully done !`, {
-  position:'bottom-right'
+  position:'bottom-right',
 })
 }
 

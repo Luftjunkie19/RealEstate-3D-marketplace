@@ -15,7 +15,7 @@ function AdditionalWall({width, height,map, scale, rotation, position, colour}: 
  
   
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const loadMap= map.texturePath ? useLoader(THREE.TextureLoader, map.texturePath as string) : null;
+  const loadMap= map.texturePath !== null || map.texturePath !== undefined ? useLoader(THREE.TextureLoader, map.texturePath as string) : null;
  
   return (
     <mesh position={[position.x, position.y, position.z]} rotation-x={rotation._x} rotation-y={rotation._y} rotation-z={rotation._z} scale-x={scale.x} scale-y={scale.y} scale-z={scale.z}>
