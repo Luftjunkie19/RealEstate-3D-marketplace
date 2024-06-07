@@ -6,7 +6,7 @@ import SucceededList from '@/app/components/profile/dashboard/successProperties/
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import { cancelSubscription, getOrder, getSubscriptionDetails, pauseSubscription, resumeSubscription, swapSubscription } from '@/utils/square/server';
 import { supabase } from '@/utils/supabase/client';
-import React, { use, useCallback, useEffect, useState } from 'react'
+import React, { Suspense, use, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { FaPauseCircle } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
@@ -14,6 +14,7 @@ import {GrResume }from 'react-icons/gr';
 import { IoIosSwap } from 'react-icons/io';
 import ModalDialog from '@/app/components/profile/ModalDialog';
 import { DialogClose } from '@/components/ui/dialog';
+import Loader from '@/app/components/estate-components/Loader';
 
 type Props = {}
 
@@ -128,7 +129,8 @@ const swapSub= async (swapPlanId:string)=>{
 
   return (
     <div className='w-full min-h-screen'>
-      {userData && userData.is_subscribed && 
+      <Suspense fallback={<Loader/>}>
+        {userData && userData.is_subscribed && 
   <div className='p-2 flex flex-col gap-2'>
   <p className='text-3xl font-bold text-white'>Subscription Management</p>   
 <div className="flex sm:flex-col lg:flex-row gap-2 justify-around items-center">
@@ -181,10 +183,10 @@ const swapSub= async (swapPlanId:string)=>{
       </div>
       }
 
-     <div className="p-2">
-      <p className='text-white text-3xl font-semibold'>Your Statistics</p>
       {
         userData &&
+     <div className="p-2">
+      <p className='text-white text-3xl font-semibold'>Your Statistics</p>
       <div className="flex sm:flex-col p-2 lg:flex-row max-w-7xl mx-auto m-0 items-center gap-4 w-full">
         {userData && <RecentListingsBarChart listings={[
     {
@@ -272,15 +274,16 @@ const swapSub= async (swapPlanId:string)=>{
     }
 ]}/>}
       </div>
-      }
      </div>
+     }
      
      {userData && userData.successfull_transactions.length > 0 &&
      <div className="p-2 flex flex-col gap-2">
-      <p className='text-white text-xl font-bold'>Successfully Rented/Sold Properties:</p>
-      <SucceededList listings={userData.successfull_transactions} />
-     </div>
-     }
+    <p className='text-white text-xl font-bold'>Successfully Rented/Sold Properties:</p>
+  <SucceededList listings={userData.successfull_transactions} />
+</div>
+}
+      </Suspense>
     </div>
   )
 }
