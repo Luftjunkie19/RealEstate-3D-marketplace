@@ -33,7 +33,15 @@ function OfferPlans({}: Props) {
   return (
     <PaymentForm cardTokenizeResponseReceived={async (token)=>{
         console.log(token, user.square_customer.customer);
-       if(token.details && user && user.square_customer.customer){
+
+        if(user.is_subscribed){
+            toast.error('You are already subscribed, manage your subscription from the dashboard !', {
+                position:"bottom-right"
+            });
+            return;
+        }
+
+       if(token.details && user && user.square_customer.customer && !user.is_subscribed){
            const createdCardObj= await createCardItem(user.square_customer.customer.id, "John Doe", token.details.card.expYear, token.details.card.expMonth, token.token);
            if(!user.customer_card_details && createdCardObj.result.card){
             await supabase.from('users').update({customer_card_details:createdCardObj.result.card}).eq('user_id', userData?.id);
@@ -57,6 +65,8 @@ function OfferPlans({}: Props) {
            
 
         }
+            
+        
     }} locationId={process.env.NEXT_PUBLIC_SQUARE_APP_SEC} applicationId={process.env.NEXT_PUBLIC_SQUARE_APP_ID}>
     {planOffer ? <Checkout selectedPlanId={planOffer}/> : 
     <div className="flex flex-col gap-4">
@@ -75,6 +85,12 @@ function OfferPlans({}: Props) {
     <p className='text-white font-bold'>9.99$ / week</p>
     <button onClick={()=>{
         if(userData){
+            if(user.is_subscribed){
+                toast.error('You are already subscribed, manage your subscription from the dashboard !', {
+                    position:"bottom-right"
+                });
+                return;
+            }    
             console.log(process.env.NEXT_PUBLIC_WEEKLY_PRICE, process.env.NEXT_PUBLIC_VARIATION_WEEK_ITEM);
             setPlanOffer(process.env.NEXT_PUBLIC_WEEKLY_PRICE as string);
             setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_WEEK_ITEM as string);
@@ -97,6 +113,12 @@ function OfferPlans({}: Props) {
     <p className='text-white font-bold'>20.99$ / month</p>
     <button onClick={()=>{
         if(userData){
+            if(user.is_subscribed){
+                toast.error('You are already subscribed, manage your subscription from the dashboard !', {
+                    position:"bottom-right"
+                });
+                return;
+            }    
             console.log(process.env.NEXT_PUBLIC_MONTHLY_PRICE, process.env.NEXT_PUBLIC_VARIATION_MONTH_ITEM);
             setPlanOffer(process.env.NEXT_PUBLIC_MONTHLY_PRICE as string);
             setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_MONTH_ITEM as string);
@@ -119,6 +141,12 @@ function OfferPlans({}: Props) {
     <p className='text-white font-bold'>249.99$ / year</p>
     <button onClick={()=>{
         if(userData){
+            if(user.is_subscribed){
+                toast.error('You are already subscribed, manage your subscription from the dashboard !', {
+                    position:"bottom-right"
+                });
+                return;
+            }    
             console.log(process.env.NEXT_PUBLIC_ANNUAL_PRICE, process.env.NEXT_PUBLIC_VARIATION_ANNUAL_ITEM);
             setPlanOffer(process.env.NEXT_PUBLIC_ANNUAL_PRICE as string);
             setVariationPlanId(process.env.NEXT_PUBLIC_VARIATION_ANNUAL_ITEM as string);

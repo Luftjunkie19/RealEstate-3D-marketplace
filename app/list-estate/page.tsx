@@ -153,7 +153,7 @@ function Page({}: Props) {
     setImages(Array.from(e.target.files));
   };
   
-  const finalAmount= selectedOfferOption ?  (20 + (selectedOfferOption)).toFixed(2) : 20.00
+  const finalAmount= selectedOfferOption ?  (12 + (selectedOfferOption) + (objectToInsert ? 2.50 : 0.00)).toFixed(2) : (20.00 + (objectToInsert ? 2.50 : 0.00))
 
 
 
