@@ -4,7 +4,7 @@ import TypePieChart from '@/app/components/profile/dashboard/PieChart'
 import PromotedList from '@/app/components/profile/dashboard/promotedListings/PromotedList';
 import SucceededList from '@/app/components/profile/dashboard/successProperties/SucceededList';
 import { useAuthContext } from '@/utils/hooks/useAuthContext';
-import { cancelSubscription, getOrder, getSubscriptionDetails, pauseSubscription, resumeSubscription } from '@/utils/square/server';
+import { cancelSubscription, getOrder, getSubscriptionDetails, pauseSubscription, resumeSubscription, swapSubscription } from '@/utils/square/server';
 import { supabase } from '@/utils/supabase/client';
 import React, { use, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
@@ -12,6 +12,8 @@ import { FaPauseCircle } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import {GrResume }from 'react-icons/gr';
 import { IoIosSwap } from 'react-icons/io';
+import ModalDialog from '@/app/components/profile/ModalDialog';
+import { DialogClose } from '@/components/ui/dialog';
 
 type Props = {}
 
@@ -57,9 +59,9 @@ useEffect(()=>{
 },[loadSubscriptionDetails]);
 
 const unsubscribe=async ()=>{
- const res= await cancelSubscription(userData.subscribtion_details.id, userData.user_id);
+ const res= await cancelSubscription(userData.subscribtion_details.id, user?.id as string);
  if(res.errors ){
-  toast.error(`${res.errors.map(item=> item.detail)}`, {
+  toast.error(`${res.errors.map(item=> item.detail).join(' ')}`, {
     position:'bottom-right',
   });
   return;
@@ -75,7 +77,7 @@ const pauseSub=async ()=>{
     const res= await pauseSubscription(userData.subscribtion_details.id);
 
     if(res.errors){
-      toast.error(`${res.errors.map(item=> item.detail)}`, {
+      toast.error(`${res.errors.map(item=> item.detail).join(' ')}`, {
         position:'bottom-right',
       });
       return;
@@ -92,7 +94,7 @@ const resumeSub= async ()=>{
 
     const res= await resumeSubscription(userData.subscribtion_details.id);
     if(res.errors){
-      toast.error(`${res.errors.map(item=> item.detail)}`, {
+      toast.error(`${res.errors.map(item=> item.detail).join(' ')}`, {
         position:'bottom-right',
       });
       return;
@@ -105,8 +107,22 @@ const resumeSub= async ()=>{
 
 }
 
-const swapSub=()=>{
-  toast.error('This feature will be build on Friday morning.');
+const swapSub= async (swapPlanId:string)=>{
+
+  const swapedSubscription= await swapSubscription(userData.subscribtion_details.id, swapPlanId);
+
+  if(swapedSubscription.errors){
+    toast.error(`${swapedSubscription.errors.map(item=> item.detail).join(' ')}`, {
+      position:'bottom-right',
+    });
+    return;
+  }
+
+  console.log(swapedSubscription);
+
+  toast.success('Subscription Plan Changed !', {
+    position:'bottom-right',
+  });
 }
 
 
@@ -115,15 +131,16 @@ const swapSub=()=>{
       {userData && userData.is_subscribed && 
   <div className='p-2 flex flex-col gap-2'>
   <p className='text-3xl font-bold text-white'>Subscription Management</p>   
-<div className="flex gap-2 justify-around items-center">
-    {subscriptionDetails && 
+<div className="flex sm:flex-col lg:flex-row gap-2 justify-around items-center">
+    {subscriptionDetails && !userData.subscription_paused ?
     <div>
       <p className='text-white font-bold text-lg'>{subscriptionDetails.lineItems[0].name}</p>
       <p className='text-green-400 font-semibold'>{(parseInt(subscriptionDetails.lineItems[0].basePriceMoney.amount)/100).toFixed(2)} {subscriptionDetails.lineItems[0].basePriceMoney.currency}</p>
       <p className='text-white'>Status: {subscriptionDetails.status}</p>
       <p className='text-white'>Started at: {new Date(subscriptionDetails.startDate).toDateString()}</p>
+     </div>: <div>
+      <p>{JSON.stringify(userData.subscription_paused)}</p>
      </div>
-     
     }
 
     <div className="flex flex-col gap-2 text-white">
@@ -131,9 +148,23 @@ const swapSub=()=>{
       <p className='max-w-md w-full'>Down below are located buttons you can manage your subscription with. In case any of buttons will not work, contact with support immediately.</p>
     {userData && userData.is_subscribed && <div className='flex gap-2 max-w-xs w-full overflow-x-auto items-center '>
       <button onClick={unsubscribe} className='bg-red-500 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Cancel <MdCancel/> </button>
-      {subscriptionDetails && subscriptionDetails.status === 'ACTIVE' ? <button onClick={pauseSub} className='bg-yellow-500 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Pause <FaPauseCircle/></button> : 
+      {subscriptionDetails && !userData.subscription_paused ? <button onClick={pauseSub} className='bg-yellow-500 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Pause <FaPauseCircle/></button> : 
       <button onClick={resumeSub} className='bg-green-400 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Resume <GrResume/></button>}  
-      <button onClick={swapSub} className='bg-blue-400 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Swap <IoIosSwap/></button>
+      <ModalDialog buttonTitle={<button className='bg-blue-400 max-w-48 flex w-full items-center gap-1 p-2 rounded-xl text-white justify-center'>Swap <IoIosSwap/></button>} dialogTitle={'Select Your Swap-Plan !'} dialogDescription={''} dialogContent={<>
+        <p className='text-white font-semibold'>Select a plan, you want to swap your plan with !</p>
+        <div className="flex items-center justify-center text-white gap-8">
+          <div className="flex flex-col items-center gap-2">
+          <p>Daily Plan</p>
+          <p className='text-green-400 font-semibold'>{9.99} $ / Day</p>
+          <DialogClose onClick={()=>swapSub(process.env.NEXT_PUBLIC_VARIATION_WEEK_ITEM as string)} className="bg-blue-400 p-2 rounded-lg w-28 ">Swap</DialogClose>
+          </div>
+          <div className="flex flex-col gap-2 items-center">
+          <p>Annual Plan</p>
+          <p className='text-green-400 font-semibold'>{249.99} $ / Year</p>
+          <DialogClose onClick={()=>swapSub(process.env.NEXT_PUBLIC_VARIATION_ANNUAL_ITEM as string)} className="bg-blue-400 p-2 rounded-lg w-28 ">Swap</DialogClose>
+          </div>
+        </div>
+      </>} footerContent={<DialogClose className='flex gap-2 items-center bg-red-500 text-white p-2 rounded-xl'>Close <MdCancel/></DialogClose>}/>
       </div>
       }
     </div>
