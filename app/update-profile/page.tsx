@@ -34,7 +34,9 @@ function UpdateProfilePage() {
 
 
 if(!e.target.files){
-    toast.error('No Image has been picked');
+    toast.error('No Image has been picked', {
+        position:'bottom-right',
+    });
     return;
 }
 
@@ -57,7 +59,10 @@ uploadUserData();
         const userProfileImg= formData.get('userProfileImg');
 
         await supabase.from('users').update({user_name:usernameField, profile_image: userProfile && (userProfile as any).profile_image}).eq('email', user!.email);
-        toast.success('Profile Updated');
+        toast.success('Profile Updated', {
+            position:'bottom-right',
+            
+        });
 
         router.push('/');
 

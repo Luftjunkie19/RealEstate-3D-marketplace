@@ -16,11 +16,15 @@ function ContactItem({contactData, roomId}: Props) {
             if(data && conferenceData && conferenceData.length > 0 && data.length > 0){
                 await supabase.from('conferences').update({allowed_to_join:[...conferenceData[0].allowed_to_join, contactData.id]}).eq('room_id', roomId);
                 await supabase.from('users').update({notifications:[...data[0].notifications, {directedTo:contactData.id, message:'A Conference to your listing has been created. Join and talk with the customer.', callCreatedAt:new Date().getTime(), roomId:roomId, hasRead:false}]}).eq('use_id', contactData.id);
-            toast.success('Successfully invited !');
+            toast.success('Successfully invited !', {
+                position:'bottom-right',
+            });
             }
         } catch (error) {
             console.log(error);
-            toast.error('Something went unsuccessfull....')
+            toast.error('Something went unsuccessfull....', {
+                position:'bottom-right'
+            })
         }
     }
 

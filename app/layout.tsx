@@ -30,7 +30,14 @@ export default function RootLayout({
 
       <body className=' bg-bgColor overflow-x-hidden'>
         <Navbar />
-      <Toaster/>
+      <Toaster toastOptions={{
+        style:{
+          backgroundColor:"#212121",
+          color:"white",
+          border:"2px solid #703BF7",
+          zIndex:99999999999
+         }
+      }}/>
 
 
         {children}

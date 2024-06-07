@@ -1,11 +1,8 @@
 
-
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { supabase } from '@/utils/supabase/client';
-import Image from 'next/image';
 import { MdSell } from "react-icons/md";
-import React, { useState } from 'react'
-import { FaBath, FaBed, FaCube, FaMessage } from 'react-icons/fa6';
+import React from 'react'
+import { FaBath, FaBed, FaCube } from 'react-icons/fa6';
 import { FaLocationDot } from "react-icons/fa6";
 type Props = {
     params:{id:string}
@@ -13,14 +10,9 @@ type Props = {
 
 import { GiHouseKeys } from "react-icons/gi";
 import PointWithMap from '@/app/components/PointWithMap';
-import { FaHeart, FaUserCircle } from 'react-icons/fa';
 import { format } from 'date-fns';
-import Link from 'next/link';
 import ContactBtn from '@/app/components/estate-components/ContactBtn';
-import { useAuthContext } from '@/utils/hooks/useAuthContext';
 import LoveBtn from '@/app/components/estate-components/LoveBtn';
-import EstateCanvas from '@/app/components/estate/EstateCanvas';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ConditionalView from '@/app/components/estate-components/ConditionalView';
 import OwnerLink from '@/app/components/estate-components/OwnerLink';
 

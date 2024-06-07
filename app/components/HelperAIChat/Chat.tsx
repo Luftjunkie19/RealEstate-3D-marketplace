@@ -39,7 +39,9 @@ export default function Chat({openState}:Props) {
 
      
       if(!run || !success){
-        toast.error('Unsuccessfully done !');
+        toast.error('Unsuccessfully done !', {
+          position:'bottom-right',
+        });
         return ''
       };
 
@@ -48,7 +50,10 @@ export default function Chat({openState}:Props) {
       return run.id;
       
     } catch (error) {
-      toast.error('No success');
+      toast.error('No success', {
+        position:'bottom-right',
+      
+      });
       return '';
     }
    
@@ -84,7 +89,9 @@ export default function Chat({openState}:Props) {
 
         else if(run.status === 'failed'){
           clearInterval(intervalId);
-          toast.error('Failed to run');
+          toast.error('Failed to run', {
+            position:'bottom-right',
+          });
           return;
         }
         setRun(run);
@@ -164,12 +171,13 @@ export default function Chat({openState}:Props) {
         if (!success || errorMessage) {
           toast.error(
             errorMessage ?? "Something went wrong fetching data for stocks",
-            { position: "bottom-center" }
+            {  position:'bottom-right' }
           );
         }
 
         if (!ticker) {
-          toast.error("No symbol found", { position: "bottom-center" });
+          toast.error("No symbol found", {  position:'bottom-right',
+             });
         }
         
         
@@ -195,7 +203,8 @@ export default function Chat({openState}:Props) {
           
         } catch (error) {
           console.log("Error fetching stock", error);
-          toast.error("Error fetching stock", { position: "bottom-center" });
+          toast.error("Error fetching stock", {  position:'bottom-right',
+           });
         }
       } 
       
@@ -240,7 +249,8 @@ export default function Chat({openState}:Props) {
           
         } catch (error) {
           console.log("Error fetching stock", error);
-          toast.error("Error fetching stock", { position: "bottom-center" });
+          toast.error("Error fetching stock", {  position:'bottom-right',
+            });
         }
       }
       
@@ -285,7 +295,8 @@ export default function Chat({openState}:Props) {
           
         } catch (error) {
           console.log("Error fetching stock", error);
-          toast.error("Error fetching stock", { position: "bottom-center" });
+          toast.error("Error fetching stock", {  position:'bottom-right',
+            });
         }
       }
 
@@ -330,7 +341,8 @@ export default function Chat({openState}:Props) {
           
         } catch (error) {
           console.log("Error fetching stock", error);
-          toast.error("Error fetching stock", { position: "bottom-center" });
+          toast.error("Error fetching stock", {  position:'bottom-right',
+             });
         }
       }
       
